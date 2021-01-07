@@ -7,6 +7,7 @@
 !.gitignore
 !config.js
 !interface_config.js
+!friendcrawl.net-config.js
 
 !css/
 !modules/
