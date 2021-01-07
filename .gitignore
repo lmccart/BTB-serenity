@@ -1,0 +1,15 @@
+# Ignore everything
+/*
+/*/
+
+# But not these files...
+!README.md
+!.gitignore
+!config.js
+!interface_config.js
+
+!css/
+!modules/
+!react/
+!images/
+
