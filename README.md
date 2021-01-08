@@ -4,5 +4,15 @@
 * https://www.digitalocean.com/docs/networking/dns/
 * https://community.jitsi.org/t/how-to-how-to-build-jitsi-meet-from-source-a-developers-guide/75422
 * https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-web#running-with-webpack-dev-server-for-development
-* `nano /usr/local/etc/nginx/nginx.conf`
-* 
+* https://domains.google.com/registrar/
+
+
+
+* `sudo nano /usr/local/etc/nginx/nginx.conf`
+* `sudo nano /etc/nginx/sites-available/friendcrawl.net.conf`
+* `sudo nano /etc/jitsi/meet/friendcrawl.net-config.js`
+* `history | grep certbot`
+* `sudo nano /var/log/nginx/error.log`
+
+* beyondthebreakdown.world > home, reg, intro, outro
+* build.beyondthebreakdown.world > jitsi

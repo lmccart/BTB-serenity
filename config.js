@@ -111,7 +111,7 @@ var config = {
 
     // Start calls with audio muted. Unlike the option above, this one is only
     // applied locally. FIXME: having these 2 options is confusing.
-    // startWithAudioMuted: false,
+    startWithAudioMuted: false,
 
     // Enabling it (with #params) will disable local audio output of remote
     // participants and to enable it back a reload is needed.
@@ -162,7 +162,7 @@ var config = {
 
     // Start calls with video muted. Unlike the option above, this one is only
     // applied locally. FIXME: having these 2 options is confusing.
-    // startWithVideoMuted: false,
+    startWithVideoMuted: false,
 
     // If set to true, prefer to use the H.264 video codec (if supported).
     // Note that it's not recommended to do this because simulcast is not
@@ -327,10 +327,10 @@ var config = {
     //
 
     // Hides lobby button
-    // hideLobbyButton: false,
+    hideLobbyButton: true,
 
     // Require users to always specify a display name.
-    // requireDisplayName: true,
+    requireDisplayName: true,
 
     // Whether to use a welcome page or not. In case it's false a random room
     // will be joined when no room is specified.
@@ -341,7 +341,7 @@ var config = {
     // enableClosePage: false,
 
     // Disable hiding of remote thumbnails when in a 1-on-1 conference call.
-    // disable1On1Mode: false,
+    disable1On1Mode: true,
 
     // Default language for the user interface.
     defaultLanguage: 'en',
@@ -365,7 +365,7 @@ var config = {
     // enableCalendarIntegration: false,
 
     // When 'true', it shows an intermediate page before joining, where the user can configure their devices.
-    // prejoinPageEnabled: false,
+    prejoinPageEnabled: true,
 
     // If etherpad integration is enabled, setting this to true will
     // automatically open the etherpad when a participant joins.  This
@@ -510,7 +510,7 @@ var config = {
     },
 
     // Decides whether the start/stop recording audio notifications should play on record.
-    // disableRecordAudioNotification: false,
+    disableRecordAudioNotification: true,
 
     // Information for the chrome extension banner
     // chromeExtensionBanner: {

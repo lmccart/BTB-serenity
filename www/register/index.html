@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html class='register-border'>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <title>Register | Beyond The Breakdown</title>
+
+    <script defer src='/__/firebase/7.18.0/firebase-app.js'></script>
+    <script defer src='/__/firebase/7.18.0/firebase-analytics.js'></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src='/__/firebase/7.18.0/firebase-auth.js'></script>
+    <script defer src='/__/firebase/7.18.0/firebase-firestore.js'></script>
+    <script defer src="/__/firebase/7.18.0/firebase-messaging.js"></script>
+    <script defer src='/__/firebase/init.js'></script>
+    <script src='https://code.jquery.com/jquery-3.5.1.min.js' integrity='sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=' crossorigin='anonymous'></script>
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Overpass+Mono&display=swap" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://use.typekit.net/fth5afb.css">
+    <link rel='stylesheet' href='/css/style.css'>
+    <script src='/js/moment-with-locales.min.js'></script>
+
+
+  </head>
+  <body>
+    <main id='register-page'>
+
+      <h1 class='sr-only'>Register</h1>
+
+      <section id='numParticipants'>
+        <a id='back-intro' class='back-arrow' href='/'>←</a>
+        <h2>How many participants in your group?</h2>
+        <p>If you are a group of 3 or less, you may be paired with other participants.</p>
+        
+        <label for='num' class='sr-only'>Number participants:</label>
+        <select name='num' id='num'>
+          <option value='1'>1</option>
+          <option value='2'>2</option>
+          <option value='3'>3</option>
+          <option value='4'>4</option>
+          <option value='5'>5</option>
+          <option value='6'>6</option>
+        </select>
+        <button id='submit-search'>Search</button>
+      </section>
+  
+      <section id='sessions' style='display: none'>
+        <span id='back-num' class='back-arrow'>←</span>
+        <h2>Which session would you like to register for?</h2>
+        <div id='sessions-error' class='notif' style='display:none'>Sorry! Something went wrong, please search again.</div>
+        <div id='sessions-none' class='notif' style='display:none'>Sorry! There are no remaining sessions for that group size. You could try searching again with fewer participants.</div>
+        <ul id='sessions-options'></ul>
+      </section>
+  
+      <form id='participants' style='display: none;' onsubmit='return register(event)'>
+        <span id='back-sessions' class='back-arrow'>←</span>
+        <h2>Who is coming?</h2>
+        <div id='participants-info'></div>
+        <button id='submit-register'>Register</button>
+        <div id='reset' style='display:none'>Your session will be released in: <span id='reset-timer'></span></div>  
+      </form>
+  
+      <section id='confirm' style='display:none'>
+        <h2>Your session is confirmed!</h2>
+        <p><span id='confirm-people'></span>
+          <span id='confirm-date' class='confirm-piece'></span>
+          <span id='confirm-time' class='confirm-piece'></span>
+        </p>
+        <p>Use this URL to connect:
+          <span id='confirm-url' class='confirm-piece'></span>
+        </p>
+        <p>Each participant in your group will receive an email confirmation with this information. 
+          Please check your spam folder if you don't see it right away.
+          If you need to cancel your session, there is a link in the email to do this.
+          For more information you can contact <a href='mailto:beyondthebreakdown2021@gmail.com' target='_blank'>beyondthebreakdown2021@gmail.com</a>.</p>
+      </section>
+  
+    </main>
+
+    <script src='/js/register.js' defer></script>
+  </body>
+</html>

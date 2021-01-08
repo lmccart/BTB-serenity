@@ -1,0 +1,340 @@
+/* CSS files add styling rules to your content */
+html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  font-family: input-mono, monospace;
+  line-height: 1.5;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+}
+
+.back-arrow {
+  position: absolute;
+  top: 0.1em;
+  left: .7em;
+  font-size: 4.5em;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+
+.back-arrow:hover {
+  color: white;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+}
+
+section {
+  max-width: 50%;
+}
+
+h1, h2 {
+  font-size: 3em;
+  font-style: italic;
+  line-height: 1.15;
+}
+
+p {
+  margin-bottom: 2em;
+}
+
+.button, button {
+  border: 4px solid black;
+  padding: 1em;
+  display: inline-block;
+  text-decoration: none;
+  color: black;
+  background: white;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.0em;
+  cursor: pointer;
+  font-family: input-mono, monospace;
+}
+
+.button:hover, button:hover {
+  /* border: 4px solid white; */
+  background: black;
+  color: white;
+}
+
+button:focus, input:focus, textarea:focus {
+  outline: none;
+}
+
+select {
+  border: 4px solid black;
+  padding: 1em;
+  display: inline-block;
+  text-decoration: none;
+  color: black;
+  background: white;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.0em;
+  font-family: input-mono, monospace;
+}
+
+input {
+  border: 4px solid black;
+  padding: 1em;
+  display: inline-block;
+  text-decoration: none;
+  color: black;
+  background: white;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 1.0em;
+  width: 20em;
+  font-family: input-mono, monospace;
+}
+
+textarea {
+  border: 4px solid black;
+  padding: 1em;
+  display: inline-block;
+  color: black;
+  background: white;
+  font-size: 1em;
+  width: 16.75vw;
+  font-family: input-mono, monospace;
+}
+
+label {
+  float: right;
+  margin-right: 1em;
+  margin-top: 1em;
+}
+
+tr {
+  height: 1em;
+}
+
+td {
+  vertical-align: top;
+  padding-bottom: 0.5em;
+}
+
+table {
+  margin-bottom: 2em;
+}
+
+/* INTRO PAGE */
+.intro-border {
+  border: 1em solid #6e00ff;
+}
+
+#intro-page {
+  background: #cfc6d0;
+}
+
+
+/* REGISTER PAGE */
+.register-border {
+  border: 1em solid #ff0047;
+}
+
+#register-page {
+  background: #ffd2b1;
+  /* background: linear-gradient(180deg, rgba(245,139,130,1) 0%, rgba(247,144,30,1) 100%); */
+}
+
+#reset {
+  position: absolute;
+  top: 3.25em;
+  left: 10em;
+  color: black;
+}
+
+/* SESSION PAGE */
+
+.session-border {
+  border: 1em solid #6e00ff;
+}
+#session-page {
+}
+
+#session-page section {
+  max-width: 100%;
+}
+
+
+#meet { 
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+}
+
+
+#overlay {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: black;
+  color: white;
+  display: none;
+  z-index: 3;
+  pointer-events: none;
+}
+
+#ytPlayer {
+  width: 100%;
+  height: 120%;
+  z-index: 10;
+  position: absolute;
+  top: -10%;
+  left: 0;
+  pointer-events: none;
+}
+
+#participant-controls {
+  position: absolute;
+  bottom: 5em;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+#pause-timer {
+  color: white;
+  font-size: 10em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+#notif-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+}
+
+#notif {
+  text-align: center;
+  color: yellow;
+  max-width: 68vw;
+  font-size: 4em;
+  text-align: center;
+  pointer-events: none;
+}
+
+
+#guide-controls {
+  background: #6e00ff;
+  display: none;
+  position: absolute;
+  top: 1.5em;
+  left: 1.5em;
+  z-index: 5;
+  width: 22.5vw;
+  text-align: left;
+  padding: 1em;
+}
+
+#next {
+  color: white;
+  margin-bottom: 1em;
+}
+
+.guide-button {
+  margin: 1em 0 0.5em 0;
+}
+
+#text {
+  margin-top: 2em;
+}
+
+#next-prompt {
+  width: 100%;
+  font-style: italic;
+  font-weight: bold;
+  color: white;
+}
+
+
+#form {
+  margin-top: 2em;
+  display: none;
+}
+
+#form label {
+  float: left;
+  color: white;
+}
+
+#world-submit {
+  margin-top: 1em;
+  margin-bottom: 0.25em;
+}
+
+/* REGISTRATION */
+#sessions-options {
+  text-align: left;
+}
+
+.option {
+  list-style-type: none;
+  margin: 0.5em;
+  display: inline-block;
+}
+
+.option:hover, .selected-option {
+  background: black;
+  color: white;
+}
+
+.confirm-piece {
+  display: block;
+  font-weight: bold;
+}
+
+
+
+.sr-only {
+	border: 0 !important;
+	clip: rect(1px, 1px, 1px, 1px) !important; /* 1 */
+	-webkit-clip-path: inset(50%) !important;
+		clip-path: inset(50%) !important;  /* 2 */
+	height: 1px !important;
+	margin: -1px !important;
+	overflow: hidden !important;
+	padding: 0 !important;
+	position: absolute !important;
+	width: 1px !important;
+	white-space: nowrap !important;            /* 3 */
+}
