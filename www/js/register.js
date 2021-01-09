@@ -1,6 +1,9 @@
 
 
 let num = 0;
+let caption = false;
+let asl = false;
+
 let options = {};
 let selected_option = -1;
 let timer_interval;
@@ -19,10 +22,12 @@ db.collection('sessions').onSnapshot({}, function(snapshot) {
 });
 
 // Attach DOM event listeners
-$('#submit-search').click(searchSessions);
-$('#submit-register').click(register);
-$('#back-num').click(showNum);
-$('#back-sessions').click(showSessions);
+$('#submit-search').on('click', searchSessions);
+$('#submit-register').on('click', register);
+$('#back-num').on('click', showNum);
+$('#back-sessions').on('click', showSessions);
+$('#caption-display').on('click', () => { $('#caption').prop('checked', !$('#caption').prop('checked'))});
+$('#asl-display').on('click', () => { $('#asl').prop('checked', !$('#asl').prop('checked'))});
 
 function showNum() {
   $('#numParticipants').show();
@@ -41,15 +46,23 @@ function searchSessions() {
   $('#sessions').show();
   reset();
   num = Number($('#num').val());
+
+  caption = $('#caption').prop('checked');
+  asl = $('#caption').prop('asl');
+
   for (let o in options) {
     let opt = options[o];
     if (opt.participants.length + num <= 6 && !opt.hold) {
-      let date = moment(opt.datetime).format("YYYY-MM-DD HH:mm:ss");
-      console.log(date)
-      $('#sessions-options').append('<li class="option button" id="'+opt.id+'">'+ date + '</li>');
+      if ((!caption && !asl) || opt.accessible) {
+        let date = moment(opt.datetime).format("YYYY-MM-DD HH:mm:ss");
+        console.log(date)
+        let elt = $('<li class="option button">'+date+'</li>');
+        elt.attr('id', opt.id);
+        $('#sessions-options').append(elt);
+      }
     }
   }
-  $('.option').click(selectSession);
+  $('.option').on('click', selectSession);
   if (!$('.option').length) {
     $('#sessions-none').show();
   }
@@ -109,25 +122,28 @@ function register(e) {
     }
 
     for (let i=1; i<num+1; i++) {
-
       let pid = [group_ids[i-1]];
       for (let j=0; j<num; j++) {
         if (j !== i-1) {
           pid.push(group_ids[j]);
         }
       }
-      let cancel_url = 'http://beyond-the-breakdown.web.app/cancel/?roomId='+s.id+'&pid='+pid.join(',');
+      let url_cancel = 'http://beyond-the-breakdown.web.app/cancel/?roomId='+s.id+'&pid='+pid.join(',');
 
       s.participants.push({
         name: $('#p'+i+'name').val(),
         email: $('#p'+i+'email').val(),
         pid: group_ids[i-1],
-        cancel_url: cancel_url
+        url_cancel: url_cancel
       });
     };
     if (num >= 4) {
       s.closed = true;
     }
+
+    if (caption) s.caption_needed = true;
+    if (asl) s.asl_needed = true;
+
     db.collection('sessions').doc(selected_option).set(s);
     displayRegistrationConfirmation();
   } else {
@@ -146,7 +162,7 @@ function displayRegistrationConfirmation() {
   }
   $('#confirm-date').text(options[selected_option].datetime);
   $('#confirm-time').text(options[selected_option].datetime);
-  $('#confirm-url').text(options[selected_option].session_url);
+  $('#confirm-url').text(options[selected_option].url_session);
   $('#confirm').show();
   releaseSession();
 }

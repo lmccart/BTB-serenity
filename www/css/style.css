@@ -167,6 +167,7 @@ table {
 .session-border {
   border: 1em solid #6e00ff;
 }
+
 #session-page {
 }
 
@@ -174,6 +175,23 @@ table {
   max-width: 100%;
 }
 
+input[type='checkbox'] {
+  position: absolute;
+  left: -999999999999px;
+  bottom: -999999999999px;
+}
+#caption-display, #asl-display {
+  border: 4px solid black;
+  width: 2em;
+  height: 2em;
+  background: white;
+  cursor: pointer;
+  display: inline-block;
+}
+
+#caption:checked ~ #caption-display, #asl:checked ~ #asl-display {
+  background: black;
+}
 
 #meet { 
   width: 100vw;
@@ -322,8 +340,6 @@ table {
   display: block;
   font-weight: bold;
 }
-
-
 
 .sr-only {
 	border: 0 !important;

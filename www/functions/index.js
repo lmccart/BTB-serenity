@@ -28,8 +28,10 @@ exports.sendConfirm = functions.firestore
       if (!session.participants[i].confirmed) {
         let html = 'Dear ' + session.participants[i].name + ',';
         html += '<br><br>Your session registration is confirmed for '+session.datetime+'.';
-        html += '<br><br>At that time, please connect at <a href="'+session.session_url+'">'+session.session_url+'</a>.';
-        html += '<br><br>If you are unable to attend, please <a href="'+session.cancel_url+'">click here to cancel</a>.';
+        if (session.caption) html += ' Your session will include live captioning.';
+        if (session.asl) html += ' Your session will include live captioning.';
+        html += '<br><br>At that time, please connect at <a href="'+session.url_session+'">'+session.url_session+'</a>.';
+        html += '<br><br>If you are unable to attend, please <a href="'+session.url_cancel+'">click here to cancel</a>.';
         html += '<br><br>Sincerely,';
         html += '<br>Tony Patrick, Lauren Lee McCarthy, and Grace Lee';
         html += '<br>Artists, Beyond the Breakdown';
@@ -130,8 +132,8 @@ exports.checkReminder = functions.https.onRequest((req, res) => {
         for (let i=0; i<session.participants.length; i++) {
           let html = 'Dear ' + session.participants[i].name + ',';
           html += '<br><br>This is a reminder that your Beyond the Breakdown session is confirmed for '+session.datetime+'.';
-          html += '<br><br>At that time, please connect at <a href="'+session.session_url+'">'+session.session_url+'</a>.';
-          html += '<br><br>If you are unable to attend, please <a href="'+session.participants[i].cancel_url+'">click here to cancel</a>.';
+          html += '<br><br>At that time, please connect at <a href="'+session.url_session+'">'+session.url_session+'</a>.';
+          html += '<br><br>If you are unable to attend, please <a href="'+session.participants[i].url_cancel+'">click here to cancel</a>.';
           html += '<br><br>Sincerely,';
           html += '<br>Tony Patrick, Lauren Lee McCarthy, and Grace Lee';
           html += '<br>Artists, Beyond the Breakdown';
