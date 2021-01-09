@@ -26,21 +26,19 @@ exports.sendConfirm = functions.firestore
     for (let i=0; i<session.participants.length; i++) {
       updated_participants[i] = session.participants[i];
       if (!session.participants[i].confirmed) {
-        let html = 'Dear ' + session.participants[i].name + ',';
-        html += '<br><br>Your session registration is confirmed for '+session.datetime+'.';
-        if (session.caption) html += ' Your session will include live captioning.';
-        if (session.asl) html += ' Your session will include live captioning.';
-        html += '<br><br>At that time, please connect at <a href="'+session.url_session+'">'+session.url_session+'</a>.';
-        html += '<br><br>If you are unable to attend, please <a href="'+session.url_cancel+'">click here to cancel</a>.';
-        html += '<br><br>Sincerely,';
-        html += '<br>Tony Patrick, Lauren Lee McCarthy, and Grace Lee';
-        html += '<br>Artists, Beyond the Breakdown';
         let msg = {
           to: session.participants[i].email,
-          message: {
-            subject: 'Beyond the Breakdown session confirmation',
-            html: html
-          },
+          template: {
+            name: 'session-confirmation',
+            data: {
+              name: session.participants[i].name,
+              datetime: session.datetime,
+              url_session: session.url_session,
+              url_cancel: session.url_cancel,
+              caption: session.accessiblity_caption || false,
+              asl: session.accessiblity_asl || false
+            }
+          }
         };
         db.collection('mail').add(msg);
         updated_participants[i].confirmed = true;

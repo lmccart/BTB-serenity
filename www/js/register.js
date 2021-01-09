@@ -48,7 +48,7 @@ function searchSessions() {
   num = Number($('#num').val());
 
   caption = $('#caption').prop('checked');
-  asl = $('#caption').prop('asl');
+  asl = $('#asl').prop('checked');
 
   for (let o in options) {
     let opt = options[o];
@@ -141,10 +141,10 @@ function register(e) {
       s.closed = true;
     }
 
-    if (caption) s.caption_needed = true;
-    if (asl) s.asl_needed = true;
+    if (caption) s.accessiblity_caption = true;
+    if (asl) s.accessiblity_asl = true;
 
-    db.collection('sessions').doc(selected_option).set(s);
+    db.collection('sessions').doc(selected_option).set(s, {merge: true});
     displayRegistrationConfirmation();
   } else {
     alert('Please fill out all participant contact info.');
