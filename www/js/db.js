@@ -48,10 +48,8 @@ function populateSlots() {
       accessible: false,
       closed: false,
       participants: [],
-      reminder_sent: false,
-      url_session: 'https://build.beyondthebreakdown.world/'+id,
-      url_cancel: 'https://beyondthebreakdown.world/cancel?id='+id,
-      wrapup_sent: false,
+      sent_reminder: false,
+      sent_wrapup: false,
       id: id
     };
     slots.push(s);

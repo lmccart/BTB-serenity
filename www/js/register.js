@@ -128,12 +128,14 @@ function register(e) {
           pid.push(group_ids[j]);
         }
       }
-      let url_cancel = 'http://beyond-the-breakdown.web.app/cancel/?roomId='+s.id+'&pid='+pid.join(',');
+      let url_cancel = 'https://beyondthebreakdown.world/cancel/?sessionId='+s.id+'&pid='+pid.join(',');
+      let url_session = 'https://beyondthebreakdown.world/welcome/?sessionId='+s.id+'&pid='+pid[0];
 
       s.participants.push({
         name: $('#p'+i+'name').val(),
         email: $('#p'+i+'email').val(),
-        pid: group_ids[i-1],
+        pid: pid[0],
+        url_session: url_session,
         url_cancel: url_cancel
       });
     };
@@ -144,7 +146,7 @@ function register(e) {
     if (caption) s.accessiblity_caption = true;
     if (asl) s.accessiblity_asl = true;
 
-    db.collection('sessions').doc(selected_option).set(s, {merge: true});
+    db.collection('sessions').doc(selected_option).set(s);
     displayRegistrationConfirmation();
   } else {
     alert('Please fill out all participant contact info.');

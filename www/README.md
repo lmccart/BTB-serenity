@@ -2,10 +2,10 @@ Repo Notes:
 * Serenity prompts are located in `data/prompts.tsv` and in this [google spreadsheet](https://docs.google.com/spreadsheets/d/12XJfovHsBwuTXDcOGfeTrTolDyWDBs5Kzc2h6HXEZHE/edit#gid=0)
 
 Relevant URLS:
-* https://beyondthebreakdown.com - homepage
-* https://beyondthebreakdown.com/register - registration pages
-* https://build.beyondthebreakdown.com/00XXXX - session, participant view
-* https://build.beyondthebreakdown.com/00XXXX?guide=true - session, facilitator view
+* https://beyondthebreakdown.world - homepage
+* https://beyondthebreakdown.world/register - registration pages
+* https://build.beyondthebreakdown.world/00XXXX - session, participant view
+* https://build.beyondthebreakdown.world/00XXXX?guide=true - session, facilitator view
 
 HTTPS Functions:
 * https://us-central1-beyond-the-breakdown.cloudfunctions.net/refresh

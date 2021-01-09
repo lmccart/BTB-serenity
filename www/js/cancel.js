@@ -7,13 +7,13 @@ let db = firebase.firestore(app);
 let id, pid;
 let session;
 
-$('#cancel-individual').click(cancelIndividual);
-$('#cancel-group').click(cancelGroup);
+$('#cancel-individual').on('click', cancelIndividual);
+$('#cancel-group').on('click', cancelGroup);
 parseParams();
 
 function parseParams() {
   const params = new URLSearchParams(window.location.search);
-  id = params.get('roomId');
+  id = params.get('sessionId');
   pid = params.get('pid');
   if (pid) pid = pid.split(',');
   console.log(id, pid)

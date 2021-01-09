@@ -19,15 +19,29 @@
     <link rel="stylesheet" href="https://use.typekit.net/fth5afb.css">
     <link rel='stylesheet' href='/css/style.css'>
 
+    <style>
+      #error {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+      }
+    </style>
 
   </head>
   <body>
     <main id='intro-page'>
       <section>
         <h1>Beyond the Breakdown</h1>
-        <p>Goodbye!</p>
-        <a class='button' href='/register'>Register for a session</a>
+        <p>Welcome<span id='welcome-name'></span>!</p>
+        <iframe src="https://player.vimeo.com/video/463327688" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+        <div><a class='button' href='https://build.beyondthebreakdown.world/' id='enter'>Enter</a></div>
       </section>
     </main>
+    <div id='error'>Sorry, we can't find your session. Please confirm you have clicked the correct link. You can contact <a href='mailto:info@beyondthebreakdown.world'>info@beyondthebreakdown.world</a> for help.</div>
+    <script src='/js/goodbye.js' defer></script>
   </body>
 </html>

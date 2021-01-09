@@ -14,8 +14,8 @@ let promptTimer = 0;
 
 // Parse URL params, show HTML elements depending on view
 const params = new URLSearchParams(window.location.search);
-let roomId = params.get('roomId');
-if (!roomId) {
+let sessionId = params.get('sessionId');
+if (!sessionId) {
   $('#error').show(); // TODO show error page
 }
 let guide = params.get('guide') ? true : false;
@@ -28,7 +28,7 @@ function initSession() {
   // Create jitsi session
   const domain = 'meet.jit.si';
   const options = {
-    roomName: roomId,
+    roomName: sessionId,
     parentNode: document.querySelector('#meet'),
   };
   api = new JitsiMeetExternalAPI(domain, options);
@@ -46,7 +46,7 @@ function initSession() {
     snapshot.docChanges().forEach(function(change) {
       let msg = change.doc.data();
       if(change.type !== 'added') return;
-      else if(msg.roomId !== roomId) return;
+      else if(msg.sessionId !== sessionId) return;
       else if (msg.type === 'pauseGroup') pauseGroup(msg.val);
       else if (msg.type === 'guide') playMessage(msg.val, true);
       else console.log('badType:', msg.type)
@@ -78,7 +78,7 @@ function joined(e) {
 
 
 function sendMessage(type, val) {
-  let m = { type: type, roomId: roomId, val: val, timestamp: new Date().getTime() };
+  let m = { type: type, sessionId: sessionId, val: val, timestamp: new Date().getTime() };
   db.collection('messages').add(m);
 }
 
@@ -212,7 +212,7 @@ function submitWorld() {
       return false;
     }
   }
-  db.collection('sessions').doc(roomId).set(w, {merge: true});
+  db.collection('sessions').doc(sessionId).set(w, {merge: true});
 }
 
 function convertTsvIntoObjects(tsvText){
