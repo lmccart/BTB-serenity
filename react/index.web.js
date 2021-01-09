@@ -69,7 +69,7 @@ globalNS.renderEntryPoint = ({
     elementId = 'react'
 }) => {
     ReactDOM.render(
-        <Component { ...props } />,
-        document.getElementById(elementId)
+      <Component { ...props } />,
+      document.getElementById(elementId)
     );
 };

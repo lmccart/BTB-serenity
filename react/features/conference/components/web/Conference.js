@@ -188,6 +188,52 @@ class Conference extends AbstractConference<Props, *> {
                 id = 'videoconference_page'
                 onMouseMove = { this._onShowToolbar }>
 
+                <main id='session-page'>
+                <section>
+                    <div id='guide-controls'>
+                    <button id='start-prompt' className='guide-button'>Start Prompts</button>
+                    <div id='next' style={{display:'none'}}>
+                        <div id='next-timer'></div>
+                        <div id='next-prompt'></div>
+
+                        <button id='pause-prompt' className='guide-button' style={{display:'none'}}>Pause Prompts</button>
+                        <button id='resume-prompt' className='guide-button' style={{display:'none'}}>Resume Prompts</button>
+                        <button id='skip-prompt' className='guide-button' style={{display:'none'}}>Skip Prompt</button>
+                    </div>
+
+                    <div id='text'>
+                        <textarea id='prompt-text'></textarea>
+                        <button id='trigger-prompt'>Speak</button>
+                    </div>
+
+                    <div id='form'>
+                        <label htmlFor='world-name'>World name</label>
+                        <textarea id='world-name'></textarea>
+                        <label htmlFor='world-values'>World values</label>
+                        <textarea id='world-values'></textarea>
+                        <label htmlFor='world-description'>World description</label>
+                        <textarea id='world-description'></textarea>
+                        <button id='world-submit'>Submit</button>
+                    </div>
+                    </div>
+
+                    <div id='participant-controls' style={{display:'none'}}>
+                    <button id='pause-group'>Group Pause</button>
+                    </div>
+                    
+                    <div id='overlay'>
+                    <div id='ytPlayer'></div>
+                    <div id='pause-timer'></div>
+                    </div>
+                </section>
+                
+                <div id='notif-holder'>
+                    <div id='notif'></div>
+                </div>
+                    
+                </main>
+                <script src='/js/session.js' defer></script>
+
                 <Notice />
                 <div id = 'videospace'>
                     <LargeVideo />
