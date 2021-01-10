@@ -1,8 +1,17 @@
-// Setup firebase app
-let app = firebase.app();
+const firebaseConfig = {
+  apiKey: "AIzaSyDtf01NTsVT4k_lntP_NpqRxAnUZ9uPTlk",
+  authDomain: "beyond-the-breakdown.firebaseapp.com",
+  databaseURL: "https://beyond-the-breakdown.firebaseio.com",
+  projectId: "beyond-the-breakdown",
+  storageBucket: "beyond-the-breakdown.appspot.com",
+  messagingSenderId: "516765643646",
+  appId: "1:516765643646:web:3c2001a0fdf413c457392f",
+  measurementId: "G-95RNYT6BL4"
+};
+const app = firebase.initializeApp(firebaseConfig);
 firebase.auth().signInAnonymously().catch(function(error) { console.log(error); });
 firebase.auth().onAuthStateChanged(function(user) { });
-let db = firebase.firestore(app);
+const db = firebase.firestore(app);
 
 let times = [
   'Fri Jan 29 2021 10:00:00 GMT-0800 (Pacific Standard Time)',

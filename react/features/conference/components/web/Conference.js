@@ -232,7 +232,7 @@ class Conference extends AbstractConference<Props, *> {
                 </div>
                     
                 </main>
-                <script src='/js/session.js' defer></script>
+                <script src='../js/session.js' defer></script>
 
                 <Notice />
                 <div id = 'videospace'>
