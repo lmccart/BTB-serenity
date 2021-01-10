@@ -27,8 +27,24 @@ import type { AbstractProps } from '../AbstractConference';
 import Labels from './Labels';
 import { default as Notice } from './Notice';
 
+import firebase from 'firebase';
+
 declare var APP: Object;
 declare var interfaceConfig: Object;
+
+let db;
+let userId;
+let sessionId;
+let pauseTimer = 0;
+let pauseInterval = false;
+let ytPlayer;
+
+/* GUIDE VARS */
+let prompts = [];
+let currentPrompt = -1;
+let currentOption = 0;
+let promptInterval = false;
+let promptTimer = 0;
 
 /**
  * DOM events for when full screen mode has changed. Different browsers need
@@ -191,34 +207,34 @@ class Conference extends AbstractConference<Props, *> {
                 <main id='session-page'>
                 <section>
                     <div id='guide-controls'>
-                    <button id='start-prompt' className='guide-button'>Start Prompts</button>
+                    <button id='start-prompt' className='guide-button' onClick={this._startPrompt}>Start Prompts</button>
                     <div id='next' style={{display:'none'}}>
                         <div id='next-timer'></div>
-                        <div id='next-prompt'></div>
+                        <div id='next-prompt' onClick={this._nextPrompt}></div>
 
-                        <button id='pause-prompt' className='guide-button' style={{display:'none'}}>Pause Prompts</button>
-                        <button id='resume-prompt' className='guide-button' style={{display:'none'}}>Resume Prompts</button>
-                        <button id='skip-prompt' className='guide-button' style={{display:'none'}}>Skip Prompt</button>
+                        <button id='pause-prompt' className='guide-button' style={{display:'none'}} onClick={this._pausePrompt}>Pause Prompts</button>
+                        <button id='resume-prompt' className='guide-button' style={{display:'none'}} onClick={this._resumePrompt}>Resume Prompts</button>
+                        <button id='skip-prompt' className='guide-button' style={{display:'none'}} onClick={this._nextPrompt}>Skip Prompt</button>
                     </div>
 
                     <div id='text'>
                         <textarea id='prompt-text'></textarea>
-                        <button id='trigger-prompt'>Speak</button>
+                        <button id='trigger-prompt' onClick={this._triggerTextPrompt}>Speak</button>
                     </div>
 
-                    <div id='form'>
+                    <div id='form' style={{display:'none'}}>
                         <label htmlFor='world-name'>World name</label>
                         <textarea id='world-name'></textarea>
                         <label htmlFor='world-values'>World values</label>
                         <textarea id='world-values'></textarea>
                         <label htmlFor='world-description'>World description</label>
                         <textarea id='world-description'></textarea>
-                        <button id='world-submit'>Submit</button>
+                        <button id='world-submit' onClick={this._submitWorld}>Submit</button>
                     </div>
                     </div>
 
                     <div id='participant-controls' style={{display:'none'}}>
-                    <button id='pause-group'>Group Pause</button>
+                    <button id='pause-group' onClick={this._triggerPauseGroup}>Group Pause</button>
                     </div>
                     
                     <div id='overlay'>
@@ -232,8 +248,6 @@ class Conference extends AbstractConference<Props, *> {
                 </div>
                     
                 </main>
-                <script src='../js/session.js' defer></script>
-
                 <Notice />
                 <div id = 'videospace'>
                     <LargeVideo />
@@ -275,6 +289,250 @@ class Conference extends AbstractConference<Props, *> {
         this.props.dispatch(showToolbox());
     }
 
+
+    /* BTB SERENITY!! */
+    _initializeFirebase = () => {
+
+        const firebaseConfig = {
+            apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+            authDomain: "beyond-the-breakdown.firebaseapp.com",
+            databaseURL: "https://beyond-the-breakdown.firebaseio.com",
+            projectId: "beyond-the-breakdown",
+            storageBucket: "beyond-the-breakdown.appspot.com",
+            messagingSenderId: "516765643646",
+            appId: "1:516765643646:web:3c2001a0fdf413c457392f",
+            measurementId: "G-95RNYT6BL4"
+        };
+        firebase.initializeApp(firebaseConfig);
+        firebase.auth().signInAnonymously().catch(function(error) { console.log('LM error ' + error); });
+        db = firebase.firestore();
+    }
+  
+    _initSession = () => {
+        // Setup listener for firestore changes
+        let now = new Date().getTime();
+        db.collection('messages').where('timestamp', '>', now).onSnapshot({}, (snapshot) => {
+            let that = this;
+            snapshot.docChanges().forEach(function(change) {
+                let msg = change.doc.data();
+                if (change.type !== 'added') return;
+                else if (msg.sessionId !== sessionId) return;
+                else if (msg.type === 'pauseGroup') that._pauseGroup(msg.val);
+                else if (msg.type === 'guide') that._playMessage(msg.val, true);
+                else console.log('LM badType:', msg.type)
+            });
+        });
+  
+        let tag = document.createElement('script');
+        tag.id = 'iframe-demo';
+        tag.src = 'https://www.youtube.com/iframe_api';
+        let firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+    _onYouTubeIframeAPIReady = () => {
+        ytPlayer = new YT.Player('ytPlayer', {
+            videoId: 't0NHILIwO2I',
+            playerVars: {
+                'autoplay': 0,
+                'controls': 0,
+                'rel': 0,
+                'fs': 0,
+                'modestbranding': 1
+            }
+        });
+    }
+  
+    // Called when participant joins.
+    _joined = (e) => {
+        userId = e.id;
+        $('#participant-controls').show();
+    }
+  
+    _sendMessage = (type, val) => {
+        let m = {
+            type: type,
+            sessionId: sessionId,
+            val: val,
+            timestamp: new Date().getTime()
+        };
+        // console.log('LM send message')
+        // console.log(m)
+        db.collection('messages').add(m);
+    };
+  
+    _triggerPauseGroup = () => {
+        if (guide) this._pausePrompt();
+        this._sendMessage('pauseGroup', 10000); // 10 second pause
+    }
+  
+    _triggerTextPrompt = () => {
+        console.log('LM triggerTextPrompt');
+        const msg = $('#prompt-text').val();
+        if (msg) this._sendMessage('guide', msg);
+        $('#prompt-text').val('');
+    };
+  
+    _triggerPrompt = () => {
+        this._sendMessage('guide', prompts[currentPrompt].options[currentOption]);
+    }
+  
+    _pauseGroup = (ms) => {
+        if (pauseInterval) clearInterval(pauseInterval);
+        pauseTimer = performance.now() + ms;
+        $('#pause-timer').text(this._msToHms(ms));
+        $('#overlay').fadeIn(0).delay(ms).fadeOut(0);
+        ytPlayer.playVideo();
+        //   api.isAudioMuted().then(muted => {
+        //     if (!muted) api.executeCommand('toggleAudio');
+        //   }); TODO
+        setTimeout(function() {
+            // api.executeCommand('toggleAudio'); //TOD
+            ytPlayer.stopVideo();
+            if (guide && currentPrompt > -1) this._resumePrompt();
+        }, ms);
+        pauseInterval = setInterval(function() {
+            const remaining = pauseTimer - performance.now();
+            $('#pause-timer').text(this._msToHms(remaining));
+        });
+    }
+  
+    _playMessage = (msg, doSpeak) => {
+        $('#notif').text(msg);
+        $('#notif-holder').stop().fadeIn(300).delay(4000).fadeOut(300);
+        if (doSpeak) this._speak(msg);
+        console.log('LM _playMessage: ' + msg);
+    }
+  
+    // Speaks a message in the browser via TTS.
+    _speak = (msg) => {
+        const utter = new SpeechSynthesisUtterance(msg);
+        utter.rate = 0.9;
+        window.speechSynthesis.speak(utter);
+    }
+  
+    /* GUIDE */
+    _initGuide = () => {
+        console.log('LM init')
+        $.ajax(`${window.location.origin}/static/data/prompts.tsv`)
+            .done(data => {
+                console.log('LM loaded prompts from TSV');
+                this._convertTsvIntoObjects(data);
+                $('#guide-controls').show();
+            });
+    }
+  
+    _startPrompt = () => {
+        $('#start-prompt').hide();
+        $('#next').show();
+        $('#pause-prompt').show();
+        $('#skip-prompt').show();
+        this._nextPrompt();
+    }
+  
+    _nextPrompt = () => {
+        if (promptInterval) clearInterval(promptInterval);
+        currentPrompt++;
+        if (currentPrompt < prompts.length) {
+            promptInterval = setInterval(this._checkPrompt, 100);
+            promptTimer = prompts[currentPrompt].lastOffset + performance.now();
+            let options = prompts[currentPrompt].options;
+            currentOption = Math.floor(Math.random() * options.length);
+            $('#next-prompt').text(options[currentOption]);
+        } else {
+            $('#next').hide();
+            $('#form').show();
+        }
+    }
+  
+    _resumePrompt = () => {
+        if (pauseInterval) clearInterval(pauseInterval);
+        promptTimer += performance.now();
+        promptInterval = setInterval(this._checkPrompt, 100);
+        $('#resume-prompt').hide();
+        $('#pause-prompt').show();
+    }
+  
+    _pausePrompt = () => {
+        if (promptInterval) clearInterval(promptInterval);
+        promptTimer -= performance.now();
+        $('#pause-prompt').hide();
+        $('#resume-prompt').show();
+        $('#next-timer').text('Next prompt PAUSED');
+    }
+  
+    _checkPrompt = () => {
+        const remaining = promptTimer - performance.now();
+        if (remaining <= 0) {
+            this._triggerPrompt();
+            this._nextPrompt();
+        } else {
+            $('#next-timer').text('Next prompt in ' + this._msToHms(remaining));
+        }
+    }
+  
+    _submitWorld = () => {
+        let w = {
+            world_name: $('#world-name').val(),
+            world_values: $('#world-values').val(),
+            world_description: $('#world-description').val()
+        }
+        // check complete
+        for (let i in w) {
+            if (!w[i] || !w[i].length) {
+                alert('please complete the form');
+                return false;
+            }
+        }
+        db.collection('sessions').doc(sessionId).set(w, {
+            merge: true
+        });
+    }
+  
+    _convertTsvIntoObjects = (tsvText) => {
+        let tsvRows = tsvText.split('\n');
+        let headers = tsvRows.shift();
+        headers = headers.split('\t');
+  
+        let lastOffset = 0;
+        for (let row of tsvRows) {
+            let cols = row.split('\t');
+            if (cols[1].toUpperCase().includes('Y')) {
+                let offset = this._offsetToMs(cols[0]);
+                let p = {
+                    offset: offset,
+                    lastOffset: offset - lastOffset,
+                    options: []
+                };
+                for (let i = 2; i < cols.length; i++) {
+                    if (cols[i].length > 2) p.options.push(cols[i]);
+                }
+                lastOffset = offset;
+                prompts.push(p);
+            }
+        }
+        console.log(prompts);
+    }
+  
+    // Helper for formatting text in hh:mm format.
+    _msToHms = (d) => {
+        d = Number(d) / 1000;
+        let h = Math.floor(d / 3600);
+        let m = Math.floor(d % 3600 / 60);
+        let s = Math.floor(d % 3600 % 60);
+  
+        let time = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+        if (h > 0) time = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+        return time;
+    }
+  
+    _offsetToMs = (offset) => {
+        const minSec = offset.split(':');
+        return 1000 * (parseInt(minSec[1]) + parseInt(minSec[0]) * 60);
+    }
+        
+  
+
     /**
      * Until we don't rewrite UI using react components
      * we use UI.start from old app. Also method translates
@@ -283,6 +541,7 @@ class Conference extends AbstractConference<Props, *> {
      * @inheritdoc
      */
     _start() {
+        console.log('LM START');
         APP.UI.start();
 
         APP.UI.registerListeners();
@@ -296,6 +555,23 @@ class Conference extends AbstractConference<Props, *> {
         dispatch(connect());
 
         maybeShowSuboptimalExperienceNotification(dispatch, t);
+
+        this._initializeFirebase();
+
+        // Parse URL params, show HTML elements depending on view
+        const params = window.location.pathname.substring(1).split('-');
+        sessionId = params[0];
+        if (!sessionId.length) {
+          $('#error').show(); // TODO show error page
+        }
+        const guide = params[1] === 'guide';
+        console.log('LM ' + sessionId + ' ' + guide);
+        if (guide) this._initGuide();
+        
+        this._initSession();
+        
+
+
     }
 }
 
