@@ -34,7 +34,7 @@ declare var APP: Object;
 declare var interfaceConfig: Object;
 
 let db;
-let userId;
+let userId = 'TODOpid';
 let sessionId;
 let pauseTimer = 0;
 let pauseInterval = false;
@@ -254,7 +254,7 @@ class Conference extends AbstractConference<Props, *> {
                             <div id='chat-messages'></div>
                             <label htmlFor='chat-input' className='sr-only'>Input Message</label>
                             <textarea id='chat-input'></textarea>
-                            <button id='chat-send'>Send</button>
+                            <button id='chat-send' onClick={this._sendChat}>Send</button>
                         </div>
                     </section>
                 
@@ -351,8 +351,8 @@ class Conference extends AbstractConference<Props, *> {
                 if (change.type !== 'added') return;
                 else if (msg.sessionId !== sessionId) return;
                 else if (msg.type === 'group-pause') that._groupPause(msg.val);
-                else if (msg.type === 'serenity') that._playMessage(msg.val, true);
-                else if (msg.type === 'serenity') that._playMessage(msg.val, true);
+                else if (msg.type === 'group-chat') that._groupChatMessage(msg.val);
+                else if (msg.type === 'serenity') that._playPrompt(msg.val, true);
                 else console.log('LM badType:', msg.type)
             });
         });
@@ -373,6 +373,19 @@ class Conference extends AbstractConference<Props, *> {
         };
         db.collection('messages').add(m);
     };
+
+    _sendChat = () => {
+        const data = {
+            msg: $('#chat-input').val(),
+            user: userId
+        }
+        if (data.msg) this._sendMessage('group-chat', data);
+        $('#chat-input').val('');
+    }
+
+    _groupChatMessage = (data) => {
+        $('#chat-messages').append('<div><span>'+data.user+'</span><span>'+data.msg+'</span>');
+    }
   
     _triggerGroupPause = () => {
         if (facilitator) this._pausePrompt();
@@ -401,11 +414,12 @@ class Conference extends AbstractConference<Props, *> {
         });
     }
   
-    _playMessage = (msg, doSpeak) => {
+    _playPrompt = (msg, doSpeak) => {
         $('#notif').text(msg);
+        $('#serenity-messages').text(msg);
         $('#notif-holder').stop().fadeIn(300).delay(4000).fadeOut(300);
         if (doSpeak) this._speak(msg);
-        console.log('LM _playMessage: ' + msg);
+        console.log('LM _playPrompt: ' + msg);
     }
   
     // Speaks a message in the browser via TTS.
@@ -513,7 +527,8 @@ class Conference extends AbstractConference<Props, *> {
         for (let row of tsvRows) {
             let cols = row.split('\t');
             if (cols[1].toUpperCase().includes('Y')) {
-                let offset = _offSetToMs(cols[0]);
+                const minSec = cols[0].split(':');
+                let offset = 1000 * (parseInt(minSec[1]) + parseInt(minSec[0]) * 60); // offset to ms
                 let p = {
                     offset: offset,
                     lastOffset: offset - lastOffset,
@@ -589,12 +604,5 @@ function _msToHms(d) {
     if (h > 0) time = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
     return time;
 }
-  
-function _offsetToMs(offset) {
-    const minSec = offset.split(':');
-    return 1000 * (parseInt(minSec[1]) + parseInt(minSec[0]) * 60);
-}
-        
-  
 
 export default reactReduxConnect(_mapStateToProps)(translate(Conference));
