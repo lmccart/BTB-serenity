@@ -7,6 +7,7 @@
 * https://community.jitsi.org/t/how-to-how-to-build-jitsi-meet-from-source-a-developers-guide/75422
 * https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-web#running-with-webpack-dev-server-for-development
 * https://domains.google.com/registrar/
+* https://console.cloud.google.com/apis/credentials
 
 ## Useful commands
 * `sudo nano /usr/local/etc/nginx/nginx.conf`

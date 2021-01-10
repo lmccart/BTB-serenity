@@ -292,20 +292,25 @@ class Conference extends AbstractConference<Props, *> {
 
     /* BTB SERENITY!! */
     _initializeFirebase = () => {
-
-        const firebaseConfig = {
-            apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
-            authDomain: "beyond-the-breakdown.firebaseapp.com",
-            databaseURL: "https://beyond-the-breakdown.firebaseio.com",
-            projectId: "beyond-the-breakdown",
-            storageBucket: "beyond-the-breakdown.appspot.com",
-            messagingSenderId: "516765643646",
-            appId: "1:516765643646:web:3c2001a0fdf413c457392f",
-            measurementId: "G-95RNYT6BL4"
-        };
-        firebase.initializeApp(firebaseConfig);
-        firebase.auth().signInAnonymously().catch(function(error) { console.log('LM error ' + error); });
-        db = firebase.firestore();
+        return new Promise(resolve => {
+            $.ajax(`${window.location.origin}/static/data/env.json`)
+                .done(data => {
+                    const firebaseConfig = {
+                        apiKey: data.firebaseApiKey,
+                        authDomain: "beyond-the-breakdown.firebaseapp.com",
+                        databaseURL: "https://beyond-the-breakdown.firebaseio.com",
+                        projectId: "beyond-the-breakdown",
+                        storageBucket: "beyond-the-breakdown.appspot.com",
+                        messagingSenderId: "516765643646",
+                        appId: "1:516765643646:web:3c2001a0fdf413c457392f",
+                        measurementId: "G-95RNYT6BL4"
+                    };
+                    firebase.initializeApp(firebaseConfig);
+                    firebase.auth().signInAnonymously().catch(function(error) { console.log('LM error ' + error); });
+                    db = firebase.firestore();
+                    resolve();
+            });
+        });
     }
   
     _initSession = () => {
@@ -556,22 +561,21 @@ class Conference extends AbstractConference<Props, *> {
 
         maybeShowSuboptimalExperienceNotification(dispatch, t);
 
-        this._initializeFirebase();
-
-        // Parse URL params, show HTML elements depending on view
-        const params = window.location.pathname.substring(1).split('-');
-        sessionId = params[0];
-        if (!sessionId.length) {
-          $('#error').show(); // TODO show error page
-        }
-        const guide = params[1] === 'guide';
-        console.log('LM ' + sessionId + ' ' + guide);
-        if (guide) this._initGuide();
-        
-        this._initSession();
-        
-
-
+        this._initializeFirebase()
+        .then(() => {
+            console.log('LM happening')
+            // Parse URL params, show HTML elements depending on view
+            const params = window.location.pathname.substring(1).split('-');
+            sessionId = params[0];
+            if (!sessionId.length) {
+            $('#error').show(); // TODO show error page
+            }
+            const guide = params[1] === 'guide';
+            console.log('LM ' + sessionId + ' ' + guide);
+            if (guide) this._initGuide();
+            
+            this._initSession();
+        });
     }
 }
 
