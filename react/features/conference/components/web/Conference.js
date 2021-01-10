@@ -28,6 +28,7 @@ import Labels from './Labels';
 import { default as Notice } from './Notice';
 
 import firebase from 'firebase';
+import { Player, ControlBar } from 'video-react';
 
 declare var APP: Object;
 declare var interfaceConfig: Object;
@@ -37,9 +38,9 @@ let userId;
 let sessionId;
 let pauseTimer = 0;
 let pauseInterval = false;
-let ytPlayer;
 
-/* GUIDE VARS */
+/* FACILITATOR VARS */
+let facilitator;
 let prompts = [];
 let currentPrompt = -1;
 let currentOption = 0;
@@ -205,47 +206,62 @@ class Conference extends AbstractConference<Props, *> {
                 onMouseMove = { this._onShowToolbar }>
 
                 <main id='session-page'>
-                <section>
-                    <div id='guide-controls'>
-                    <button id='start-prompt' className='guide-button' onClick={this._startPrompt}>Start Prompts</button>
-                    <div id='next' style={{display:'none'}}>
-                        <div id='next-timer'></div>
-                        <div id='next-prompt' onClick={this._nextPrompt}></div>
+                    <section id='facilitator-controls' style={{display:'none'}} aria-hidden='true'>
+                        <button id='start-prompt' className='facilitator-button' onClick={this._startPrompt}>Start Prompts</button>
+                        <div id='next' style={{display:'none'}}>
+                            <div id='next-timer'></div>
+                            <div id='next-prompt' onClick={this._nextPrompt}></div>
 
-                        <button id='pause-prompt' className='guide-button' style={{display:'none'}} onClick={this._pausePrompt}>Pause Prompts</button>
-                        <button id='resume-prompt' className='guide-button' style={{display:'none'}} onClick={this._resumePrompt}>Resume Prompts</button>
-                        <button id='skip-prompt' className='guide-button' style={{display:'none'}} onClick={this._nextPrompt}>Skip Prompt</button>
-                    </div>
+                            <button id='pause-prompt' className='facilitator-button' style={{display:'none'}} onClick={this._pausePrompt}>Pause Prompts</button>
+                            <button id='resume-prompt' className='facilitator-button' style={{display:'none'}} onClick={this._resumePrompt}>Resume Prompts</button>
+                            <button id='skip-prompt' className='facilitator-button' style={{display:'none'}} onClick={this._nextPrompt}>Skip Prompt</button>
+                        </div>
 
-                    <div id='text'>
-                        <textarea id='prompt-text'></textarea>
-                        <button id='trigger-prompt' onClick={this._triggerTextPrompt}>Speak</button>
-                    </div>
+                        <div id='text'>
+                            <textarea id='prompt-text'></textarea>
+                            <button id='trigger-prompt' onClick={this._triggerTextPrompt}>Speak</button>
+                        </div>
 
-                    <div id='form' style={{display:'none'}}>
-                        <label htmlFor='world-name'>World name</label>
-                        <textarea id='world-name'></textarea>
-                        <label htmlFor='world-values'>World values</label>
-                        <textarea id='world-values'></textarea>
-                        <label htmlFor='world-description'>World description</label>
-                        <textarea id='world-description'></textarea>
-                        <button id='world-submit' onClick={this._submitWorld}>Submit</button>
-                    </div>
-                    </div>
+                        <div id='form' style={{display:'none'}}>
+                            <label htmlFor='world-name'>World name</label>
+                            <textarea id='world-name'></textarea>
+                            <label htmlFor='world-values'>World values</label>
+                            <textarea id='world-values'></textarea>
+                            <label htmlFor='world-description'>World description</label>
+                            <textarea id='world-description'></textarea>
+                            <button id='world-submit' onClick={this._submitWorld}>Submit</button>
+                        </div>
+                    </section>
 
-                    <div id='participant-controls' style={{display:'none'}}>
-                    <button id='pause-group' onClick={this._triggerPauseGroup}>Group Pause</button>
-                    </div>
-                    
-                    <div id='overlay'>
-                    <div id='ytPlayer'></div>
-                    <div id='pause-timer'></div>
-                    </div>
-                </section>
+                    <section id='participant-controls' style={{display:'none'}}>
+                        <h2 className='sr-only'>Participant Controls</h2>
+                        <div id='group-buttons'>
+                            <button id='group-pause' onClick={this._triggerGroupPause}>Group Pause</button>
+                        </div>
+                        
+                        <div id='group-pause-overlay' style={{display:'none'}}>
+                            <h3 >Group Pause: Overlay of Forest Scene</h3>
+                            <Player loop id='group-pause-player' ref={(player) => { this.player = player }}>
+                                <source src='./images/pause.mp4' />
+                                <ControlBar disableCompletely={true} />
+                            </Player>
+                            <div id='group-pause-timer'></div>
+                        </div>
+
+                        <div id='chat'>
+                            <h3 className='sr-only'>Chat</h3>
+                            <div id='serenity-messages'></div>
+                            <div id='chat-messages'></div>
+                            <label htmlFor='chat-input' className='sr-only'>Input Message</label>
+                            <textarea id='chat-input'></textarea>
+                            <button id='chat-send'>Send</button>
+                        </div>
+                    </section>
                 
-                <div id='notif-holder'>
-                    <div id='notif'></div>
-                </div>
+
+                    <section id='notif-holder'>
+                        <div id='notif'></div>
+                    </section>
                     
                 </main>
                 <Notice />
@@ -314,6 +330,18 @@ class Conference extends AbstractConference<Props, *> {
     }
   
     _initSession = () => {
+        console.log('LM _initSession')
+        const params = window.location.pathname.substring(1).split('-');
+        sessionId = params[0];
+        if (!sessionId.length) {
+            $('#error').show(); // TODO show error page
+        }
+        const facilitator = params[1] === 'facilitator';
+        console.log('LM ' + sessionId + ' ' + facilitator);
+        if (facilitator) this._initFacilitator();
+
+        $('#participant-controls').show();
+
         // Setup listener for firestore changes
         let now = new Date().getTime();
         db.collection('messages').where('timestamp', '>', now).onSnapshot({}, (snapshot) => {
@@ -322,8 +350,9 @@ class Conference extends AbstractConference<Props, *> {
                 let msg = change.doc.data();
                 if (change.type !== 'added') return;
                 else if (msg.sessionId !== sessionId) return;
-                else if (msg.type === 'pauseGroup') that._pauseGroup(msg.val);
-                else if (msg.type === 'guide') that._playMessage(msg.val, true);
+                else if (msg.type === 'group-pause') that._groupPause(msg.val);
+                else if (msg.type === 'serenity') that._playMessage(msg.val, true);
+                else if (msg.type === 'serenity') that._playMessage(msg.val, true);
                 else console.log('LM badType:', msg.type)
             });
         });
@@ -335,25 +364,6 @@ class Conference extends AbstractConference<Props, *> {
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     }
 
-    _onYouTubeIframeAPIReady = () => {
-        ytPlayer = new YT.Player('ytPlayer', {
-            videoId: 't0NHILIwO2I',
-            playerVars: {
-                'autoplay': 0,
-                'controls': 0,
-                'rel': 0,
-                'fs': 0,
-                'modestbranding': 1
-            }
-        });
-    }
-  
-    // Called when participant joins.
-    _joined = (e) => {
-        userId = e.id;
-        $('#participant-controls').show();
-    }
-  
     _sendMessage = (type, val) => {
         let m = {
             type: type,
@@ -361,44 +371,33 @@ class Conference extends AbstractConference<Props, *> {
             val: val,
             timestamp: new Date().getTime()
         };
-        // console.log('LM send message')
-        // console.log(m)
         db.collection('messages').add(m);
     };
   
-    _triggerPauseGroup = () => {
-        if (guide) this._pausePrompt();
-        this._sendMessage('pauseGroup', 10000); // 10 second pause
+    _triggerGroupPause = () => {
+        if (facilitator) this._pausePrompt();
+        this._sendMessage('group-pause', 10000); // 10 second pause
     }
   
-    _triggerTextPrompt = () => {
-        console.log('LM triggerTextPrompt');
-        const msg = $('#prompt-text').val();
-        if (msg) this._sendMessage('guide', msg);
-        $('#prompt-text').val('');
-    };
-  
-    _triggerPrompt = () => {
-        this._sendMessage('guide', prompts[currentPrompt].options[currentOption]);
-    }
-  
-    _pauseGroup = (ms) => {
+    _groupPause = (ms) => {
         if (pauseInterval) clearInterval(pauseInterval);
         pauseTimer = performance.now() + ms;
-        $('#pause-timer').text(this._msToHms(ms));
-        $('#overlay').fadeIn(0).delay(ms).fadeOut(0);
-        ytPlayer.playVideo();
+        $('#group-pause-timer').text(_msToHms(ms));
+        $('#group-pause-overlay').fadeIn(0).delay(ms).fadeOut(0);
+        this.player.volume = 0;
+        this.player.play();
         //   api.isAudioMuted().then(muted => {
         //     if (!muted) api.executeCommand('toggleAudio');
         //   }); TODO
+        let player = this.player;
         setTimeout(function() {
-            // api.executeCommand('toggleAudio'); //TOD
-            ytPlayer.stopVideo();
-            if (guide && currentPrompt > -1) this._resumePrompt();
+            // api.executeCommand('toggleAudio'); //TODO
+            player.pause();
+            if (facilitator && currentPrompt > -1) this._resumePrompt();
         }, ms);
         pauseInterval = setInterval(function() {
             const remaining = pauseTimer - performance.now();
-            $('#pause-timer').text(this._msToHms(remaining));
+            $('#group-pause-timer').text(_msToHms(remaining));
         });
     }
   
@@ -416,14 +415,14 @@ class Conference extends AbstractConference<Props, *> {
         window.speechSynthesis.speak(utter);
     }
   
-    /* GUIDE */
-    _initGuide = () => {
+    /* FACILITATOR */
+    _initFacilitator = () => {
         console.log('LM init')
         $.ajax(`${window.location.origin}/static/data/prompts.tsv`)
             .done(data => {
                 console.log('LM loaded prompts from TSV');
                 this._convertTsvIntoObjects(data);
-                $('#guide-controls').show();
+                $('#facilitator-controls').show();
             });
     }
   
@@ -472,9 +471,20 @@ class Conference extends AbstractConference<Props, *> {
             this._triggerPrompt();
             this._nextPrompt();
         } else {
-            $('#next-timer').text('Next prompt in ' + this._msToHms(remaining));
+            $('#next-timer').text('Next prompt in ' + _msToHms(remaining));
         }
     }
+  
+    _triggerPrompt = () => {
+        this._sendMessage('serenity', prompts[currentPrompt].options[currentOption]);
+    }
+    
+    _triggerTextPrompt = () => {
+        console.log('LM triggerTextPrompt');
+        const msg = $('#prompt-text').val();
+        if (msg) this._sendMessage('serenity', msg);
+        $('#prompt-text').val('');
+    };
   
     _submitWorld = () => {
         let w = {
@@ -503,7 +513,7 @@ class Conference extends AbstractConference<Props, *> {
         for (let row of tsvRows) {
             let cols = row.split('\t');
             if (cols[1].toUpperCase().includes('Y')) {
-                let offset = this._offsetToMs(cols[0]);
+                let offset = _offSetToMs(cols[0]);
                 let p = {
                     offset: offset,
                     lastOffset: offset - lastOffset,
@@ -518,25 +528,7 @@ class Conference extends AbstractConference<Props, *> {
         }
         console.log(prompts);
     }
-  
-    // Helper for formatting text in hh:mm format.
-    _msToHms = (d) => {
-        d = Number(d) / 1000;
-        let h = Math.floor(d / 3600);
-        let m = Math.floor(d % 3600 / 60);
-        let s = Math.floor(d % 3600 % 60);
-  
-        let time = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-        if (h > 0) time = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-        return time;
-    }
-  
-    _offsetToMs = (offset) => {
-        const minSec = offset.split(':');
-        return 1000 * (parseInt(minSec[1]) + parseInt(minSec[0]) * 60);
-    }
-        
-  
+
 
     /**
      * Until we don't rewrite UI using react components
@@ -562,20 +554,7 @@ class Conference extends AbstractConference<Props, *> {
         maybeShowSuboptimalExperienceNotification(dispatch, t);
 
         this._initializeFirebase()
-        .then(() => {
-            console.log('LM happening')
-            // Parse URL params, show HTML elements depending on view
-            const params = window.location.pathname.substring(1).split('-');
-            sessionId = params[0];
-            if (!sessionId.length) {
-            $('#error').show(); // TODO show error page
-            }
-            const guide = params[1] === 'guide';
-            console.log('LM ' + sessionId + ' ' + guide);
-            if (guide) this._initGuide();
-            
-            this._initSession();
-        });
+        .then(this._initSession);
     }
 }
 
@@ -597,5 +576,25 @@ function _mapStateToProps(state) {
         _showPrejoin: isPrejoinPageVisible(state)
     };
 }
+
+
+    // Helper for formatting text in hh:mm format.
+function _msToHms(d) {
+    d = Number(d) / 1000;
+    let h = Math.floor(d / 3600);
+    let m = Math.floor(d % 3600 / 60);
+    let s = Math.floor(d % 3600 % 60);
+
+    let time = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    if (h > 0) time = String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    return time;
+}
+  
+function _offsetToMs(offset) {
+    const minSec = offset.split(':');
+    return 1000 * (parseInt(minSec[1]) + parseInt(minSec[0]) * 60);
+}
+        
+  
 
 export default reactReduxConnect(_mapStateToProps)(translate(Conference));
