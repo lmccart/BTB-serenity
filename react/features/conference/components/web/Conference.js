@@ -42,6 +42,7 @@ let pauseInterval = false;
 /* FACILITATOR VARS */
 let facilitator;
 let prompts = [];
+let extraPrompts = [];
 let currentPrompt = -1;
 let currentOption = 0;
 let promptInterval = false;
@@ -236,7 +237,9 @@ class Conference extends AbstractConference<Props, *> {
                     <section id='participant-controls' style={{display:'none'}}>
                         <h2 className='sr-only'>Participant Controls</h2>
                         <div id='group-buttons'>
-                            <button id='group-pause' onClick={this._triggerGroupPause}>Group Pause</button>
+                            <button id='group-help' onClick={this._triggerHelp}>Help</button>
+                            <button id='group-pause' onClick={this._triggerGroupPause}>Pause</button>
+                            <button id='toggle-chat' onClick={this._toggleChat}>Chat</button>
                         </div>
                         
                         <div id='group-pause-overlay' style={{display:'none'}}>
@@ -248,7 +251,7 @@ class Conference extends AbstractConference<Props, *> {
                             <div id='group-pause-timer'></div>
                         </div>
 
-                        <div id='chat'>
+                        <div id='group-chat' style={{display:'none'}}>
                             <h3 className='sr-only'>Chat</h3>
                             <div id='serenity-messages'></div>
                             <div id='chat-messages'></div>
@@ -387,9 +390,17 @@ class Conference extends AbstractConference<Props, *> {
         $('#chat-messages').append('<div><span>'+data.user+'</span><span>'+data.msg+'</span>');
     }
   
+    _triggerHelp = () => {
+        let randomPrompt = extraPrompts[Math.floor(Math.random() * extraPrompts.length)];
+        this._sendMessage('serenity', randomPrompt);
+    }
     _triggerGroupPause = () => {
         if (facilitator) this._pausePrompt();
         this._sendMessage('group-pause', 10000); // 10 second pause
+    }
+
+    _toggleChat = () => {
+        $('#group-chat').toggle();
     }
   
     _groupPause = (ms) => {
@@ -432,6 +443,11 @@ class Conference extends AbstractConference<Props, *> {
     /* FACILITATOR */
     _initFacilitator = () => {
         console.log('LM init')
+        $.ajax(`${window.location.origin}/static/data/extra-prompts.txt`)
+            .done(data => {
+                extraPrompts = data.split('\n').filter(Boolean);
+                console.log(extraPrompts);
+            });
         $.ajax(`${window.location.origin}/static/data/prompts.tsv`)
             .done(data => {
                 console.log('LM loaded prompts from TSV');
