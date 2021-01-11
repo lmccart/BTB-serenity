@@ -35,6 +35,7 @@ declare var interfaceConfig: Object;
 
 let db;
 let userId = 'TODOpid';
+let userName = 'Builder';
 let sessionId;
 let pauseTimer = 0;
 let pauseInterval = false;
@@ -327,20 +328,29 @@ class Conference extends AbstractConference<Props, *> {
                     firebase.initializeApp(firebaseConfig);
                     firebase.auth().signInAnonymously().catch(function(error) { console.log('LM error ' + error); });
                     db = firebase.firestore();
-                    resolve();
+
+                    console.log(sessionId)
+                    db.collection('sessions').doc(sessionId).get({}).then(doc => {
+                        for (let p of doc.data().participants) {
+                            console.log(p)
+                            if (p.pid === userId) {
+                                userName = p.name;
+                            } else if (userId === 'facilitator') {
+                                userName = 'Serenity'
+                            }
+                            APP.conference.changeLocalDisplayName(userName);
+                        }
+                        resolve();
+                    }).catch((e) => {
+                        console.log('error');
+                        console.log(e);
+                        // TODO
+                    });
             });
         });
     }
   
     _initSession = () => {
-        console.log('LM _initSession')
-        const params = window.location.pathname.substring(1).split('-');
-        sessionId = params[0];
-        if (!sessionId.length) {
-            $('#error').show(); // TODO show error page
-        }
-        const facilitator = params[1] === 'facilitator';
-        console.log('LM ' + sessionId + ' ' + facilitator);
         if (facilitator) this._initFacilitator();
 
         $('#participant-controls').show();
@@ -380,14 +390,15 @@ class Conference extends AbstractConference<Props, *> {
     _sendChat = () => {
         const data = {
             msg: $('#chat-input').val(),
-            user: userId
+            userId: userId,
+            userName: userName 
         }
         if (data.msg) this._sendMessage('group-chat', data);
         $('#chat-input').val('');
     }
 
     _groupChatMessage = (data) => {
-        $('#chat-messages').append('<div><span>'+data.user+'</span><span>'+data.msg+'</span>');
+        $('#chat-messages').append('<div><span>'+data.userName+'</span><span>'+data.msg+'</span>');
     }
   
     _triggerHelp = () => {
@@ -583,6 +594,17 @@ class Conference extends AbstractConference<Props, *> {
         dispatch(connect());
 
         maybeShowSuboptimalExperienceNotification(dispatch, t);
+
+
+        console.log('LM _initSession')
+        const params = window.location.pathname.substring(1).split('-');
+        sessionId = params[0];
+        userId = params[1];
+        // if (!sessionId.length || !userId.length) {
+        //     $('#error').show(); // TODO show error page
+        // }
+        facilitator = userId === 'facilitator';
+        console.log('LM ' + sessionId + ' ' + userId + ' ' + facilitator);
 
         this._initializeFirebase()
         .then(this._initSession);
