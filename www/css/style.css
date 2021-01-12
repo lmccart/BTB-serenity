@@ -1,22 +1,76 @@
 /* CSS files add styling rules to your content */
 html {
-  width: 100%;
-  height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  box-sizing: border-box;
-  font-family: input-mono, monospace;
-  line-height: 1.5;
+  font-family: freight-sans-pro, sans-serif;
 }
 
 body {
+  width: 92.4vw;
+  height: calc(100vh - 7.6vw);
+  margin: 0;
+  padding: 3.8vw;
+  font-size: 1.5em;
+  overflow: hidden;
+}
+
+h1 {
+  font-size: 4em;
+  line-height: 1.15;
+  font-family: freight-big-pro, serif;
+  text-align: left;
+  margin: 1.5vw 0 1.3vw 0;
+}
+
+main {
   width: 100%;
   height: 100%;
-  margin: 0;
-  padding: 0;
-
+  text-align: center;
+  border: .25vw solid #232323;
 }
+
+section {
+  width: 75%;
+  margin: 0 auto;
+  text-align: left;
+}
+
+p {
+  width: 85%;
+  text-align: left;
+  font-size: 1.0em;
+}
+
+.button, button {
+  font-size: 1.0em;
+  font-family: freight-sans-pro, sans-serif;
+  border: 0.1em solid #232323;
+  border-radius: .8em;
+  outline: none;
+  min-width: 6.5em;
+  padding: 0.15em 1.4em 0.35em 1.4em;
+  background: #232323;
+  color: white;
+  cursor: pointer;
+  margin-top: 1.5em;
+}
+
+.button:hover, button:hover {
+  background: #984F3A !important;
+  border-color: #984F3A !important;
+  color: white !important;
+}
+
+.button.back, button.back {
+  background: none;
+  color: #232323;
+  position: absolute;
+  left: 6.6vw;
+  bottom: calc(2.1em + 2.8vw);
+}
+
+/* 
+
 
 .back-arrow {
   position: absolute;
@@ -32,44 +86,16 @@ body {
   color: white;
 }
 
-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  text-align: center;
-}
-
-section {
-  max-width: 50%;
-}
-
-h1, h2 {
-  font-size: 3em;
-  font-style: italic;
-  line-height: 1.15;
-}
-
-p {
-  margin-bottom: 2em;
-}
-
 .button, button {
-  border: 4px solid black;
-  padding: 1em;
-  display: inline-block;
-  text-decoration: none;
-  color: black;
-  background: white;
-  font-weight: bold;
-  font-style: italic;
-  font-size: 1.0em;
-  cursor: pointer;
-  font-family: input-mono, monospace;
+  border: none;
+  border-radius: 4px;
+  width: 2vw;
+  outline: none;
+  background: #232323;
+  color: white;
 }
 
 .button:hover, button:hover {
-  /* border: 4px solid white; */
   background: black;
   color: white;
 }
@@ -86,7 +112,6 @@ select {
   color: black;
   background: white;
   font-weight: bold;
-  font-style: italic;
   font-size: 1.0em;
   font-family: input-mono, monospace;
 }
@@ -99,7 +124,6 @@ input {
   color: black;
   background: white;
   font-weight: bold;
-  font-style: italic;
   font-size: 1.0em;
   width: 20em;
   font-family: input-mono, monospace;
@@ -136,24 +160,7 @@ table {
 }
 
 /* INTRO PAGE */
-.intro-border {
-  border: 1em solid #6e00ff;
-}
 
-#intro-page {
-  background: #cfc6d0;
-}
-
-
-/* REGISTER PAGE */
-.register-border {
-  border: 1em solid #ff0047;
-}
-
-#register-page {
-  background: #ffd2b1;
-  /* background: linear-gradient(180deg, rgba(245,139,130,1) 0%, rgba(247,144,30,1) 100%); */
-}
 
 #reset {
   position: absolute;
@@ -164,9 +171,6 @@ table {
 
 /* SESSION PAGE */
 
-.session-border {
-  border: 1em solid #6e00ff;
-}
 
 #session-page {
 }
@@ -299,7 +303,6 @@ input[type='checkbox'] {
 
 #next-prompt {
   width: 100%;
-  font-style: italic;
   font-weight: bold;
   color: white;
 }
@@ -339,7 +342,7 @@ input[type='checkbox'] {
 .confirm-piece {
   display: block;
   font-weight: bold;
-}
+} */
 
 .sr-only {
 	border: 0 !important;
@@ -353,4 +356,46 @@ input[type='checkbox'] {
 	position: absolute !important;
 	width: 1px !important;
 	white-space: nowrap !important;            /* 3 */
+}
+
+
+
+#serenity {
+  width: 15vw;
+  padding: 1.3vw;
+  background-image: -o-radial-gradient(circle, #F39330, #F3933000 8.7vw);
+  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 8.7vw);
+  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 8.7vw);
+}
+
+#plant {
+  width: 49vw;
+  position: absolute;
+  bottom: 0;
+  left: 25vw;
+}
+
+body {
+  background: linear-gradient(135deg, #e6abba,  #ec8c4c, #f2cc53, #984f3a);
+  background-size: 800% 800%;
+
+  -webkit-animation: GradietAnim 20s ease infinite;
+  -moz-animation: AnimationName 20s ease infinite;
+  animation: AnimationName 20s ease infinite;
+}
+
+@-webkit-keyframes GradietAnim {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 51%}
+  100%{background-position:0% 50%}
+}
+@-moz-keyframes GradietAnim {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 51%}
+  100%{background-position:0% 50%}
+}
+@keyframes GradietAnim {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 51%}
+  100%{background-position:0% 50%}
 }

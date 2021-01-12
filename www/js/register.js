@@ -19,6 +19,8 @@ db.collection('sessions').onSnapshot({}, function(snapshot) {
 });
 
 // Attach DOM event listeners
+$('#intro').on('click', showRegister);
+$('#back-intro').on('click', showIntro);
 $('#submit-search').on('click', searchSessions);
 $('#submit-register').on('click', register);
 $('#back-num').on('click', showNum);
@@ -26,8 +28,18 @@ $('#back-sessions').on('click', showSessions);
 $('#caption-display').on('click', () => { $('#caption').prop('checked', !$('#caption').prop('checked'))});
 $('#asl-display').on('click', () => { $('#asl').prop('checked', !$('#asl').prop('checked'))});
 
+function showIntro() {
+  $('section').hide();
+  $('#intro').show();
+}
+
+function showRegister() {
+  $('#intro').hide();
+  $('#sessionOptions').show();
+}
+
 function showNum() {
-  $('#numParticipants').show();
+  $('#sessionOptions').show();
   $('#sessions').hide();
   releaseSession();
 }
@@ -39,7 +51,7 @@ function showSessions() {
 }
 
 function searchSessions() {
-  $('#numParticipants').hide();
+  $('#sessionOptions').hide();
   $('#sessions').show();
   reset();
   num = Number($('#num').val());
@@ -151,7 +163,7 @@ function register(e) {
 }
 
 function displayRegistrationConfirmation() {
-  $('#numParticipants').hide();
+  $('#sessionOptions').hide();
   $('#sessions').hide();
   $('#participants').hide();
   if (num === 1) {

@@ -23,12 +23,18 @@
   <body>
     <main id='register-page'>
 
-      <h1 class='sr-only'>Register</h1>
+      <img src='../css/serenity.gif' id='serenity' alt=''>
+      <section id='intro'>
+        <h1>Beyond the Breakdown</h1>
+        <p>Imagines alternate narratives for our near-future reality inside a browser designed to hack our normal online behaviors 
+          and cultivate collaborative spaces for self-reflection and renewal. Created by Tony Patrick, Lauren Lee McCarthy, and Grace Lee.
+        </p>
+        <button id='register'>Register for a Sesssion</button>
+      </section>
 
-      <section id='numParticipants'>
-        <a id='back-intro' class='back-arrow' href='/'>←</a>
-        <h2>How many participants in your group?</h2>
-        <p>If you are a group of 3 or less, you may be paired with other participants.</p>
+      <section id='sessionOptions' style='display:none'>
+        <h1>Make a Reservation</h1>
+        <p>Please select the number of people in your group. If you are less than 3, you will be paired with other participants to make a group.</p>
         
         <label for='num' class='sr-only'>Number participants:</label>
         <select name='num' id='num'>
@@ -52,8 +58,8 @@
           <div id='asl-display' aria-hidden='true'></div>
         </div>
 
-
         <button id='submit-search'>Search</button>
+        <button id='back-intro' class='back'>Back</button>
       </section>
   
       <section id='sessions' style='display: none'>
@@ -87,6 +93,7 @@
           For more information you can contact <a href='mailto:info@beyondthebreakdown.world' target='_blank'>info@beyondthebreakdown.world</a>.</p>
       </section>
   
+      <img src='../css/plant-crop.png' id='plant' alt=''>
     </main>
 
     <script src='../js/register.js' defer></script>
