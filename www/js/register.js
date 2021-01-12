@@ -97,7 +97,7 @@ function searchSessions() {
       if ((!caption && !asl) || opt.accessible) {
         let date = moment(opt.datetime).format('dddd MMM DD h:mm a');
         console.log(date)
-        let elt = $('<li class="option button">'+date+'</li>');
+        let elt = $('<li class="option button light">'+date+'</li>');
         elt.attr('id', opt.id);
         $('#sessions-options').append(elt);
       }

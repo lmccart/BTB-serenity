@@ -3,7 +3,7 @@ firebase.auth().signInAnonymously().catch(function(error) { console.log(error); 
 firebase.auth().onAuthStateChanged(function(user) { });
 const db = firebase.firestore(app);
 
-let id, pid;
+let sessionId, pid;
 let session;
 
 $('#cancel-individual').on('click', cancelIndividual);
@@ -12,37 +12,44 @@ parseParams();
 
 function parseParams() {
   const params = new URLSearchParams(window.location.search);
-  id = params.get('sessionId');
+  sessionId = params.get('sessionId');
   pid = params.get('pid');
   if (pid) pid = pid.split(',');
-  console.log(id, pid)
+  console.log(sessionId, pid)
 
-  if (!id || !pid || !pid.length) {
+  if (!sessionId) {
     $('#not-found').show();
   } else {
-    let docRef = db.collection('sessions').doc(id);
+    let docRef = db.collection('sessions').doc(sessionId);
     docRef.get().then(function(doc) {
       console.log(doc.data().participants)
-      if (doc.exists && doc.data().participants.length > 0) {
+      if (doc.exists && doc.data().participants.length) {
         session = doc.data();
         console.log(session);
-        $('#cancel').show();
-        $('#datetime').html(session.datetime);
-        if (pid.length === 1) {
-          $('#cancel-group').hide();
-        } else {
-          let people = '';
-          for (let p of session.participants) {
-            console.log(p.pid);
-            if (pid.includes(p.pid)) {
-              people += p.name + ', ';
-            }
+        
+        let people = '';
+        for (let p of session.participants) {
+          console.log(p.pid, p.name);
+          if (!pid || !pid.length || pid.includes(p.pid)) {
+            people += p.name + ', ';
           }
-          people = people.slice(0, -2);
-          $('#cancel-people').text(people);
         }
+        console.log(people)
+        people = people.slice(0, -2);
+        $('.cancel-people').text(people);
+
+        if (!pid || !pid.length) {
+          $('#cancel-group').show();
+        } else if (pid.length === 1) {
+          $('#cancel-individual').show();
+        } else {
+          $('#cancel-options').show();
+        }
+
+        $('.datetime').html(moment(session.datetime).format('dddd MMM DD h:mm a'));
+
       } else { $('#not-found').show(); }
-    }).catch(function(error) { $('#not-found').show(); });
+    })//.catch(function(error) { $('#not-found').show(); });
   }
 }
 
@@ -53,7 +60,7 @@ function cancelIndividual() {
       updated_participants.push(p);
     }
   }
-  db.collection('sessions').doc(session.id).set({participants: updated_participants}, {merge: true});
+  db.collection('sessions').doc(sessionId).set({participants: updated_participants}, {merge: true});
   $('#cancel').hide();
   $('#confirm-individual').show();
 }
@@ -70,7 +77,7 @@ function cancelGroup() {
     if (!found) updated_participants.push(p);
   }
   console.log(updated_participants)
-  db.collection('sessions').doc(session.id).set({participants: updated_participants, closed: false}, {merge: true});
+  db.collection('sessions').doc(sessionId).set({participants: updated_participants, closed: false}, {merge: true});
   $('#cancel').hide();
   $('#confirm-group').show();
 }

@@ -175,23 +175,3 @@ exports.checkOneYear = functions.https.onRequest((req, res) => {
     res.json({success: true});
   });
 });
-
-
-
-// exports.testEmail = functions.https.onRequest((req, res) => {
-//   let html = 'Dear ______,';
-//   html += '<br><br>Your registration for the session scheduled for _____ has been cancelled.';
-//   html += 'To make a new registration, you can visit <a href="http://beyond-the-breakdown.web.app">beyond-the-breakdown.web.app</a>.';
-//   html += '<br><br>Sincerely,';
-//   html += '<br>Tony Patrick, Lauren Lee McCarthy, and Grace Lee';
-//   html += '<br>Artists, Beyond the Breakdown';
-//   let msg = {
-//     to: 'laurenleemccarthy@gmail.com',
-//     message: {
-//       subject: 'Beyond the Breakdown cancellation confirmation',
-//       html: html
-//     },
-//   };
-//   db.collection('mail').add(msg);
-//   res.json(msg);
-// });

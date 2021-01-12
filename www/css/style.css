@@ -22,6 +22,14 @@ h1 {
   margin: 1.5vw 0 1.3vw 0;
 }
 
+ul {
+  margin: 2em 0 0 0;
+  padding: 0;
+}
+li {
+  list-style-type: none;
+}
+
 main {
   width: 100%;
   height: 100%;
@@ -51,9 +59,11 @@ p {
   outline: none;
   min-width: 6.5em;
   padding: 0.15em 1.4em 0.35em 1.4em;
+  margin-bottom: 0.5em;
   background: #232323;
   color: white;
   cursor: pointer;
+  display: block;
 }
 
 .button:hover, button:hover {
@@ -63,11 +73,14 @@ p {
 }
 
 .button.back, button.back {
-  background: none;
-  color: #232323;
   position: absolute;
   left: 6.6vw;
   bottom: calc(2.1em + 2.8vw);
+}
+
+.light {
+  color: #232323;
+  background: none;
 }
 
 select {
@@ -104,18 +117,13 @@ select {
 
 #sessions-options {
   text-align: left;
-  margin: 0;
-  padding: 0;
   height: 20vh;
   overflow-y: scroll;
 }
 
 .option {
-  list-style-type: none;
   margin: 0 0 0.5em 0;
   display: inline-block;
-  background: none;
-  color: #232323;
   width: 40%;
 }
 #sessions-options>li:nth-child(odd){
@@ -176,7 +184,7 @@ a, #confirm-url {
   color: white;
   text-decoration: none;
 }
-a:hover, #confirm-url:hover, #copied {
+a:hover, #confirm-url:hover {
   color: #984F3A;
   cursor: pointer;
 }
