@@ -24,14 +24,19 @@
     <main id='register-page'>
 
       <img src='../css/serenity.gif' id='serenity' alt=''>
+
+      <!-- intro SECTION -->
       <section id='intro'>
         <h1>Beyond the Breakdown</h1>
         <p>Imagines alternate narratives for our near-future reality inside a browser designed to hack our normal online behaviors 
           and cultivate collaborative spaces for self-reflection and renewal. Created by Tony Patrick, Lauren Lee McCarthy, and Grace Lee.
         </p>
-        <button id='register'>Register for a Sesssion</button>
+        <div class='buttons'>
+          <button id='register'>Register for a Sesssion</button>
+        </div>
       </section>
 
+      <!-- sessionOptions SECTION -->
       <section id='sessionOptions' style='display:none'>
         <h1>Make a Reservation</h1>
         <p>Please select the number of people in your group. If you are less than 3, you will be paired with other participants to make a group.</p>
@@ -48,38 +53,58 @@
 
         <div>
           <label for='caption'>Closed captioning is needed for this session</label>
-          <input type='checkbox' id='caption' name='caption'>
-          <div id='caption-display' aria-hidden='true'></div>
+          <select name='caption' id='caption'>
+            <option value='1'>Yes</option>
+            <option value='0'>No</option>
+          </select>
         </div>
 
         <div>
           <label for='asl'>ASL interpretation is needed for this session</label>
-          <input type='checkbox' id='asl' name='asl'>
-          <div id='asl-display' aria-hidden='true'></div>
+          <select name='asl' id='asl'>
+            <option value='1'>Yes</option>
+            <option value='0'>No</option>
+          </select>
         </div>
 
-        <button id='submit-search'>Search</button>
+        <div class='buttons'>
+          <button id='submit-search'>Next</button>
+        </div>
         <button id='back-intro' class='back'>Back</button>
       </section>
   
+      <!-- sessions SECTION -->
       <section id='sessions' style='display: none'>
-        <span id='back-num' class='back-arrow'>←</span>
-        <h2>Which session would you like to register for?</h2>
-        <div id='sessions-error' class='notif' style='display:none'>Sorry! Something went wrong, please search again.</div>
-        <div id='sessions-none' class='notif' style='display:none'>Sorry! There are no remaining sessions for that group size. You could try searching again with fewer participants.</div>
+        <h1>Available Sessions</h1>
+        <p>Select a time for your session. Sessions last 30-60 minutes.</p>
+        <p id='sessions-error' class='notif' style='display:none'>Sorry! Something went wrong, please search again.</p>
+        <p id='sessions-none' class='notif' style='display:none'>Sorry! There are no remaining sessions for that group size. You could try searching again with fewer participants.</p>
         <ul id='sessions-options'></ul>
+
+
+        <div class='buttons'>
+          <button id='submit-session' style='display:none'>Next</button>
+        </div>
+        <button id='back-sessionOptions' class='back'>Back</button>
       </section>
   
-      <form id='participants' style='display: none;' onsubmit='return register(event)'>
-        <span id='back-sessions' class='back-arrow'>←</span>
-        <h2>Who is coming?</h2>
+      <!-- participants SECTION -->
+      <section id='participants' style='display: none;'>
+        <h1>Participant Info</h1>
+        <p>Please add name and email for each participant.</p>
         <div id='participants-info'></div>
-        <button id='submit-register'>Register</button>
+        
+        <div class='buttons'>
+          <button id='submit-register'>Register</button>
+        </div>
+        <button id='back-sessions' class='back'>Back</button>
+
         <div id='reset' style='display:none'>Your session will be released in: <span id='reset-timer'></span></div>  
-      </form>
+      </section>
   
+      <!-- confirm SECTION -->
       <section id='confirm' style='display:none'>
-        <h2>Your session is confirmed!</h2>
+        <h1>Thank you!</h1>
         <p><span id='confirm-people'></span>
           <span id='confirm-date' class='confirm-piece'></span>
           <span id='confirm-time' class='confirm-piece'></span>

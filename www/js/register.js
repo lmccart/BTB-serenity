@@ -3,7 +3,7 @@ firebase.auth().signInAnonymously().catch(function(error) { console.log(error); 
 firebase.auth().onAuthStateChanged(function(user) { });
 const db = firebase.firestore(app);
 
-let num = 0;
+let num = 3;
 let caption = false;
 let asl = false;
 
@@ -18,13 +18,20 @@ db.collection('sessions').onSnapshot({}, function(snapshot) {
   });
 });
 
-// Attach DOM event listeners
-$('#intro').on('click', showRegister);
+// showParticipantForm();
+
+$('#intro').on('click', showSessionOptions);
+
+$('#submit-search').on('click', showSessions);
 $('#back-intro').on('click', showIntro);
-$('#submit-search').on('click', searchSessions);
+
+
+$('#submit-session').on('click', selectSession);
+$('#back-sessionOptions').on('click', showSessionOptions);
+
 $('#submit-register').on('click', register);
-$('#back-num').on('click', showNum);
-$('#back-sessions').on('click', showSessions);
+$('#back-sessions').on('click', showSessionOptions);
+
 $('#caption-display').on('click', () => { $('#caption').prop('checked', !$('#caption').prop('checked'))});
 $('#asl-display').on('click', () => { $('#asl').prop('checked', !$('#asl').prop('checked'))});
 
@@ -33,26 +40,26 @@ function showIntro() {
   $('#intro').show();
 }
 
-function showRegister() {
-  $('#intro').hide();
+function showSessionOptions() {
+  $('section').hide();
   $('#sessionOptions').show();
-}
-
-function showNum() {
-  $('#sessionOptions').show();
-  $('#sessions').hide();
   releaseSession();
 }
 
 function showSessions() {
+  $('section').hide();
   $('#sessions').show();
-  $('#participants').hide();
-  releaseSession();
+  $('#submit-session').hide();
+  searchSessions();
+}
+
+function showConfirm() {
+  $('section').hide();
+  $('#confirm').show();
 }
 
 function searchSessions() {
-  $('#sessionOptions').hide();
-  $('#sessions').show();
+  releaseSession();
   reset();
   num = Number($('#num').val());
 
@@ -63,7 +70,7 @@ function searchSessions() {
     let opt = options[o];
     if (opt.participants.length + num <= 6 && !opt.hold) {
       if ((!caption && !asl) || opt.accessible) {
-        let date = moment(opt.datetime).format("YYYY-MM-DD HH:mm:ss");
+        let date = moment(opt.datetime).format('dddd MMM DD h:mm a');
         console.log(date)
         let elt = $('<li class="option button">'+date+'</li>');
         elt.attr('id', opt.id);
@@ -71,7 +78,12 @@ function searchSessions() {
       }
     }
   }
-  $('.option').on('click', selectSession);
+  $('.option').on('click', function() {
+    $('.option').removeClass('selected');
+    $(this).addClass('selected');
+    $('#submit-session').show();
+  });
+
   if (!$('.option').length) {
     $('#sessions-none').show();
   }
@@ -81,31 +93,29 @@ function searchSessions() {
 function selectSession() {
   $('#sessions').hide();
   releaseSession();
-  selected_option = $(this).attr('id');
+  selected_option = $('.option.selected').attr('id');
 
   if (options[selected_option].hold) {
     alert('Sorry this session is no longer available, please search again.');
+    showRegister();
   } else {
     startTimer();
     // set hold
     db.collection('sessions').doc(selected_option).set({hold: new Date().getTime()}, {merge: true});
-
-    // mark selected
-    $('.option').removeClass('selected-option');
-    $(this).addClass('selected-option');
-  
-    // display participant info
-    $('#participants').show();
-    $('#participants-info').empty();
-    $('#participants-info').html('<table><trbody></trbody></table>')
-    for (let n=1; n<num+1; n++) {
-      $('#participants-info').append('<tr><td><label for="p'+n+'name">Participant '+n+' Name</label></td><td><input id="p'+n+'name" type="name"></td></tr>');
-      $('#participants-info').append('<tr><td><label for="p'+n+'email" type="email">Participant '+n+' Email</label></td><td><input id="p'+n+'email"></td></tr>');
-      $('#participants-info').append('<tr></tr>');
-    }
+    showParticipantForm(num);
   }
 }
 
+function showParticipantForm() {
+  $('#participants').show();
+  $('#participants-info').empty();
+  $('#participants-info').html('<table><trbody></trbody></table>')
+  for (let n=1; n<num+1; n++) {
+    $('#participants-info').append('<tr><td><label for="p'+n+'name">Participant '+n+' Name</label></td><td><input id="p'+n+'name" type="name"></td></tr>');
+    $('#participants-info').append('<tr><td><label for="p'+n+'email" type="email">Participant '+n+' Email</label></td><td><input id="p'+n+'email"></td></tr>');
+    $('#participants-info').append('<tr></tr>');
+  }
+}
 
 // TODO: validate email format
 function validateParticipantForm() {
