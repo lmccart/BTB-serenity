@@ -1,7 +1,19 @@
 const app = firebase.app();
+let db;
+let initialized = false;
 firebase.auth().signInAnonymously().catch(function(error) { console.log(error); });
-firebase.auth().onAuthStateChanged(function(user) { });
-const db = firebase.firestore(app);
+firebase.auth().onAuthStateChanged(function(user) { 
+  db = firebase.firestore(app);
+
+  db.collection('sessions').onSnapshot({}, function(snapshot) {
+    console.log('snap')
+    snapshot.docChanges().forEach(function(change) {
+      options[change.doc.id] = change.doc.data();
+      if (!initialized) showIntro();
+    });
+  });
+});
+
 
 let num = 3;
 let caption = false;
@@ -12,13 +24,8 @@ let selected_option = -1;
 let timer_interval;
 let end_timer;
 
-db.collection('sessions').onSnapshot({}, function(snapshot) {
-  snapshot.docChanges().forEach(function(change) {
-    options[change.doc.id] = change.doc.data();
-  });
-});
-
-// showParticipantForm();
+showConfirm();
+initialized = true;
 
 $('#intro').on('click', showSessionOptions);
 
@@ -38,6 +45,7 @@ $('#asl-display').on('click', () => { $('#asl').prop('checked', !$('#asl').prop(
 function showIntro() {
   $('section').hide();
   $('#intro').show();
+  initialized = true;
 }
 
 function showSessionOptions() {
@@ -48,9 +56,21 @@ function showSessionOptions() {
 
 function showSessions() {
   $('section').hide();
+  $('#sessions-options').empty();
+  $('.notif').hide();
   $('#sessions').show();
   $('#submit-session').hide();
   searchSessions();
+}
+
+function showParticipantForm() {
+  $('section').hide();
+  $('#participants').show();
+  $('#participants-info').empty();
+  for (let n=1; n<num+1; n++) {
+    $('#participants-info').append('<div class="participant-item"><label for="p'+n+'name">Participant '+n+' Name</label></td><td><input id="p'+n+'name" type="text"></div>');
+    $('#participants-info').append('<div class="participant-item"><label for="p'+n+'email" type="email">Participant '+n+' Email</label></td><td><input id="p'+n+'email" type="text"></div>');
+  }
 }
 
 function showConfirm() {
@@ -60,7 +80,6 @@ function showConfirm() {
 
 function searchSessions() {
   releaseSession();
-  reset();
   num = Number($('#num').val());
 
   caption = $('#caption').prop('checked');
@@ -97,23 +116,12 @@ function selectSession() {
 
   if (options[selected_option].hold) {
     alert('Sorry this session is no longer available, please search again.');
-    showRegister();
+    // showSessionOptions();
   } else {
     startTimer();
     // set hold
     db.collection('sessions').doc(selected_option).set({hold: new Date().getTime()}, {merge: true});
     showParticipantForm(num);
-  }
-}
-
-function showParticipantForm() {
-  $('#participants').show();
-  $('#participants-info').empty();
-  $('#participants-info').html('<table><trbody></trbody></table>')
-  for (let n=1; n<num+1; n++) {
-    $('#participants-info').append('<tr><td><label for="p'+n+'name">Participant '+n+' Name</label></td><td><input id="p'+n+'name" type="name"></td></tr>');
-    $('#participants-info').append('<tr><td><label for="p'+n+'email" type="email">Participant '+n+' Email</label></td><td><input id="p'+n+'email"></td></tr>');
-    $('#participants-info').append('<tr></tr>');
   }
 }
 
@@ -176,26 +184,11 @@ function displayRegistrationConfirmation() {
   $('#sessionOptions').hide();
   $('#sessions').hide();
   $('#participants').hide();
-  if (num === 1) {
-    $('#confirm-people').text('You are confirmed for: ');
-  } else {
-    $('#confirm-people').text('Your group of '+num+' is confirmed for: ');
-  }
   $('#confirm-date').text(options[selected_option].datetime);
   $('#confirm-time').text(options[selected_option].datetime);
   $('#confirm-url').text(options[selected_option].url_session);
   $('#confirm').show();
   releaseSession();
-}
-
-function reset() {
-  releaseSession();
-  $('.notif').hide();
-  $('#sessions').show();
-  $('#sessions-options').empty();
-  $('#participants').hide();
-  $('#participants-info').empty();
-  $('#confirm').hide();
 }
 
 function releaseSession() {
@@ -222,7 +215,7 @@ function startTimer() {
     if (remaining <= 0) {
       $('#reset-timer').text(msToHms(0));
       db.collection('sessions').doc(selected_option).set({hold: false}, {merge: true});
-      reset();
+      showSessionOptions();
     } else {
       $('#reset-timer').text(msToHms(remaining));
     }

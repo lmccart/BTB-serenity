@@ -26,7 +26,7 @@
       <img src='../css/serenity.gif' id='serenity' alt=''>
 
       <!-- intro SECTION -->
-      <section id='intro'>
+      <section id='intro' style='display:none'>
         <h1>Beyond the Breakdown</h1>
         <p>Imagines alternate narratives for our near-future reality inside a browser designed to hack our normal online behaviors 
           and cultivate collaborative spaces for self-reflection and renewal. Created by Tony Patrick, Lauren Lee McCarthy, and Grace Lee.
@@ -90,12 +90,12 @@
   
       <!-- participants SECTION -->
       <section id='participants' style='display: none;'>
-        <h1>Participant Info</h1>
+        <h1>Participant Information</h1>
         <p>Please add name and email for each participant.</p>
         <div id='participants-info'></div>
         
         <div class='buttons'>
-          <button id='submit-register'>Register</button>
+          <button id='submit-register'>Submit</button>
         </div>
         <button id='back-sessions' class='back'>Back</button>
 
@@ -105,17 +105,17 @@
       <!-- confirm SECTION -->
       <section id='confirm' style='display:none'>
         <h1>Thank you!</h1>
-        <p><span id='confirm-people'></span>
-          <span id='confirm-date' class='confirm-piece'></span>
-          <span id='confirm-time' class='confirm-piece'></span>
+        <p><span id='confirm-people'>Your session is confirmed for:</span><br>
+          <span id='confirm-datetime'></span>
         </p>
-        <p>Use this URL to connect:
-          <span id='confirm-url' class='confirm-piece'></span>
+        <p>Here's the link:<br>
+          <a id='confirm-url' href='#'>***</a>
         </p>
-        <p>Each participant in your group will receive an email confirmation with this information. 
+        <p>Each participant in your group will receive an email confirmation with this information.</p>
+        <p>
           Please check your spam folder if you don't see it within the new few minutes.
-          If you need to cancel your session, there is a link in the email to do this.
-          For more information you can contact <a href='mailto:info@beyondthebreakdown.world' target='_blank'>info@beyondthebreakdown.world</a>.</p>
+          If you need to reschedule, you can <a href='#' id='cancel-link'>cancel your session</a> and reschedule a new one.
+        </p>
       </section>
   
       <img src='../css/plant-crop.png' id='plant' alt=''>
