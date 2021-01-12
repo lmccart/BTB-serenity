@@ -49,7 +49,9 @@ function populateSlots() {
       participants: [],
       sent_reminder: false,
       sent_wrapup: false,
-      id: id
+      id: id,
+      url_session: 'https://beyondthebreakdown.world/welcome/?sessionId='+id,
+      url_cancel: 'https://beyondthebreakdown.world/cancel/?sessionId='+id
     };
     slots.push(s);
     // batch.set(db.collection('sessions').doc(s.id), s);

@@ -33,7 +33,7 @@ exports.sendConfirm = functions.firestore
             data: {
               name: session.participants[i].name,
               datetime: session.datetime,
-              url_session: session.participants[i].url_session,
+              url_session: session.url_session,
               url_cancel: session.participants[i].url_cancel,
               caption: session.accessiblity_caption || false,
               asl: session.accessiblity_asl || false
@@ -124,7 +124,7 @@ exports.checkReminder = functions.https.onRequest((req, res) => {
               data: {
                 name: session.participants[i].name,
                 datetime: session.datetime,
-                url_session: session.participants[i].url_session,
+                url_session: session.url_session,
                 url_cancel: session.participants[i].url_cancel,
                 caption: session.accessiblity_caption || false,
                 asl: session.accessiblity_asl || false

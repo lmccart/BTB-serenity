@@ -135,7 +135,10 @@ select {
   background-color: rgba(0, 0, 0, .5);
   -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
-
+#participants-info {
+  height: 20vw;
+  overflow-y: scroll;
+}
 #participants-info>div:nth-child(odd){
   margin-right: 2em;
 }
@@ -169,13 +172,15 @@ select {
   color: black;
 }
 
-a {
+a, #confirm-url {
   color: white;
   text-decoration: none;
 }
-a:hover {
+a:hover, #confirm-url:hover, #copied {
   color: #984F3A;
+  cursor: pointer;
 }
+
 
 /* SESSION PAGE */
 

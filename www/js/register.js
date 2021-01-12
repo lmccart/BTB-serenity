@@ -6,7 +6,6 @@ firebase.auth().onAuthStateChanged(function(user) {
   db = firebase.firestore(app);
 
   db.collection('sessions').onSnapshot({}, function(snapshot) {
-    console.log('snap')
     snapshot.docChanges().forEach(function(change) {
       options[change.doc.id] = change.doc.data();
       if (!initialized) showIntro();
@@ -24,14 +23,13 @@ let selected_option = -1;
 let timer_interval;
 let end_timer;
 
-showConfirm();
-initialized = true;
+// showConfirm();
+// initialized = true;
 
-$('#intro').on('click', showSessionOptions);
+$('#register').on('click', showSessionOptions);
 
 $('#submit-search').on('click', showSessions);
 $('#back-intro').on('click', showIntro);
-
 
 $('#submit-session').on('click', selectSession);
 $('#back-sessionOptions').on('click', showSessionOptions);
@@ -75,7 +73,15 @@ function showParticipantForm() {
 
 function showConfirm() {
   $('section').hide();
+  console.log(options[selected_option]);
+  let dt = options[selected_option].datetime;
+  let formatted = moment(dt).format('dddd MMM DD h:mm a');
+  $('#confirm-datetime').text(formatted);
+  $('#confirm-url').text(options[selected_option].url_session);
+  $('#confirm-url').attr('href', options[selected_option].url_session);
+  $('#confirm-cancel').attr('href', options[selected_option].url_cancel);
   $('#confirm').show();
+  releaseSession();
 }
 
 function searchSessions() {
@@ -155,14 +161,12 @@ function register(e) {
           pid.push(group_ids[j]);
         }
       }
-      let url_cancel = 'https://beyondthebreakdown.world/cancel/?sessionId='+s.id+'&pid='+pid.join(',');
-      let url_session = 'https://beyondthebreakdown.world/welcome/?sessionId='+s.id+'&pid='+pid[0];
+      let url_cancel = s.url_cancel += '&pid='+pid.join(',');
 
       s.participants.push({
         name: $('#p'+i+'name').val(),
         email: $('#p'+i+'email').val(),
         pid: pid[0],
-        url_session: url_session,
         url_cancel: url_cancel
       });
     };
@@ -174,21 +178,10 @@ function register(e) {
     if (asl) s.accessiblity_asl = true;
 
     db.collection('sessions').doc(selected_option).set(s);
-    displayRegistrationConfirmation();
+    showConfirm();
   } else {
     alert('Please fill out all participant contact info.');
   }
-}
-
-function displayRegistrationConfirmation() {
-  $('#sessionOptions').hide();
-  $('#sessions').hide();
-  $('#participants').hide();
-  $('#confirm-date').text(options[selected_option].datetime);
-  $('#confirm-time').text(options[selected_option].datetime);
-  $('#confirm-url').text(options[selected_option].url_session);
-  $('#confirm').show();
-  releaseSession();
 }
 
 function releaseSession() {
@@ -245,3 +238,13 @@ function makeid() {
 }
 
 
+function copyUrl(elt) {
+  let text = $(elt).text();
+  console.log(text)
+  $('#copied').fadeIn(0).delay(1000).fadeOut(0);
+  let $temp = $('<input>');
+  $('body').append($temp);
+  $temp.val(text).select();
+  document.execCommand('copy');
+  $temp.remove();
+}
