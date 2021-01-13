@@ -15,6 +15,6 @@ export function downloadBlob(blob, fileName = 'recording.ogg') {
     a.href = base64Url;
     a.download = fileName;
     document.body.appendChild(a);
-    a.click();
+    a.on('click', );
     document.body.removeChild(a);
 }

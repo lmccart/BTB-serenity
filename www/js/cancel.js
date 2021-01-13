@@ -1,56 +1,54 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyDtf01NTsVT4k_lntP_NpqRxAnUZ9uPTlk",
-  authDomain: "beyond-the-breakdown.firebaseapp.com",
-  databaseURL: "https://beyond-the-breakdown.firebaseio.com",
-  projectId: "beyond-the-breakdown",
-  storageBucket: "beyond-the-breakdown.appspot.com",
-  messagingSenderId: "516765643646",
-  appId: "1:516765643646:web:3c2001a0fdf413c457392f",
-  measurementId: "G-95RNYT6BL4"
-};
-const app = firebase.initializeApp(firebaseConfig);
+const app = firebase.app();
 firebase.auth().signInAnonymously().catch(function(error) { console.log(error); });
 firebase.auth().onAuthStateChanged(function(user) { });
 const db = firebase.firestore(app);
 
-let id, pid;
+let sessionId, pid;
 let session;
 
-$('#cancel-individual').on('click', cancelIndividual);
-$('#cancel-group').on('click', cancelGroup);
+$('#submit-cancel-individual').on('click', cancelIndividual);
+$('#submit-cancel-group').on('click', cancelGroup);
+$('#submit-cancel-option').on('click', cancelOptions);
+$('.cancel-option').on('click', function() {
+  $('.cancel-option').removeClass('selected');
+  $(this).addClass('selected');
+  $('#submit-cancel-option').show();
+});
+
 parseParams();
 
 function parseParams() {
   const params = new URLSearchParams(window.location.search);
-  id = params.get('sessionId');
+  sessionId = params.get('sessionId');
   pid = params.get('pid');
   if (pid) pid = pid.split(',');
-  console.log(id, pid)
+  console.log(sessionId, pid)
 
-  if (!id || !pid || !pid.length) {
+  if (!sessionId || !pid || !pid.length) {
     $('#not-found').show();
   } else {
-    let docRef = db.collection('sessions').doc(id);
+    let docRef = db.collection('sessions').doc(sessionId);
     docRef.get().then(function(doc) {
       console.log(doc.data().participants)
-      if (doc.exists && doc.data().participants.length > 0) {
+      if (doc.exists && doc.data().participants.length) {
         session = doc.data();
         console.log(session);
-        $('#cancel').show();
-        $('#datetime').html(session.datetime);
-        if (pid.length === 1) {
-          $('#cancel-group').hide();
+        
+        let people = session.participants.filter(function(p, i) { return pid.includes(p.pid); }).map(function(p, i) { return p.name; }).join(', ');
+        console.log(people)
+        $('.cancel-people').text(people);
+        $('.cancel-person').text(people.split(',')[0]);
+
+        if (pid.includes('group') && pid.length > 2) {
+          $('#cancel-group').show();
+        } else if (pid.length === 1 || (pid.includes('group') && pid.length === 2)) {
+          $('#cancel-individual').show();
         } else {
-          let people = '';
-          for (let p of session.participants) {
-            console.log(p.pid);
-            if (pid.includes(p.pid)) {
-              people += p.name + ', ';
-            }
-          }
-          people = people.slice(0, -2);
-          $('#cancel-people').text(people);
+          $('#cancel-options').show();
         }
+
+        $('.datetime').html(moment(session.datetime).format('dddd MMM DD h:mm a'));
+
       } else { $('#not-found').show(); }
     }).catch(function(error) { $('#not-found').show(); });
   }
@@ -63,7 +61,7 @@ function cancelIndividual() {
       updated_participants.push(p);
     }
   }
-  db.collection('sessions').doc(session.id).set({participants: updated_participants}, {merge: true});
+  db.collection('sessions').doc(sessionId).set({participants: updated_participants}, {merge: true});
   $('#cancel').hide();
   $('#confirm-individual').show();
 }
@@ -71,16 +69,25 @@ function cancelIndividual() {
 function cancelGroup() {
   let updated_participants = [];
   for (let p of session.participants) {
-    let found = false;
+    let remove = false;
     for (let e of pid) {
       if (p.pid === e) {
-        found = true;
+        remove = true;
       }
     }
-    if (!found) updated_participants.push(p);
+    if (!remove) updated_participants.push(p);
   }
   console.log(updated_participants)
-  db.collection('sessions').doc(session.id).set({participants: updated_participants, closed: false}, {merge: true});
+  db.collection('sessions').doc(sessionId).set({participants: updated_participants, closed: false}, {merge: true});
   $('#cancel').hide();
   $('#confirm-group').show();
+}
+
+
+function cancelOptions() {
+  if ($('.cancel-option.selected').data('type') === 'individual') {
+    cancelIndividual();
+  } else {
+    cancelGroup();
+  }
 }

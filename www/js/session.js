@@ -1,14 +1,4 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyDtf01NTsVT4k_lntP_NpqRxAnUZ9uPTlk",
-  authDomain: "beyond-the-breakdown.firebaseapp.com",
-  databaseURL: "https://beyond-the-breakdown.firebaseio.com",
-  projectId: "beyond-the-breakdown",
-  storageBucket: "beyond-the-breakdown.appspot.com",
-  messagingSenderId: "516765643646",
-  appId: "1:516765643646:web:3c2001a0fdf413c457392f",
-  measurementId: "G-95RNYT6BL4"
-};
-const app = firebase.initializeApp(firebaseConfig);
+const app = firebase.app();
 firebase.auth().signInAnonymously().catch(function(error) { console.log(error); });
 firebase.auth().onAuthStateChanged(function(user) { });
 const db = firebase.firestore(app);
@@ -68,7 +58,7 @@ function initSession() {
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   
-  $('#pause-group').click(triggerPauseGroup);
+  $('#pause-group').on('click', triggerPauseGroup);
 }
 
 function onYouTubeIframeAPIReady() {
@@ -149,12 +139,12 @@ function initGuide() {
     convertTsvIntoObjects(data);
 
     $('#guide-controls').show();
-    $('#trigger-prompt').click(triggerTextPrompt);
-    $('#start-prompt').click(startPrompt);
-    $('#skip-prompt').click(nextPrompt);
-    $('#pause-prompt').click(pausePrompt);
-    $('#resume-prompt').click(resumePrompt);
-    $('#world-submit').click(submitWorld);
+    $('#trigger-prompt').on('click', triggerTextPrompt);
+    $('#start-prompt').on('click', startPrompt);
+    $('#skip-prompt').on('click', nextPrompt);
+    $('#pause-prompt').on('click', pausePrompt);
+    $('#resume-prompt').on('click', resumePrompt);
+    $('#world-submit').on('click', submitWorld);
 
   });  
 }
