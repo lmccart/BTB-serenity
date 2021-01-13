@@ -27,12 +27,14 @@ import type { AbstractProps } from '../AbstractConference';
 import Labels from './Labels';
 import { default as Notice } from './Notice';
 
-import firebase from 'firebase';
+import config from '../../../../../static/data/env.json';
+console.log(config)
 import { Player, ControlBar } from 'video-react';
 
 declare var APP: Object;
 declare var interfaceConfig: Object;
 
+let app;
 let db;
 let userId = 'TODOpid';
 let userName = 'Builder';
@@ -246,9 +248,9 @@ class Conference extends AbstractConference<Props, *> {
                         <div id='group-pause-overlay' style={{display:'none'}}>
                             <h3 >Group Pause: Overlay of Forest Scene</h3>
                             <Player
+                                src='./images/pause.mp4'
                                 loop
                                 muted={true}
-                                src='./images/pause.mp4'
                                 id='group-pause-player' 
                                 ref={(player) => { this.player = player }}>
                                 <ControlBar disableCompletely={true} />
@@ -317,38 +319,61 @@ class Conference extends AbstractConference<Props, *> {
     /* BTB SERENITY!! */
     _initializeFirebase = () => {
         return new Promise(resolve => {
-            $.ajax(`${window.location.origin}/static/data/env.json`)
-                .done(data => {
-                    const firebaseConfig = {
-                        apiKey: data.firebaseApiKey,
-                        authDomain: "beyond-the-breakdown.firebaseapp.com",
-                        databaseURL: "https://beyond-the-breakdown.firebaseio.com",
-                        projectId: "beyond-the-breakdown",
-                        storageBucket: "beyond-the-breakdown.appspot.com",
-                        messagingSenderId: "516765643646",
-                        appId: "1:516765643646:web:3c2001a0fdf413c457392f",
-                        measurementId: "G-95RNYT6BL4"
-                    };
-                    firebase.initializeApp(firebaseConfig);
-                    firebase.auth().signInAnonymously().catch(function(error) { console.log('LM error ' + error); });
-                    db = firebase.firestore();
+            console.log(config.firebaseApiKey)
+            const firebaseConfig = {
+                apiKey: config.firebaseApiKey,
+                authDomain: "beyond-the-breakdown.firebaseapp.com",
+                databaseURL: "https://beyond-the-breakdown.firebaseio.com",
+                projectId: "beyond-the-breakdown",
+                storageBucket: "beyond-the-breakdown.appspot.com",
+                messagingSenderId: "516765643646",
+                appId: "1:516765643646:web:3c2001a0fdf413c457392f",
+                measurementId: "G-95RNYT6BL4"
+            };
 
-                    console.log(sessionId)
+            Promise.all([this._loadFirebase(firebaseConfig), this._loadAuth, this._loadFirestore()])
+            .then((results) => {
+                db = results[2];
+                results[1]().then(() => { 
+                    console.log('firestore initialized')
                     db.collection('sessions').doc(sessionId).get({}).then(doc => {
                         console.log(doc);
+                        resolve(doc);
                         // if (userId === 'facilitator') {
                         //     userName = 'Serenity'
                         // }
                         // APP.conference.changeLocalDisplayName(userName);
-                        resolve();
                     }).catch((e) => {
-                        console.log('error');
-                        console.log(e);
+                        console.log('error', e);
                         // TODO
                     });
-            });
+                }).catch((e) => { console.log('error', e) });
         });
-    }
+    })};
+    _loadFirebase = (config) => { 
+        return new Promise( (resolve, reject) => {
+            document.body.appendChild(Object.assign(document.createElement('script'), {
+                src: `https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js`,
+                onload: () => resolve(firebase.initializeApp(config)),
+                onerror: reject
+            }));
+    })};
+    _loadAuth = () => { 
+        return new Promise( (resolve, reject) => {
+            document.body.appendChild(Object.assign(document.createElement('script'), {
+                src: `https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js`,
+                onload: () => resolve(firebase.auth().signInAnonymously),
+                onerror: reject
+            }));
+    })};
+    _loadFirestore = () => { 
+        return new Promise( (resolve, reject) => {
+            document.body.appendChild(Object.assign(document.createElement('script'), {
+                src: `https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js`,
+                onload: () => resolve(firebase.firestore()),
+                onerror: reject
+            }));
+    })};
   
     _initSession = () => {
         if (facilitator) this._initFacilitator();
@@ -369,12 +394,6 @@ class Conference extends AbstractConference<Props, *> {
                 else console.log('LM badType:', msg.type)
             });
         });
-  
-        let tag = document.createElement('script');
-        tag.id = 'iframe-demo';
-        tag.src = 'https://www.youtube.com/iframe_api';
-        let firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     }
 
     _sendMessage = (type, val) => {
