@@ -1,3 +1,6 @@
+/* LM */
+@import '../node_modules/video-react/styles/scss/video-react';
+
 /* Functions BEGIN */
 
 @import 'functions';
@@ -22,9 +25,6 @@
 $flagsImagePath: "../images/";
 @import "../node_modules/bc-css-flags/dist/css/bc-css-flags.scss";
 /* Flags END */
-
-
-@import '../node_modules/video-react/styles/scss/video-react';
 
 /* Modules BEGIN */
 

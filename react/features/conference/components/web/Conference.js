@@ -245,8 +245,12 @@ class Conference extends AbstractConference<Props, *> {
                         
                         <div id='group-pause-overlay' style={{display:'none'}}>
                             <h3 >Group Pause: Overlay of Forest Scene</h3>
-                            <Player loop id='group-pause-player' ref={(player) => { this.player = player }}>
-                                <source src='./images/pause.mp4' />
+                            <Player
+                                loop
+                                muted={true}
+                                src='./images/pause.mp4'
+                                id='group-pause-player' 
+                                ref={(player) => { this.player = player }}>
                                 <ControlBar disableCompletely={true} />
                             </Player>
                             <div id='group-pause-timer'></div>
@@ -331,15 +335,11 @@ class Conference extends AbstractConference<Props, *> {
 
                     console.log(sessionId)
                     db.collection('sessions').doc(sessionId).get({}).then(doc => {
-                        for (let p of doc.data().participants) {
-                            console.log(p)
-                            if (p.pid === userId) {
-                                userName = p.name;
-                            } else if (userId === 'facilitator') {
-                                userName = 'Serenity'
-                            }
-                            APP.conference.changeLocalDisplayName(userName);
-                        }
+                        console.log(doc);
+                        // if (userId === 'facilitator') {
+                        //     userName = 'Serenity'
+                        // }
+                        // APP.conference.changeLocalDisplayName(userName);
                         resolve();
                     }).catch((e) => {
                         console.log('error');
@@ -419,7 +419,6 @@ class Conference extends AbstractConference<Props, *> {
         pauseTimer = performance.now() + ms;
         $('#group-pause-timer').text(_msToHms(ms));
         $('#group-pause-overlay').fadeIn(0).delay(ms).fadeOut(0);
-        this.player.volume = 0;
         this.player.play();
         //   api.isAudioMuted().then(muted => {
         //     if (!muted) api.executeCommand('toggleAudio');
