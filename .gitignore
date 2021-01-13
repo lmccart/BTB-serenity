@@ -8,6 +8,9 @@
 !config.js
 !interface_config.js
 !friendcrawl.net-config.js
+!webpack.config.js
+!package.json
+!package-lock.json
 
 !css/
 !modules/
