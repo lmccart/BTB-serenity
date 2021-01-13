@@ -28,7 +28,6 @@ import Labels from './Labels';
 import { default as Notice } from './Notice';
 
 import config from '../../../../../static/data/env.json';
-console.log(config)
 import { Player, ControlBar } from 'video-react';
 
 declare var APP: Object;
@@ -272,9 +271,9 @@ class Conference extends AbstractConference<Props, *> {
                     <section id='notif-holder'>
                         <div id='notif'></div>
                     </section>
-                    
+
                 </main>
-                <Notice />
+                    
                 <div id = 'videospace'>
                     <LargeVideo />
                     <KnockingParticipantList />
@@ -282,6 +281,7 @@ class Conference extends AbstractConference<Props, *> {
                     { hideLabels || <Labels /> }
                 </div>
 
+                <Notice />
                 { _showPrejoin || _isLobbyScreenVisible || <Toolbox /> }
                 <Chat />
 
@@ -290,6 +290,8 @@ class Conference extends AbstractConference<Props, *> {
                 <CalleeInfoContainer />
 
                 { _showPrejoin && <Prejoin />}
+                
+                <img src='./images/serenity.gif' id='serenity-session' alt=''/>
             </div>
         );
     }
@@ -317,7 +319,7 @@ class Conference extends AbstractConference<Props, *> {
 
 
     /* BTB SERENITY!! */
-    _initializeFirebase = () => {
+    _initFirebase = () => {
         return new Promise(resolve => {
             console.log(config.firebaseApiKey)
             const firebaseConfig = {
@@ -331,25 +333,24 @@ class Conference extends AbstractConference<Props, *> {
                 measurementId: "G-95RNYT6BL4"
             };
 
-            Promise.all([this._loadFirebase(firebaseConfig), this._loadAuth, this._loadFirestore()])
-            .then((results) => {
-                db = results[2];
-                results[1]().then(() => { 
-                    console.log('firestore initialized')
-                    db.collection('sessions').doc(sessionId).get({}).then(doc => {
-                        console.log(doc);
-                        resolve(doc);
-                        // if (userId === 'facilitator') {
-                        //     userName = 'Serenity'
-                        // }
-                        // APP.conference.changeLocalDisplayName(userName);
-                    }).catch((e) => {
-                        console.log('error', e);
-                        // TODO
-                    });
-                }).catch((e) => { console.log('error', e) });
-        });
+            this._loadFirebase(firebaseConfig)
+            .then(firebase => {
+                return this._loadAuth();
+            })
+            .then(firebase => {
+                return firebase.auth().signInAnonymously();
+            })
+            .then(firebase => {
+                return this._loadFirestore();
+            })
+            .then(firebase => {
+                db = firebase.firestore();
+                console.log('done')
+                console.log(db);
+                resolve();
+            });
     })};
+    
     _loadFirebase = (config) => { 
         return new Promise( (resolve, reject) => {
             document.body.appendChild(Object.assign(document.createElement('script'), {
@@ -362,7 +363,7 @@ class Conference extends AbstractConference<Props, *> {
         return new Promise( (resolve, reject) => {
             document.body.appendChild(Object.assign(document.createElement('script'), {
                 src: `https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js`,
-                onload: () => resolve(firebase.auth().signInAnonymously),
+                onload: () => resolve(firebase),
                 onerror: reject
             }));
     })};
@@ -370,12 +371,13 @@ class Conference extends AbstractConference<Props, *> {
         return new Promise( (resolve, reject) => {
             document.body.appendChild(Object.assign(document.createElement('script'), {
                 src: `https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js`,
-                onload: () => resolve(firebase.firestore()),
+                onload: () => resolve(firebase),
                 onerror: reject
             }));
     })};
   
     _initSession = () => {
+        console.log('LM _initSession')
         if (facilitator) this._initFacilitator();
 
         $('#participant-controls').show();
@@ -598,9 +600,7 @@ class Conference extends AbstractConference<Props, *> {
      * @inheritdoc
      */
     _start() {
-        console.log('LM START');
         APP.UI.start();
-
         APP.UI.registerListeners();
         APP.UI.bindEvents();
 
@@ -608,13 +608,17 @@ class Conference extends AbstractConference<Props, *> {
             document.addEventListener(name, this._onFullScreenChange));
 
         const { dispatch, t } = this.props;
-
         dispatch(connect());
-
         maybeShowSuboptimalExperienceNotification(dispatch, t);
 
+        console.log('LM START');
+        $('<link/>', {
+            rel: 'stylesheet',
+            type: 'text/css',
+            href: 'static/style.css'
+         }).appendTo('head');
 
-        console.log('LM _initSession')
+        console.log('LM _start')
         const params = window.location.pathname.substring(1).split('-');
         sessionId = params[0];
         userId = params[1];
@@ -624,7 +628,7 @@ class Conference extends AbstractConference<Props, *> {
         facilitator = userId === 'facilitator';
         console.log('LM ' + sessionId + ' ' + userId + ' ' + facilitator);
 
-        this._initializeFirebase()
+        this._initFirebase()
         .then(this._initSession);
     }
 }

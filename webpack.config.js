@@ -293,12 +293,14 @@ module.exports = [
  * target, undefined; otherwise, the path to the local file to be served.
  */
 function devServerProxyBypass({ path }) {
+    // console.log(path)
     if (path.startsWith('/css/') || path.startsWith('/doc/')
             || path.startsWith('/fonts/')
             || path.startsWith('/images/')
             || path.startsWith('/lang/')
             || path.startsWith('/sounds/')
             || path.startsWith('/static/')
+            || path.startsWith('/www/')
             || path.endsWith('.wasm')) {
 
         return path;
