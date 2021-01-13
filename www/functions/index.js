@@ -26,18 +26,20 @@ exports.sendConfirm = functions.firestore
     for (let i=0; i<session.participants.length; i++) {
       updated_participants[i] = session.participants[i];
       if (!session.participants[i].confirmed) {
+        let d = {
+          name: session.participants[i].name,
+          datetime: session.datetime,
+          url_session: session.url_session,
+          url_cancel: session.participants[i].url_cancel,
+          caption: session.accessiblity_caption || false,
+          asl: session.accessiblity_asl || false
+        };
+        console.log(d)
         db.collection('mail').add({
           to: session.participants[i].email,
           template: {
             name: 'session-confirmation',
-            data: {
-              name: session.participants[i].name,
-              datetime: session.datetime,
-              url_session: session.url_session,
-              url_cancel: session.participants[i].url_cancel,
-              caption: session.accessiblity_caption || false,
-              asl: session.accessiblity_asl || false
-            }
+            data: d
           }
         });
         updated_participants[i].confirmed = true;
@@ -53,27 +55,29 @@ exports.sendCancel = functions.firestore
     let session = change.after.data();
     let after = change.after.data().participants;
     let before = change.before.data().participants;
-    functions.logger.log('after = '+after.length)
-    functions.logger.log('before = '+before.length)
-    
-    for (let b=0; b<before.length; b++) {
-      console.log('checking pid '+before[b].pid)
-      let found = false;
-      for (let a=0; a<after.length; a++) {
-        if (before[a].pid === before[b].pid) { found = true; }
-      }
-      if (!found) {
-        functions.logger.log('sending cancel to ' + before[b].name);
-        db.collection('mail').add({
-          to: before[b].email,
-          template: {
-            name: 'cancel-confirmation',
-            data: {
-              name: before[b].name,
-              datetime: session.datetime
+    if (after.length < before.length) {
+      functions.logger.log('after = '+after.length)
+      functions.logger.log('before = '+before.length)
+      
+      for (let b=0; b<before.length; b++) {
+        console.log('checking pid '+before[b].pid)
+        let found = false;
+        for (let a=0; a<after.length; a++) {
+          if (before[a].pid === before[b].pid) { found = true; }
+        }
+        if (!found) {
+          functions.logger.log('sending cancel to ' + before[b].name);
+          db.collection('mail').add({
+            to: before[b].email,
+            template: {
+              name: 'cancel-confirmation',
+              data: {
+                name: before[b].name,
+                datetime: session.datetime
+              }
             }
-          }
-        });
+          });
+        }
       }
     }
 });

@@ -32,36 +32,36 @@
         <h1>Cancel</h1>
         <p>Are you sure you want to cancel your GROUP reservation for <span class='datetime'></span>? This reservation includes <span class='cancel-people'></span>.</p>
         <div class='buttons'>
-          <button class='cancel-group'>Yes, cancel our reservation</button>
+          <button id='submit-cancel-group'>Yes, cancel our reservation</button>
         </div>
       </section>
 
       <section id='cancel-individual' style='display:none'>
         <h1>Cancel</h1>
-        <p>Are you sure you want to cancel your reservation for <span class='datetime'></span>?</p>
+        <p>Hi <span class='cancel-person'></span>. Are you sure you want to cancel your reservation for <span class='datetime'></span>?</p>
         <div class='buttons'>
-          <button class='cancel-individual'>Yes, cancel my reservation</button>
+          <button id='submit-cancel-individual'>Yes, cancel my reservation</button>
         </div>
       </section>
 
       <section id='cancel-options' style='display:none'>
         <h1>Cancel</h1>
-        <p>Are you sure you want to cancel your reservation for <span class='datetime'></span>? This reservation includes <span class='cancel-people'></span>.</p>
+        <p>Hi <span class='cancel-person'></span>. Are you sure you want to cancel your reservation for <span class='datetime'></span>? This reservation includes <span class='cancel-people'></span>.</p>
         <ul>
-          <li><button class='light'>Cancel ONLY my individual reservation.</button></li>
-          <li><button class='light'>Cancel the WHOLE GROUP reservation.</button></li>
+          <li><button class='light cancel-option' data-type='individual'>Cancel ONLY my individual reservation.</button></li>
+          <li><button class='light cancel-option' data-type='group'>Cancel the WHOLE GROUP reservation.</button></li>
         </ul>
         <div class='buttons'>
-          <button class='cancel-option' style='display:none'>Submit</button>
+          <button id='submit-cancel-option' style='display:none'>Submit</button>
         </div>
         </section>
       
       <section id='confirm-individual' style='display:none'>
-        <h2>Your individual reservation has been canceled.</h2>
+        <p>Your individual reservation has been canceled.</p>
       </section>
 
       <section id='confirm-group' style='display:none'>
-        <h2>Your group reservation has been canceled. Each participant will receive a cancelation confirmation email.</h2>
+        <p>Your group reservation has been canceled. Each participant will receive a cancelation confirmation email.</p>
       </section>
 
       <img src='../css/plant-crop.png' id='plant' alt=''>

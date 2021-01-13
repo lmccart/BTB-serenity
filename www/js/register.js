@@ -71,7 +71,7 @@ function showParticipantForm() {
   }
 }
 
-function showConfirm() {
+function showConfirm(pid) {
   $('section').hide();
   console.log(options[selected_option]);
   let dt = options[selected_option].datetime;
@@ -79,7 +79,7 @@ function showConfirm() {
   $('#confirm-datetime').text(formatted);
   $('#confirm-url').text(options[selected_option].url_session);
   $('#confirm-url').attr('href', options[selected_option].url_session);
-  $('#confirm-cancel').attr('href', options[selected_option].url_cancel);
+  $('#confirm-cancel').attr('href', options[selected_option].url_cancel + '&pid=group,'+pid.join(','));
   $('#confirm').show();
   releaseSession();
 }
@@ -161,7 +161,7 @@ function register(e) {
           pid.push(group_ids[j]);
         }
       }
-      let url_cancel = s.url_cancel += '&pid='+pid.join(',');
+      let url_cancel = s.url_cancel + '&pid='+pid.join(',');
 
       s.participants.push({
         name: $('#p'+i+'name').val(),
@@ -178,7 +178,7 @@ function register(e) {
     if (asl) s.accessiblity_asl = true;
 
     db.collection('sessions').doc(selected_option).set(s);
-    showConfirm();
+    showConfirm(group_ids);
   } else {
     alert('Please fill out all participant contact info.');
   }

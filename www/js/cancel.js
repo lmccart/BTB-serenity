@@ -6,8 +6,15 @@ const db = firebase.firestore(app);
 let sessionId, pid;
 let session;
 
-$('#cancel-individual').on('click', cancelIndividual);
-$('#cancel-group').on('click', cancelGroup);
+$('#submit-cancel-individual').on('click', cancelIndividual);
+$('#submit-cancel-group').on('click', cancelGroup);
+$('#submit-cancel-option').on('click', cancelOptions);
+$('.cancel-option').on('click', function() {
+  $('.cancel-option').removeClass('selected');
+  $(this).addClass('selected');
+  $('#submit-cancel-option').show();
+});
+
 parseParams();
 
 function parseParams() {
@@ -17,7 +24,7 @@ function parseParams() {
   if (pid) pid = pid.split(',');
   console.log(sessionId, pid)
 
-  if (!sessionId) {
+  if (!sessionId || !pid || !pid.length) {
     $('#not-found').show();
   } else {
     let docRef = db.collection('sessions').doc(sessionId);
@@ -27,20 +34,14 @@ function parseParams() {
         session = doc.data();
         console.log(session);
         
-        let people = '';
-        for (let p of session.participants) {
-          console.log(p.pid, p.name);
-          if (!pid || !pid.length || pid.includes(p.pid)) {
-            people += p.name + ', ';
-          }
-        }
+        let people = session.participants.filter(function(p, i) { return pid.includes(p.pid); }).map(function(p, i) { return p.name; }).join(', ');
         console.log(people)
-        people = people.slice(0, -2);
         $('.cancel-people').text(people);
+        $('.cancel-person').text(people.split(',')[0]);
 
-        if (!pid || !pid.length) {
+        if (pid.includes('group') && pid.length > 2) {
           $('#cancel-group').show();
-        } else if (pid.length === 1) {
+        } else if (pid.length === 1 || (pid.includes('group') && pid.length === 2)) {
           $('#cancel-individual').show();
         } else {
           $('#cancel-options').show();
@@ -49,7 +50,7 @@ function parseParams() {
         $('.datetime').html(moment(session.datetime).format('dddd MMM DD h:mm a'));
 
       } else { $('#not-found').show(); }
-    })//.catch(function(error) { $('#not-found').show(); });
+    }).catch(function(error) { $('#not-found').show(); });
   }
 }
 
@@ -68,16 +69,25 @@ function cancelIndividual() {
 function cancelGroup() {
   let updated_participants = [];
   for (let p of session.participants) {
-    let found = false;
+    let remove = false;
     for (let e of pid) {
       if (p.pid === e) {
-        found = true;
+        remove = true;
       }
     }
-    if (!found) updated_participants.push(p);
+    if (!remove) updated_participants.push(p);
   }
   console.log(updated_participants)
   db.collection('sessions').doc(sessionId).set({participants: updated_participants, closed: false}, {merge: true});
   $('#cancel').hide();
   $('#confirm-group').show();
+}
+
+
+function cancelOptions() {
+  if ($('.cancel-option.selected').data('type') === 'individual') {
+    cancelIndividual();
+  } else {
+    cancelGroup();
+  }
 }

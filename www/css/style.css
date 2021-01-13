@@ -129,9 +129,9 @@ select {
 #sessions-options>li:nth-child(odd){
   margin-right: 2em;
 }
-.option.selected {
-  background: #232323 !important;
-  border-color: #232323;
+.selected {
+  background: #984F3A !important;
+  border-color: #984F3A;
   color: white;
 }
 ::-webkit-scrollbar {
