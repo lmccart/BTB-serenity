@@ -238,16 +238,15 @@ class Conference extends AbstractConference<Props, *> {
                         <div id='notif'></div>
                     </section>
 
-                    <div id='group-chat' style={{display:'none'}}>
+                    <section id='group-chat' style={{display:'none'}}>
                         <h3 className='sr-only'>Chat</h3>
-                        <div id='serenity-messages'></div>
                         <div id='chat-messages'></div>
                         <label htmlFor='chat-input' className='sr-only'>Input Message</label>
-                        <input type='text' id='chat-input'/>
+                        <input type='text' id='chat-input' placeholder='Type a message'/>
                         <button id='chat-send' onClick={this._sendChat} className='sr-only'>Send</button>
-                    </div>
+                    </section>
 
-                    {/* <section id='facilitator-controls' style={{display:'none'}} aria-hidden='true'>
+                    <section id='facilitator-controls' style={{display:'none'}} aria-hidden='true'>
                         <button id='start-prompt' className='facilitator-button' onClick={this._startPrompt}>Start Prompts</button>
                         <div id='next' style={{display:'none'}}>
                             <div id='next-timer'></div>
@@ -272,7 +271,7 @@ class Conference extends AbstractConference<Props, *> {
                             <textarea id='world-description'></textarea>
                             <button id='world-submit' onClick={this._submitWorld}>Submit</button>
                         </div>
-                    </section> */}
+                    </section>
 
 
                 </main>
@@ -384,7 +383,7 @@ class Conference extends AbstractConference<Props, *> {
         if (facilitator) this._initFacilitator();
 
         $('#participant-controls').show();
-        $('#chat-input').on('keypress', (e) => { if (e.which === 13) this._sendChat(); else console.log(e.which); });
+        $('#chat-input').on('keypress', (e) => { if (e.which === 13) this._sendChat();});
 
         // Setup listener for firestore changes
         let now = new Date().getTime();
@@ -392,6 +391,7 @@ class Conference extends AbstractConference<Props, *> {
             let that = this;
             snapshot.docChanges().forEach(function(change) {
                 let msg = change.doc.data();
+                console.log(msg)
                 if (change.type !== 'added') return;
                 else if (msg.sessionId !== sessionId) return;
                 else if (msg.type === 'group-pause') that._groupPause(msg.val);
@@ -423,7 +423,9 @@ class Conference extends AbstractConference<Props, *> {
     }
 
     _groupChatMessage = (data) => {
-        $('#chat-messages').append('<div><span>'+data.userName+'</span><span>'+data.msg+'</span>');
+        let elt = $('<div class="chat-message"><span class="chat-user">'+data.userName+'</span><span class="chat-text">'+data.msg+'</span></div>');
+        if (data.userName === 'Serenity') elt.addClass('serenity-message');
+        $('#chat-messages').append(elt);
     }
   
     _triggerHelp = () => {
@@ -462,7 +464,7 @@ class Conference extends AbstractConference<Props, *> {
   
     _playPrompt = (msg, doSpeak) => {
         $('#notif').text(msg);
-        $('#serenity-messages').text(msg);
+        this._groupChatMessage({msg: msg, userName: 'Serenity'});
         $('#notif-holder').stop().fadeIn(300).delay(4000).fadeOut(300);
         if (doSpeak) this._speak(msg);
         console.log('LM _playPrompt: ' + msg);
