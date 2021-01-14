@@ -1316,7 +1316,7 @@ class Toolbox extends Component<Props, State> {
         return (
             <div className = 'toolbox-content'>
                 <div className = 'button-group-left'>
-                    { buttonsLeft.indexOf('chat') !== -1
+                    {/* { buttonsLeft.indexOf('chat') !== -1
                         && <div className = 'toolbar-button-with-badge'>
                             <ToolbarButton
                                 accessibilityLabel = { t('toolbar.accessibilityLabel.chat') }
@@ -1338,7 +1338,7 @@ class Toolbox extends Component<Props, State> {
                     {
                         buttonsLeft.indexOf('closedcaptions') !== -1
                             && <ClosedCaptionButton />
-                    }
+                    } */}
                 </div>
                 <div className = 'button-group-center'>
                     { this._renderAudioButton() }
@@ -1353,7 +1353,7 @@ class Toolbox extends Component<Props, State> {
                                 this._onToolbarOpenLocalRecordingInfoDialog
                             } />
                     }
-                    { buttonsRight.indexOf('tileview') !== -1
+                    {/* { buttonsRight.indexOf('tileview') !== -1
                         && <TileViewButton /> }
                     { buttonsRight.indexOf('invite') !== -1
                         && <ToolbarButton
@@ -1363,7 +1363,7 @@ class Toolbox extends Component<Props, State> {
                             onClick = { this._onToolbarOpenInvite }
                             tooltip = { t('toolbar.invite') } /> }
                     { buttonsRight.indexOf('security') !== -1
-                        && <SecurityDialogButton customClass = 'security-toolbar-button' /> }
+                        && <SecurityDialogButton customClass = 'security-toolbar-button' /> } */}
                     { buttonsRight.indexOf('overflowmenu') !== -1
                         && <OverflowMenuButton
                             isOpen = { _overflowMenuVisible }

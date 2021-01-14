@@ -100,7 +100,7 @@ function computeCameraVideoSize( // eslint-disable-line max-params
 
     const aspectRatio = videoWidth / videoHeight;
 
-    switch (videoLayoutFit) {
+    switch ('both') {
     case 'height':
         return [ videoSpaceHeight * aspectRatio, videoSpaceHeight ];
     case 'width':

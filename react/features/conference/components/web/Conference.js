@@ -209,7 +209,20 @@ class Conference extends AbstractConference<Props, *> {
                 onMouseMove = { this._onShowToolbar }>
 
                 <main id='session-page'>
-                    <section id='facilitator-controls' style={{display:'none'}} aria-hidden='true'>
+                    <section id='session-top'>
+
+                    </section>
+                    <section id='session-bottom'>
+                        <div id='participant-controls' style={{display:'none'}}>
+                            <div id='group-buttons'>
+                                <button id='group-help' onClick={this._triggerHelp}>Help</button>
+                                <button id='group-pause' onClick={this._triggerGroupPause}>Pause</button>
+                                <button id='toggle-chat' onClick={this._toggleChat}>Chat</button>
+                            </div>
+                        </div>
+
+                    </section>
+                    {/* <section id='facilitator-controls' style={{display:'none'}} aria-hidden='true'>
                         <button id='start-prompt' className='facilitator-button' onClick={this._startPrompt}>Start Prompts</button>
                         <div id='next' style={{display:'none'}}>
                             <div id='next-timer'></div>
@@ -234,9 +247,9 @@ class Conference extends AbstractConference<Props, *> {
                             <textarea id='world-description'></textarea>
                             <button id='world-submit' onClick={this._submitWorld}>Submit</button>
                         </div>
-                    </section>
+                    </section> */}
 
-                    <section id='participant-controls' style={{display:'none'}}>
+                    {/* <section id='participant-controls' style={{display:'none'}}>
                         <h2 className='sr-only'>Participant Controls</h2>
                         <div id='group-buttons'>
                             <button id='group-help' onClick={this._triggerHelp}>Help</button>
@@ -266,7 +279,7 @@ class Conference extends AbstractConference<Props, *> {
                             <button id='chat-send' onClick={this._sendChat}>Send</button>
                         </div>
                     </section>
-                
+                 */}
 
                     <section id='notif-holder'>
                         <div id='notif'></div>

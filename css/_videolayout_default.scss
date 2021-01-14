@@ -5,9 +5,9 @@
 #videospace {
     display: block;
     width: 92.4vw;
-    height: calc(100vh - 7.6vw);
+    height: calc(100vh - 14.5vw - 6vw - 7.6vw);
     position: absolute !important;
-    top: 3.8vw;
+    top: calc(3.8vw + 14.75vw);
     left: 3.8vw;
     overflow: hidden;
     z-index: 1;
@@ -216,6 +216,12 @@
 #largeVideoContainer {
     overflow: hidden;
     text-align: center;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 #largeVideoContainer {
