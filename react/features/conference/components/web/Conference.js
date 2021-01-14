@@ -214,6 +214,7 @@ class Conference extends AbstractConference<Props, *> {
                     </section>
                     <section id='session-bottom'>
                         <div id='participant-controls' style={{display:'none'}}>
+                            <h2 className='sr-only'>Participant Controls</h2>
                             <div id='group-buttons'>
                                 <button id='group-help' onClick={this._triggerHelp}>Help</button>
                                 <button id='group-pause' onClick={this._triggerGroupPause}>Pause</button>
@@ -222,6 +223,30 @@ class Conference extends AbstractConference<Props, *> {
                         </div>
 
                     </section>
+                    <section id='group-pause-overlay' style={{display:'none'}}>
+                        <Player
+                            src='./images/pause.mp4'
+                            loop
+                            muted={true}
+                            id='group-pause-player' 
+                            ref={(player) => { this.player = player }}>
+                            <ControlBar disableCompletely={true} />
+                        </Player>
+                        <div id='group-pause-timer'></div>
+                    </section>
+                    <section id='notif-holder'>
+                        <div id='notif'></div>
+                    </section>
+
+                    <div id='group-chat' style={{display:'none'}}>
+                        <h3 className='sr-only'>Chat</h3>
+                        <div id='serenity-messages'></div>
+                        <div id='chat-messages'></div>
+                        <label htmlFor='chat-input' className='sr-only'>Input Message</label>
+                        <input type='text' id='chat-input'/>
+                        <button id='chat-send' onClick={this._sendChat} className='sr-only'>Send</button>
+                    </div>
+
                     {/* <section id='facilitator-controls' style={{display:'none'}} aria-hidden='true'>
                         <button id='start-prompt' className='facilitator-button' onClick={this._startPrompt}>Start Prompts</button>
                         <div id='next' style={{display:'none'}}>
@@ -249,41 +274,6 @@ class Conference extends AbstractConference<Props, *> {
                         </div>
                     </section> */}
 
-                    {/* <section id='participant-controls' style={{display:'none'}}>
-                        <h2 className='sr-only'>Participant Controls</h2>
-                        <div id='group-buttons'>
-                            <button id='group-help' onClick={this._triggerHelp}>Help</button>
-                            <button id='group-pause' onClick={this._triggerGroupPause}>Pause</button>
-                            <button id='toggle-chat' onClick={this._toggleChat}>Chat</button>
-                        </div>
-                        
-                        <div id='group-pause-overlay' style={{display:'none'}}>
-                            <h3 >Group Pause: Overlay of Forest Scene</h3>
-                            <Player
-                                src='./images/pause.mp4'
-                                loop
-                                muted={true}
-                                id='group-pause-player' 
-                                ref={(player) => { this.player = player }}>
-                                <ControlBar disableCompletely={true} />
-                            </Player>
-                            <div id='group-pause-timer'></div>
-                        </div>
-
-                        <div id='group-chat' style={{display:'none'}}>
-                            <h3 className='sr-only'>Chat</h3>
-                            <div id='serenity-messages'></div>
-                            <div id='chat-messages'></div>
-                            <label htmlFor='chat-input' className='sr-only'>Input Message</label>
-                            <textarea id='chat-input'></textarea>
-                            <button id='chat-send' onClick={this._sendChat}>Send</button>
-                        </div>
-                    </section>
-                 */}
-
-                    <section id='notif-holder'>
-                        <div id='notif'></div>
-                    </section>
 
                 </main>
                     
@@ -394,6 +384,7 @@ class Conference extends AbstractConference<Props, *> {
         if (facilitator) this._initFacilitator();
 
         $('#participant-controls').show();
+        $('#chat-input').on('keypress', (e) => { if (e.which === 13) this._sendChat(); else console.log(e.which); });
 
         // Setup listener for firestore changes
         let now = new Date().getTime();
@@ -441,7 +432,7 @@ class Conference extends AbstractConference<Props, *> {
     }
     _triggerGroupPause = () => {
         if (facilitator) this._pausePrompt();
-        this._sendMessage('group-pause', 10000); // 10 second pause
+        this._sendMessage('group-pause', 100000); // 10 second pause
     }
 
     _toggleChat = () => {
@@ -631,7 +622,6 @@ class Conference extends AbstractConference<Props, *> {
             href: 'static/style.css'
          }).appendTo('head');
 
-        console.log('LM _start')
         const params = window.location.pathname.substring(1).split('-');
         sessionId = params[0];
         userId = params[1];
