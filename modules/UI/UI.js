@@ -7,6 +7,7 @@ import EventEmitter from 'events';
 import Logger from 'jitsi-meet-logger';
 
 import { isMobileBrowser } from '../../react/features/base/environment/utils';
+import { setAudioMuted } from '../../react/features/base/media';
 import { getLocalParticipant } from '../../react/features/base/participants';
 import { toggleChat } from '../../react/features/chat';
 import { setDocumentUrl } from '../../react/features/etherpad';
@@ -523,6 +524,10 @@ UI.onSharedVideoStop = function(id, attributes) {
     if (sharedVideoManager) {
         sharedVideoManager.onSharedVideoStop(id, attributes);
     }
+};
+
+UI.mute = function(muted) {
+    APP.store.dispatch(setAudioMuted(muted))
 };
 
 // TODO: Export every function separately. For now there is no point of doing

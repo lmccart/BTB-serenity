@@ -2,7 +2,7 @@
 html {
   margin: 0;
   padding: 0;
-  font-family: freight-sans-pro, sans-serif;
+  font-family: 'freight-sans-pro', sans-serif;
 }
 
 body {
@@ -53,7 +53,7 @@ p {
 }
 .button, button {
   font-size: 1.0em;
-  font-family: freight-sans-pro, sans-serif;
+  font-family: 'freight-sans-pro', sans-serif;
   border: 0.1em solid #232323;
   border-radius: .8em;
   outline: none;
@@ -85,7 +85,7 @@ p {
 
 select {
   font-size: 0.75em;
-  font-family: freight-sans-pro, sans-serif;
+  font-family: 'freight-sans-pro', sans-serif;
   padding: 0 0.5em 0.3em 0.5em;
 
   background:
@@ -162,7 +162,7 @@ select {
 
 .participant-item input {
   font-size: 1.0em;
-  font-family: freight-sans-pro, sans-serif;
+  font-family: 'freight-sans-pro', sans-serif;
   display: block;
   width: -moz-available;
   width: -webkit-fill-available;
@@ -253,29 +253,6 @@ a:hover, #confirm-url:hover {
   left: 0;
   z-index: 10;
 }
-
-#notif-holder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 20;
-}
-
-#notif {
-  text-align: center;
-  color: yellow;
-  max-width: 68vw;
-  font-size: 4em;
-  text-align: center;
-  pointer-events: none;
-}
-
 
 #guide-controls {
   background: #6e00ff;

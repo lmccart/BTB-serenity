@@ -36,7 +36,7 @@ declare var interfaceConfig: Object;
 let app;
 let db;
 let userId = 'TODOpid';
-let userName = 'Builder';
+let userName = 'SerenityAF';
 let sessionId;
 let pauseTimer = 0;
 let pauseInterval = false;
@@ -149,7 +149,9 @@ class Conference extends AbstractConference<Props, *> {
      * @inheritdoc
      */
     componentDidMount() {
-        document.title = `${this.props._roomName} | ${interfaceConfig.APP_NAME}`;
+        document.title = `Beyond the Breakdown`;
+        $('<link/>', { rel: 'stylesheet', type: 'text/css', href: 'https://use.typekit.net/fth5afb.css' }).appendTo('head');
+        $('<link/>', { rel: 'stylesheet', type: 'text/css', href: 'static/style.css' }).appendTo('head');
         this._start();
     }
 
@@ -238,29 +240,28 @@ class Conference extends AbstractConference<Props, *> {
                         <div id='notif'></div>
                     </section>
 
-                    <section id='group-chat' style={{display:'none'}}>
+                    <section id='group-chat' style={{display:'none'}} className='panel'>
+                        <span id='close-chat' onClick={this._toggleChat}>x</span>
                         <h3 className='sr-only'>Chat</h3>
                         <div id='chat-messages'></div>
-                        <label htmlFor='chat-input' className='sr-only'>Input Message</label>
-                        <input type='text' id='chat-input' placeholder='Type a message'/>
+                        <label htmlFor='chat-text' className='sr-only'>Input Message</label>
+                        <input type='text' id='chat-text' placeholder='Type a message'/>
                         <button id='chat-send' onClick={this._sendChat} className='sr-only'>Send</button>
                     </section>
 
-                    <section id='facilitator-controls' style={{display:'none'}} aria-hidden='true'>
+                    <section id='facilitator-controls' style={{display:'none'}} aria-hidden='true' className='panel'>
                         <button id='start-prompt' className='facilitator-button' onClick={this._startPrompt}>Start Prompts</button>
+
                         <div id='next' style={{display:'none'}}>
                             <div id='next-timer'></div>
-                            <div id='next-prompt' onClick={this._nextPrompt}></div>
-
-                            <button id='pause-prompt' className='facilitator-button' style={{display:'none'}} onClick={this._pausePrompt}>Pause Prompts</button>
-                            <button id='resume-prompt' className='facilitator-button' style={{display:'none'}} onClick={this._resumePrompt}>Resume Prompts</button>
-                            <button id='skip-prompt' className='facilitator-button' style={{display:'none'}} onClick={this._nextPrompt}>Skip Prompt</button>
+                            <div id='next-prompt'></div>
                         </div>
 
-                        <div id='text'>
-                            <textarea id='prompt-text'></textarea>
-                            <button id='trigger-prompt' onClick={this._triggerTextPrompt}>Speak</button>
-                        </div>
+                        <button id='pause-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._pausePrompt}>Pause</button>
+                        <button id='resume-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._resumePrompt}>Resume</button>
+                        <button id='skip-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._nextPrompt}>Skip</button>
+                        <input id='prompt-text' type='text' placeholder='Type a message' />
+
 
                         <div id='form' style={{display:'none'}}>
                             <label htmlFor='world-name'>World name</label>
@@ -383,7 +384,13 @@ class Conference extends AbstractConference<Props, *> {
         if (facilitator) this._initFacilitator();
 
         $('#participant-controls').show();
-        $('#chat-input').on('keypress', (e) => { if (e.which === 13) this._sendChat();});
+        $('#chat-text').on('keypress', (e) => { if (e.which === 13) this._sendChat();});
+        $('#prompt-text').on('keypress', (e) => { if (e.which === 13) this._triggerTextPrompt();});
+        
+        console.log('detach')
+        let callButtons = $('#call-buttons').detach();
+        $('#group-buttons').append(callButtons);
+        console.log(callButtons)
 
         // Setup listener for firestore changes
         let now = new Date().getTime();
@@ -414,18 +421,19 @@ class Conference extends AbstractConference<Props, *> {
 
     _sendChat = () => {
         const data = {
-            msg: $('#chat-input').val(),
+            msg: $('#chat-text').val(),
             userId: userId,
             userName: userName 
         }
         if (data.msg) this._sendMessage('group-chat', data);
-        $('#chat-input').val('');
+        $('#chat-text').val('');
     }
 
     _groupChatMessage = (data) => {
         let elt = $('<div class="chat-message"><span class="chat-user">'+data.userName+'</span><span class="chat-text">'+data.msg+'</span></div>');
         if (data.userName === 'Serenity') elt.addClass('serenity-message');
         $('#chat-messages').append(elt);
+        $('#chat-messages').scrollTop($('#chat-messages').height());
     }
   
     _triggerHelp = () => {
@@ -434,7 +442,7 @@ class Conference extends AbstractConference<Props, *> {
     }
     _triggerGroupPause = () => {
         if (facilitator) this._pausePrompt();
-        this._sendMessage('group-pause', 100000); // 10 second pause
+        this._sendMessage('group-pause', 5000); // 10 second pause
     }
 
     _toggleChat = () => {
@@ -447,14 +455,12 @@ class Conference extends AbstractConference<Props, *> {
         $('#group-pause-timer').text(_msToHms(ms));
         $('#group-pause-overlay').fadeIn(0).delay(ms).fadeOut(0);
         this.player.play();
-        //   api.isAudioMuted().then(muted => {
-        //     if (!muted) api.executeCommand('toggleAudio');
-        //   }); TODO
+        APP.UI.mute(true);
         let player = this.player;
         setTimeout(function() {
-            // api.executeCommand('toggleAudio'); //TODO
+            APP.UI.mute(false);
             player.pause();
-            if (facilitator && currentPrompt > -1) this._resumePrompt();
+            if (currentPrompt > -1) this._resumePrompt();
         }, ms);
         pauseInterval = setInterval(function() {
             const remaining = pauseTimer - performance.now();
@@ -494,6 +500,7 @@ class Conference extends AbstractConference<Props, *> {
     }
   
     _startPrompt = () => {
+        if (!facilitator) return;
         $('#start-prompt').hide();
         $('#next').show();
         $('#pause-prompt').show();
@@ -502,6 +509,7 @@ class Conference extends AbstractConference<Props, *> {
     }
   
     _nextPrompt = () => {
+        if (!facilitator) return;
         if (promptInterval) clearInterval(promptInterval);
         currentPrompt++;
         if (currentPrompt < prompts.length) {
@@ -511,12 +519,12 @@ class Conference extends AbstractConference<Props, *> {
             currentOption = Math.floor(Math.random() * options.length);
             $('#next-prompt').text(options[currentOption]);
         } else {
-            $('#next').hide();
             $('#form').show();
         }
     }
   
     _resumePrompt = () => {
+        if (!facilitator) return;
         if (pauseInterval) clearInterval(pauseInterval);
         promptTimer += performance.now();
         promptInterval = setInterval(this._checkPrompt, 100);
@@ -525,6 +533,7 @@ class Conference extends AbstractConference<Props, *> {
     }
   
     _pausePrompt = () => {
+        if (!facilitator || currentPrompt === -1) return;
         if (promptInterval) clearInterval(promptInterval);
         promptTimer -= performance.now();
         $('#pause-prompt').hide();
@@ -616,13 +625,6 @@ class Conference extends AbstractConference<Props, *> {
         const { dispatch, t } = this.props;
         dispatch(connect());
         maybeShowSuboptimalExperienceNotification(dispatch, t);
-
-        console.log('LM START');
-        $('<link/>', {
-            rel: 'stylesheet',
-            type: 'text/css',
-            href: 'static/style.css'
-         }).appendTo('head');
 
         const params = window.location.pathname.substring(1).split('-');
         sessionId = params[0];

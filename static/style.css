@@ -2,7 +2,7 @@
 html {
   margin: 0;
   padding: 0;
-  font-family: freight-sans-pro, sans-serif;
+  font-family: 'freight-sans-pro', sans-serif !important;
 }
 
 body {
@@ -37,7 +37,7 @@ main {
 #session-bottom {
   width: 100%;
   outline: 0.25vw solid #232323;
-  height: 5.5vw;
+  height: 3.25em;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -45,7 +45,7 @@ main {
 
 #group-buttons {
   width: 100%;
-  margin-top: 1.1vw;
+  margin-top: 0.75em;
 }
 
 #group-help {
@@ -70,32 +70,63 @@ main {
   z-index: 20;
 }
 
-#group-chat {
+.panel {
   width: 29vw;
-  height: 49vw;
   background: rgba(250, 162, 51, 0.49);
   border-top: 0.25vw solid #232323;
-  border-left: 0.25vw solid #232323;
   box-sizing: border-box;
   position: absolute;
   bottom: 0;
-  right: 0;
   z-index: 15;
 }
 
-#chat-input {
+#close-chat {
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 1;
+  cursor: pointer;
+}
+
+#close-chat:hover {
+  color: #984F3A;
+}
+
+#group-chat {
+  height: 49vw;
+  right: 0;
+  border-left: 0.25vw solid #232323;
+  overflow-x: hidden;
+}
+
+#chat-text, #prompt-text {
+  border: none;
+  border-top: 0.25vw solid #232323;
+  font-size: 0.75em;
+}
+
+#chat-text {
   position: absolute;
   bottom: 0;
   left: 0;
+}
+
+#chat-messages {
+  position: absolute;
+  left: 0;
+  bottom: 1.75em;
+  height: calc(100% - 1.75em);
+  width: 100%;
+  overflow-y: scroll;
 }
 
 .chat-message {
   background: #F7C2B6;
   color: #232323;
   text-align: left;
-  margin: 1vw;
-  margin-top: 0;
-  padding: 1vw;
+  margin: 0.75em;
+  padding: 0.75em;
+  font-size: 0.75em;
 }
 
 .chat-message.serenity-message {
@@ -111,10 +142,66 @@ main {
   display: block;
 }
 
+#facilitator-controls {
+  left: 0;
+  border-right: 0.25vw solid #232323;
+}
+
+#start-prompt {
+  margin-top: 0.75em;
+}
+
+#resume-prompt, #pause-prompt {
+  float: left;
+  margin-left: 0.75em;
+}
+
+#skip-prompt {
+  float: right;
+  margin-right: 0.75em;
+}
+
+#next {
+  margin: 0.75em;
+  padding: 0.75em;
+  background: #232323;
+  color: white;
+  text-align: left;
+  font-size: 0.75em;
+}
+
+#next-timer {
+  font-weight: bold;
+}
+
+#notif-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 20;
+
+}
+
+#notif {
+  text-align: center;
+  color: white;
+  text-shadow: 0.2em 0.2em 0.05em #46413d;
+  max-width: 100%;
+  font-size: 4em;
+  text-align: center;
+  pointer-events: none;
+}
+
 h1 {
   font-size: 4em;
   line-height: 1.15;
-  font-family: freight-big-pro, serif;
+  font-family: freight-big-pro, serif !important;
   text-align: left;
   margin: 1.5vw 0 1.3vw 0;
 }
@@ -124,7 +211,7 @@ h1 {
 }
 .button, button {
   font-size: 1.0em;
-  font-family: freight-sans-pro, sans-serif;
+  font-family: 'freight-sans-pro', sans-serif !important;
   border: 0.1em solid #232323;
   border-radius: .8em;
   outline: none;
@@ -156,7 +243,7 @@ h1 {
 
 input {
   font-size: 1.0em;
-  font-family: freight-sans-pro, sans-serif;
+  font-family: 'freight-sans-pro', sans-serif !important;
   display: block;
   width: -moz-available;
   width: -webkit-fill-available;
@@ -245,3 +332,7 @@ body {
   display: none !important;
 
 }
+/* 
+.toolbox-content {
+  display: none !important;
+} */

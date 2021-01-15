@@ -324,13 +324,13 @@ class Conference extends AbstractConference<Props, *> {
                     pointerEvents = 'box-none'
                     style = { styles.navBarSafeView }>
                     <NavigationBar />
-                    { this._renderNotificationsContainer() }
+                    {/* { this._renderNotificationsContainer() } */}
                     <KnockingParticipantList />
                 </SafeAreaView>
 
                 <TestConnectionInfo />
 
-                { this._renderConferenceNotification() }
+                {/* { this._renderConferenceNotification() } */}
 
                 { this._renderConferenceModals() }
             </>
