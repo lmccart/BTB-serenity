@@ -91,7 +91,6 @@ main {
   box-sizing: border-box;
   position: absolute;
   bottom: 0;
-  z-index: 15;
 }
 
 #close-chat {
@@ -111,6 +110,7 @@ main {
   right: 0;
   border-left: 0.25vw solid #232323;
   overflow-x: hidden;
+  z-index: 18;
 }
 
 #chat-text, #prompt-text {
@@ -159,6 +159,7 @@ main {
 #facilitator-controls {
   left: 0;
   border-right: 0.25vw solid #232323;
+  z-index: 22;
 }
 
 #start-prompt {
@@ -198,14 +199,14 @@ main {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 20;
+  z-index: 15;
 
 }
 
 #notif {
   text-align: center;
   color: white;
-  text-shadow: 0.2em 0.2em 0.05em #46413d;
+  text-shadow: 0.02em 0.02em 0.05em #46413d;
   max-width: 100%;
   font-size: 4em;
   text-align: center;
