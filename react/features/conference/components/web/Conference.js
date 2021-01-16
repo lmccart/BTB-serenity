@@ -35,8 +35,7 @@ declare var interfaceConfig: Object;
 
 let app;
 let db;
-let userId = 'TODOpid';
-let userName = 'SerenityAF';
+let userName = 'Fellow Builder';
 let sessionId;
 let pauseTimer = 0;
 let pauseInterval = false;
@@ -210,6 +209,7 @@ class Conference extends AbstractConference<Props, *> {
                 id = 'videoconference_page'
                 onMouseMove = { this._onShowToolbar }>
 
+
                 <main id='session-page'>
                     <section id='session-top'>
 
@@ -276,6 +276,7 @@ class Conference extends AbstractConference<Props, *> {
 
 
                 </main>
+                {/* <div id='error' style={{display:'none'}}><span>Sorry! I'm unable to locate your session. Please try clicking the link in your email again.</span></div> */}
                     
                 <div id = 'videospace'>
                     <LargeVideo />
@@ -422,7 +423,6 @@ class Conference extends AbstractConference<Props, *> {
     _sendChat = () => {
         const data = {
             msg: $('#chat-text').val(),
-            userId: userId,
             userName: userName 
         }
         if (data.msg) this._sendMessage('group-chat', data);
@@ -628,12 +628,12 @@ class Conference extends AbstractConference<Props, *> {
 
         const params = window.location.pathname.substring(1).split('-');
         sessionId = params[0];
-        userId = params[1];
-        // if (!sessionId.length || !userId.length) {
-        //     $('#error').show(); // TODO show error page
-        // }
-        facilitator = userId === 'facilitator';
-        console.log('LM ' + sessionId + ' ' + userId + ' ' + facilitator);
+        userName = params[1];
+        if (userName === 'facilitator') {
+            userName = 'Serenity';
+            facilitator = true;
+        }
+        console.log('LM ' + sessionId + ' ' + userName + ' ' + facilitator);
 
         this._initFirebase()
         .then(this._initSession);

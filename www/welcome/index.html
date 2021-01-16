@@ -32,18 +32,36 @@
     </style>
 
   </head>
-  <body>
-    <main id='intro-page'>
-      <section>
+  <body id='welcome-body'>
+    <main id='welcome-page'>
+      <img src="../css/serenity.gif" id="serenity-welcome" alt="">
+      
+      <section id='welcome-name'>
         <h1>Beyond the Breakdown</h1>
-        <p>Welcome<span id='welcome-name'></span>!</p>
-        <p>Imagines alternate narratives for our near-future reality inside a browser designed to hack our normal online behaviors 
-          and cultivate collaborative spaces for self-reflection and renewal. Created by Tony Patrick, Lauren Lee McCarthy, and Grace Lee. </p>
-        <iframe src="https://player.vimeo.com/video/463327688" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-        <div><a class='button' href='https://build.beyondthebreakdown.world/' id='enter'>Enter</a></div>
+        <p>Welcome! Please enter your display name for this session.</p>
+        <label for='participant-name' class='sr-only'>Your Name</label>
+        <input id='participant-name' type='text'/>
+        
+        <div class='buttons'>
+          <button id='submit-welcome-name'>Next</button>
+        </div>
+        <img src='../css/plant-crop.png' id='plant' alt=''>
       </section>
+
+      <div id='welcome-video' style='display:none'>
+
+        <div id='welcome-video-holder'>
+          <div class='embed-container'>
+            <iframe src="//player.vimeo.com/video/501173733?title=0&amp;byline=0&amp;portrait=0" frameborder="0" ></iframe>
+          </div>
+        </div>
+        <div id='session-bottom'>
+          <button id='session-enter' style='display:none'>Enter</button>
+        </div>
+      </div>
+      
     </main>
     <div id='error'>Sorry, we can't find your session. Please confirm you have clicked the correct link. You can contact <a href='mailto:info@beyondthebreakdown.world'>info@beyondthebreakdown.world</a> for help.</div>
-    <script src='../js/welcome.js' defer></script>
+    <script src='../js/welcome.js?v=1.0' defer></script>
   </body>
 </html>
