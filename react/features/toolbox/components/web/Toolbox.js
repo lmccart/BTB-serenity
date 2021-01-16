@@ -1340,7 +1340,7 @@ class Toolbox extends Component<Props, State> {
                             && <ClosedCaptionButton />
                     } */}
                 </div>
-                <div className = 'button-group-center'>
+                <div className = 'button-group-center' id='call-buttons'>
                     { this._renderAudioButton() }
                     {/* <HangupButton
                         visible = { this._shouldShowButton('hangup') } /> */}

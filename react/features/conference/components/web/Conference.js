@@ -251,6 +251,7 @@ class Conference extends AbstractConference<Props, *> {
 
                     <section id='facilitator-controls' style={{display:'none'}} aria-hidden='true' className='panel'>
                         <button id='start-prompt' className='facilitator-button' onClick={this._startPrompt}>Start Prompts</button>
+                        <button id='end-session' className='facilitator-button' onClick={this._triggerEndSession} style={{display:'none'}}>End Session</button>
 
                         <div id='next' style={{display:'none'}}>
                             <div id='next-timer'></div>
@@ -277,6 +278,11 @@ class Conference extends AbstractConference<Props, *> {
 
                 </main>
                 {/* <div id='error' style={{display:'none'}}><span>Sorry! I'm unable to locate your session. Please try clicking the link in your email again.</span></div> */}
+
+                
+                <audio className='audio-element' style={{display:'none'}}>
+                    <source src='./images/outro.mp3'></source>
+                </audio>
                     
                 <div id = 'videospace'>
                     <LargeVideo />
@@ -384,16 +390,15 @@ class Conference extends AbstractConference<Props, *> {
         console.log('LM _initSession')
         if (facilitator) this._initFacilitator();
 
+        $.ajax(`${window.location.origin}/static/data/extra-prompts.txt`)
+            .done(data => {
+                extraPrompts = data.split('\n').filter(Boolean);
+                console.log(extraPrompts);
+            });
+
         $('#participant-controls').show();
         $('#chat-text').on('keypress', (e) => { if (e.which === 13) this._sendChat();});
         $('#prompt-text').on('keypress', (e) => { if (e.which === 13) this._triggerTextPrompt();});
-        
-        console.log('detach')
-        let callButtons = $('#call-buttons').detach();
-        $('#group-buttons').append(callButtons);
-        console.log(callButtons)
-
-        // Setup listener for firestore changes
         let now = new Date().getTime();
         db.collection('messages').where('timestamp', '>', now).onSnapshot({}, (snapshot) => {
             let that = this;
@@ -405,6 +410,7 @@ class Conference extends AbstractConference<Props, *> {
                 else if (msg.type === 'group-pause') that._groupPause(msg.val);
                 else if (msg.type === 'group-chat') that._groupChatMessage(msg.val);
                 else if (msg.type === 'serenity') that._playPrompt(msg.val, true);
+                else if (msg.type === 'end-session') that._endSession();
                 else console.log('LM badType:', msg.type)
             });
         });
@@ -486,16 +492,13 @@ class Conference extends AbstractConference<Props, *> {
     /* FACILITATOR */
     _initFacilitator = () => {
         console.log('LM init')
-        $.ajax(`${window.location.origin}/static/data/extra-prompts.txt`)
-            .done(data => {
-                extraPrompts = data.split('\n').filter(Boolean);
-                console.log(extraPrompts);
-            });
+
         $.ajax(`${window.location.origin}/static/data/prompts.tsv`)
             .done(data => {
                 console.log('LM loaded prompts from TSV');
                 this._convertTsvIntoObjects(data);
                 $('#facilitator-controls').show();
+                $('#group-help').hide();
             });
     }
   
@@ -505,6 +508,7 @@ class Conference extends AbstractConference<Props, *> {
         $('#next').show();
         $('#pause-prompt').show();
         $('#skip-prompt').show();
+        $('#end-session').show();
         this._nextPrompt();
     }
   
@@ -561,7 +565,25 @@ class Conference extends AbstractConference<Props, *> {
         if (msg) this._sendMessage('serenity', msg);
         $('#prompt-text').val('');
     };
+
+    _triggerEndSession = () => {
+        let r = confirm('Careful! Are you sure you want to end this session for everyone?');
+        if (r) {
+            this._sendMessage('end-session', {});
+        }
+    }
   
+    _endSession = () => {
+        console.log('end session')
+        let audioDur = 32 * 1000
+        const audioEl = document.getElementsByClassName('audio-element')[0];
+        audioEl.play()
+        $('body').fadeOut(audioDur + 1000);
+        setTimeout(function() {
+            if (!facilitator) window.location = 'https://beyondthebreakdown.world/goodbye';
+        }, audioDur);
+    }
+
     _submitWorld = () => {
         let w = {
             world_name: $('#world-name').val(),

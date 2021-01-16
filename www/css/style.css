@@ -225,7 +225,7 @@ input#participant-name {
 
 #welcome-video-holder {
   width: 100%;
-  height: calc(100% - 3.25em);
+  height: calc(100% - 3.5em);
   position: relative;
 }
 
@@ -256,7 +256,7 @@ iframe {
 #session-bottom {
   width: 100%;
   outline: 0.25vw solid #232323;
-  height: 3.25em;
+  height: 3.5em;
   position: absolute;
   bottom: 0;
   left: 0;
