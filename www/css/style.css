@@ -63,7 +63,9 @@ p {
   background: #232323;
   color: white;
   cursor: pointer;
-  display: block;
+  display: inline-block;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .button:hover, button:hover {
@@ -297,37 +299,54 @@ iframe {
 }
 
 body {
-  background: linear-gradient(135deg, #e6abba,  #ec8c4c, #f2cc53, #984f3a);
-  background-size: 800% 800%;
+  background: linear-gradient(135deg, #e6abba, #e6abba,  #ec8c4c, #f2cc53,  #ec8c4c,#984f3a,#984f3a);
+  background-size: 600% 600%;
 
-  -webkit-animation: GradientAnim 20s ease infinite;
-  -moz-animation: GradientAnim 20s ease infinite;
-  animation: GradientAnim 20s ease infinite;
-}
-
-#welcome-body {
-  background: linear-gradient(135deg, #000000, #000000, #0ea2ff, #78cbff,  #c5ff8b, #f2cc53, #ec8c4c, #984f3a);
-  background-size: 1200% 1200%;
-
-  -webkit-animation: GradientAnim 120s ease;
-  -moz-animation: GradientAnim 120s ease;
-  animation: GradientAnim 120s ease;
-  animation-fill-mode: forwards;
+  -webkit-animation: GradientAnim 30s linear infinite;
+  -moz-animation: GradientAnim 30s linear infinite;
+  animation: GradientAnim 30s linear infinite;
 }
 
 @-webkit-keyframes GradientAnim {
-  0%{background-position: 0% 50%}
-  50%{background-position:50% 51%}
-  100%{background-position:100% 51%}
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 @-moz-keyframes GradientAnim {
   0%{background-position:0% 50%}
-  50%{background-position:50% 51%}
-  100%{background-position:100% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 @keyframes GradientAnim {
   0%{background-position:0% 50%}
-  50%{background-position:50% 51%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+
+#welcome-body {
+  background: linear-gradient(135deg, #000000, #000000, #0ea2ff, #78cbff,  #c5ff8b, #f2cc53, #ec8c4c, #984f3a);
+  background-size: 800% 800%;
+
+  -webkit-animation: WelcomeAnim 120s linear;
+  -moz-animation: WelcomeAnim 120s linear;
+  animation: WelcomeAnim 120s linear;
+  animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes WelcomeAnim {
+  0%{background-position: 0% 50%}
+  50%{background-position:50% 50%}
+  100%{background-position:100% 50%}
+}
+@-moz-keyframes WelcomeAnim {
+  0%{background-position:0% 50%}
+  50%{background-position:50% 50%}
+  100%{background-position:100% 50%}
+}
+@keyframes WelcomeAnim {
+  0%{background-position:0% 50%}
+  50%{background-position:50% 50%}
   100%{background-position:100% 50%}
 }
 

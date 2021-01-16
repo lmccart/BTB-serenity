@@ -8,11 +8,10 @@ firebase.auth().onAuthStateChanged(function(user) {
   db.collection('sessions').onSnapshot({}, function(snapshot) {
     snapshot.docChanges().forEach(function(change) {
       options[change.doc.id] = change.doc.data();
-      if (!initialized) showIntro();
+      if (!initialized) showSessionOptions();
     });
   });
 });
-
 
 let num = 3;
 let caption = false;
@@ -23,13 +22,8 @@ let selected_option = -1;
 let timer_interval;
 let end_timer;
 
-// showConfirm();
-// initialized = true;
-
-$('#register').on('click', showSessionOptions);
 
 $('#submit-search').on('click', showSessions);
-$('#back-intro').on('click', showIntro);
 
 $('#submit-session').on('click', selectSession);
 $('#back-sessionOptions').on('click', showSessionOptions);
@@ -40,13 +34,9 @@ $('#back-sessions').on('click', showSessionOptions);
 $('#caption-display').on('click', () => { $('#caption').prop('checked', !$('#caption').prop('checked'))});
 $('#asl-display').on('click', () => { $('#asl').prop('checked', !$('#asl').prop('checked'))});
 
-function showIntro() {
-  $('section').hide();
-  $('#intro').show();
-  initialized = true;
-}
 
 function showSessionOptions() {
+  initialized = true;
   $('section').hide();
   $('#sessionOptions').show();
   releaseSession();
