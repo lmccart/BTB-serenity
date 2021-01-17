@@ -10,7 +10,7 @@ body {
   height: calc(100vh - 7.6vw);
   margin: 0;
   padding: 3.8vw;
-  font-size: 1.5em;
+  font-size: 2.25vh;
   overflow: hidden;
 }
 
@@ -34,7 +34,7 @@ main {
   width: 100%;
   height: 100%;
   text-align: center;
-  outline: .25vw solid #232323;
+  outline: .15em solid #232323;
 }
 
 section {
@@ -194,6 +194,9 @@ a:hover, #confirm-url:hover {
   cursor: pointer;
 }
 
+#copied {
+  margin-left: 1em;
+}
 
 /* WELCOME */
 #serenity-welcome {
@@ -257,7 +260,7 @@ iframe {
 
 #session-bottom {
   width: 100%;
-  outline: 0.25vw solid #232323;
+  outline: 0.15em solid #232323;
   height: 3.5em;
   position: absolute;
   bottom: 0;
@@ -351,3 +354,30 @@ body {
 }
 
 
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  /* Styles */
+  }
+
+
+
+@media (orientation:portrait) and (max-device-width: 960px) {
+  #plant {
+    width: 60vw;
+    position: absolute;
+    bottom: 0;
+    left: 40vw;
+  }
+  #serenity {
+    width: 20vw;
+    position: inherit;
+    z-index: -3;
+  }
+
+  .participant-item {
+    width: 80%;
+
+  }
+  #sessions-options, #participants-info {
+    height: 25vh;
+  }
+}

@@ -48,38 +48,21 @@ exports.sendConfirm = functions.firestore
     db.collection('sessions').doc(session.id).set({participants: updated_participants}, {merge: true});
 });
 
-exports.sendCancel = functions.firestore
-  .document('sessions/{sessionId}')
-  .onUpdate((change, context) => {
-    functions.logger.log('send cancel');
-    let session = change.after.data();
-    let after = change.after.data().participants;
-    let before = change.before.data().participants;
-    if (after.length < before.length) {
-      functions.logger.log('after = '+after.length)
-      functions.logger.log('before = '+before.length)
-      
-      for (let b=0; b<before.length; b++) {
-        console.log('checking pid '+before[b].pid)
-        let found = false;
-        for (let a=0; a<after.length; a++) {
-          if (before[a].pid === before[b].pid) { found = true; }
-        }
-        if (!found) {
-          functions.logger.log('sending cancel to ' + before[b].name);
-          db.collection('mail').add({
-            to: before[b].email,
-            template: {
-              name: 'cancel-confirmation',
-              data: {
-                name: before[b].name,
-                datetime: session.datetime
-              }
-            }
-          });
+exports.sendCancel = functions.https.onCall((data, context) => {
+  functions.logger.log('send cancel');
+  for (let p of data.participants) {
+    functions.logger.log('sending cancel to ' + p.name);
+    db.collection('mail').add({
+      to: p.email,
+      template: {
+        name: 'cancel-confirmation',
+        data: {
+          name: p.name,
+          datetime: data.datetime
         }
       }
-    }
+    });
+  }
 });
 
 exports.sendWrapup = functions.firestore
