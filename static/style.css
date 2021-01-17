@@ -6,11 +6,11 @@ html {
 }
 
 body {
-  width: 92.4vw;
-  height: calc(100vh - 7.6vw);
+  width: calc(100vw - 5em);
+  height: calc(100vh - 5em);
   margin: 0;
-  padding: 3.8vw;
-  font-size: 1.5em;
+  padding: 2.5em;
+  font-size: 1.6em;
   overflow: hidden;
 }
 
@@ -18,7 +18,7 @@ main {
   width: 100%;
   height: 100%;
   text-align: center;
-  outline: 0.25vw solid #232323;
+  outline: 0.15em solid #232323;
   position: relative;
   top: 0;
   left: 0;
@@ -26,8 +26,8 @@ main {
 
 #session-top {
   width: 100%;
-  outline: 0.25vw solid #232323;
-  height: 14.5vw;
+  outline: 0.15em solid #232323;
+  height: 7em;
   position: absolute;
   top: 0;
   left: 0;
@@ -36,7 +36,7 @@ main {
 
 #session-bottom {
   width: 100%;
-  outline: 0.25vw solid #232323;
+  outline: 0.15em solid #232323;
   height: 3.5em;
   position: absolute;
   bottom: 0;
@@ -87,7 +87,7 @@ main {
 .panel {
   width: 29vw;
   background: rgba(250, 162, 51, 0.49);
-  border-top: 0.25vw solid #232323;
+  border-top: 0.15em solid #232323;
   box-sizing: border-box;
   position: absolute;
   bottom: 0;
@@ -108,14 +108,14 @@ main {
 #group-chat {
   height: 49vw;
   right: 0;
-  border-left: 0.25vw solid #232323;
+  border-left: 0.15em solid #232323;
   overflow-x: hidden;
   z-index: 18;
 }
 
 #chat-text, #prompt-text {
   border: none;
-  border-top: 0.25vw solid #232323;
+  border-top: 0.15em solid #232323;
   font-size: 0.75em;
   width: 100%;
 }
@@ -159,7 +159,7 @@ main {
 
 #facilitator-controls {
   left: 0;
-  border-right: 0.25vw solid #232323;
+  border-right: 0.15em solid #232323;
   z-index: 22;
 }
 
@@ -307,14 +307,13 @@ a:hover {
 }
 
 #serenity-session {
-  width: 14vw;
-  padding: 1.3vw;
-  background-image: -o-radial-gradient(circle, #F39330, #F3933000 8.7vw);
-  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 8.7vw);
-  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 8.7vw);
+  width: 6.9em;
+  background-image: -o-radial-gradient(circle, #F39330, #F3933000 5em);
+  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 5em);
+  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 5em);
   position: absolute;
-  top: 2.7vw;
-  left: 42.5vw;
+  top: 2.55em;
+  left: calc((100vw - 6.9em)/2);
   z-index: 10;
 }
 
@@ -343,6 +342,18 @@ body, #error {
 }
 
 /* MISC JITSI OVERRIDE */
+
+#videospace {
+  display: block;
+  width: calc(100vw - 5em);
+  height: calc(100vh - 5em - 7em - 3.5em - 0.3em);
+  position: absolute !important;
+  top: calc(2.5em + 7em + 0.15em);
+  left: 2.5em;
+  overflow: hidden;
+  z-index: 1;
+}
+
 .hide-videos {
   display: none !important;
 }

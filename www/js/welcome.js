@@ -11,7 +11,7 @@ function init() {
   const params = new URLSearchParams(window.location.search);
   sessionId = params.get('sessionId');
   if (!sessionId) {
-    // $('#error').show();
+    $('#error-notfound').show();
   } else {
     checkSession(sessionId)
     .then((data) => {
@@ -20,7 +20,7 @@ function init() {
     })
     .catch((e) => {
       console.log(e);
-      $('#error').show();
+      $('#error-notfound').show();
     });
   }
   $('#submit-welcome-name').on('click', showVideo);
@@ -29,8 +29,12 @@ function init() {
 
 function checkSession(sessionId) {
   return new Promise((resolve, reject) => {
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+      $('#error-mobile').show();
+    }
     db.collection('sessions').doc(sessionId).get({}).then((doc) => {
-      resolve(doc.data());
+      if (doc.data()) resolve(doc.data());
+      else reject();
     }).catch(reject);
   });
 }

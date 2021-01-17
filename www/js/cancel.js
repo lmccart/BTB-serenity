@@ -55,32 +55,41 @@ function parseParams() {
 }
 
 function cancelIndividual() {
-  let updated_participants = [];
-  for (let p of session.participants) {
-    if (p.pid !== pid[0]) {
-      updated_participants.push(p);
-    }
-  }
-  db.collection('sessions').doc(sessionId).set({participants: updated_participants}, {merge: true});
-  $('#cancel').hide();
-  $('#confirm-individual').show();
+  cancel([pid[0]], true);
 }
 
 function cancelGroup() {
+  cancel(pid, false);
+}
+
+function cancel(cancel_pids, is_individual) {
   let updated_participants = [];
+  let canceled_participants = [];
   for (let p of session.participants) {
     let remove = false;
-    for (let e of pid) {
+    for (let e of cancel_pids) {
       if (p.pid === e) {
         remove = true;
       }
     }
     if (!remove) updated_participants.push(p);
+    else canceled_participants.push(p);
   }
-  console.log(updated_participants)
+  console.log(updated_participants, canceled_participants);
   db.collection('sessions').doc(sessionId).set({participants: updated_participants, closed: false}, {merge: true});
-  $('#cancel').hide();
-  $('#confirm-group').show();
+
+  let sendCancelFunc = firebase.functions().httpsCallable('sendCancel')
+  sendCancelFunc({ datetime: session.datetime, participants: canceled_participants })
+  .then(data => console.log(data))
+  .catch(e => console.log(e));
+
+  if (is_individual) {
+    $('.cancel-options').hide();
+    $('#confirm-individual').show();
+  } else {
+    $('.cancel-options').hide();
+    $('#confirm-group').show();
+  }
 }
 
 

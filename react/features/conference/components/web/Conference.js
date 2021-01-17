@@ -149,6 +149,11 @@ class Conference extends AbstractConference<Props, *> {
      */
     componentDidMount() {
         document.title = `Beyond the Breakdown`;
+        let headTitle = document.querySelector('head');
+        let setFavicon = document.createElement('link');
+        setFavicon.setAttribute('rel','shortcut icon');
+        setFavicon.setAttribute('href','/favicon.ico');
+        headTitle.appendChild(setFavicon);
         $('<link/>', { rel: 'stylesheet', type: 'text/css', href: 'https://use.typekit.net/fth5afb.css' }).appendTo('head');
         $('<link/>', { rel: 'stylesheet', type: 'text/css', href: 'static/style.css' }).appendTo('head');
         this._start();
@@ -660,6 +665,7 @@ class Conference extends AbstractConference<Props, *> {
         this._initFirebase()
         .then(this._initSession);
     }
+    
 }
 
 /**
