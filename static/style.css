@@ -6,11 +6,11 @@ html {
 }
 
 body {
-  width: 92.4vw;
-  height: calc(100vh - 7.6vw);
+  width: calc(100vw - 5em);
+  height: calc(100vh - 5em);
   margin: 0;
-  padding: 3.8vw;
-  font-size: 1.5em;
+  padding: 2.5em;
+  font-size: 1.6em;
   overflow: hidden;
 }
 
@@ -27,7 +27,7 @@ main {
 #session-top {
   width: 100%;
   outline: 0.15em solid #232323;
-  height: 14.5vw;
+  height: 7em;
   position: absolute;
   top: 0;
   left: 0;
@@ -307,14 +307,13 @@ a:hover {
 }
 
 #serenity-session {
-  width: 14vw;
-  padding: 1.3vw;
-  background-image: -o-radial-gradient(circle, #F39330, #F3933000 8.7vw);
-  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 8.7vw);
-  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 8.7vw);
+  width: 6.9em;
+  background-image: -o-radial-gradient(circle, #F39330, #F3933000 5em);
+  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 5em);
+  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 5em);
   position: absolute;
-  top: 2.7vw;
-  left: 42.5vw;
+  top: 2.55em;
+  left: calc((100vw - 6.9em)/2);
   z-index: 10;
 }
 
@@ -343,6 +342,18 @@ body, #error {
 }
 
 /* MISC JITSI OVERRIDE */
+
+#videospace {
+  display: block;
+  width: calc(100vw - 5em);
+  height: calc(100vh - 5em - 7em - 3.5em - 0.3em);
+  position: absolute !important;
+  top: calc(2.5em + 7em + 0.15em);
+  left: 2.5em;
+  overflow: hidden;
+  z-index: 1;
+}
+
 .hide-videos {
   display: none !important;
 }

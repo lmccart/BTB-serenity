@@ -14,6 +14,13 @@ body {
   overflow: hidden;
 }
 
+main {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  outline: .15em solid #232323;
+}
+
 h1 {
   font-size: 4.5em;
   line-height: 1.15;
@@ -28,13 +35,6 @@ ul {
 }
 li {
   list-style-type: none;
-}
-
-main {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  outline: .15em solid #232323;
 }
 
 section {
@@ -199,15 +199,34 @@ a:hover, #confirm-url:hover {
 }
 
 /* WELCOME */
-#serenity-welcome {
-  width: 14vw;
-  padding: 1.3vw;
-  background-image: -o-radial-gradient(circle, #F39330, #F3933000 8.7vw);
-  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 8.7vw);
-  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 8.7vw);
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
   position: absolute;
-  top: 2.7vw;
-  left: 42.5vw;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  overflow: hidden;
+  display: none;
+}
+
+.error div {
+  padding: 4em;
+}
+
+#serenity-welcome {
+  width: 10.5em;
+  padding: 0.25em;
+  background-image: -o-radial-gradient(circle, #F39330, #F3933000 5em);
+  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 5em);
+  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 5em);
+  position: absolute;
+  top: 2.5em;
+  left: calc((100vw - 10.5em)/2);
   z-index: 10;
 }
 
@@ -230,7 +249,7 @@ input#participant-name {
 
 #welcome-video-holder {
   width: 100%;
-  height: calc(100% - 3.5em);
+  height: calc(100% - 3.65em);
   position: relative;
 }
 
@@ -327,8 +346,8 @@ body {
 }
 
 
-#welcome-body {
-  background: linear-gradient(135deg, #000000, #000000, #0ea2ff, #78cbff,  #c5ff8b, #f2cc53, #ec8c4c, #984f3a);
+#welcome-body, .error {
+  background: linear-gradient(135deg, #0ea2ff, #0ea2ff, #78cbff, #78cbff,  #c5ff8b, #f2cc53, #ec8c4c, #984f3a);
   background-size: 800% 800%;
 
   -webkit-animation: WelcomeAnim 120s linear;
