@@ -246,38 +246,40 @@ class Conference extends AbstractConference<Props, *> {
                     </section>
 
                     <section id='group-chat' style={{display:'none'}} className='panel'>
-                        <span id='close-chat' onClick={this._toggleChat}>x</span>
+                        <img id='close-chat' onClick={this._toggleChat} src='./images/x.png' />
                         <h3 className='sr-only'>Chat</h3>
                         <div id='chat-messages'></div>
                         <label htmlFor='chat-text' className='sr-only'>Input Message</label>
-                        <input type='text' id='chat-text' placeholder='Type a message'/>
+                        <input type='text' id='chat-text' placeholder='Type a message' className='panel-input'/>
                         <button id='chat-send' onClick={this._sendChat} className='sr-only'>Send</button>
                     </section>
 
                     <section id='facilitator-controls' style={{display:'none'}} aria-hidden='true' className='panel'>
-                        <button id='start-prompt' className='facilitator-button' onClick={this._startPrompt}>Start Prompts</button>
-                        <button id='end-session' className='facilitator-button' onClick={this._triggerEndSession} style={{display:'none'}}>End Session</button>
+                        <div id='session-controls'>
+                            <button id='start-prompt' className='facilitator-button' onClick={this._startPrompt}>Start Prompts</button>
+                            <button id='end-session' className='facilitator-button' onClick={this._triggerEndSession} style={{display:'none'}}>End Session</button>
 
-                        <div id='next' style={{display:'none'}}>
-                            <div id='next-timer'></div>
-                            <div id='next-prompt'></div>
+                            <div id='next' style={{display:'none'}}>
+                                <div id='next-timer'></div>
+                                <div id='next-prompt'></div>
+                            </div>
+
+                            <button id='pause-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._pausePrompt}>Pause</button>
+                            <button id='resume-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._resumePrompt}>Resume</button>
+                            <button id='skip-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._nextPrompt}>Skip</button>
+                            <input id='prompt-text' type='text' placeholder='Type a message'  className='panel-input'/>
                         </div>
 
-                        <button id='pause-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._pausePrompt}>Pause</button>
-                        <button id='resume-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._resumePrompt}>Resume</button>
-                        <button id='skip-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._nextPrompt}>Skip</button>
-                        <input id='prompt-text' type='text' placeholder='Type a message' />
-
-
-                        <div id='form' style={{display:'none'}}>
+                        <div id='world-form' style={{display:'none'}}>
                             <label htmlFor='world-name'>World name</label>
-                            <textarea id='world-name'></textarea>
+                            <input id='world-name' type='text' className='panel-input'/>
                             <label htmlFor='world-values'>World values</label>
-                            <textarea id='world-values'></textarea>
+                            <input id='world-values' type='text' className='panel-input'/>
                             <label htmlFor='world-description'>World description</label>
-                            <textarea id='world-description'></textarea>
+                            <input id='world-description' type='text' className='panel-input'/>
                             <button id='world-submit' onClick={this._submitWorld}>Submit</button>
                         </div>
+                        <div id='world-thanks' className='chat-message serenity-message' style={{display:'none'}}>Thanks! The session is complete, you can close the window now.</div>
                     </section>
 
 
@@ -580,13 +582,17 @@ class Conference extends AbstractConference<Props, *> {
   
     _endSession = () => {
         console.log('end session')
-        let audioDur = 32 * 1000
+        let audioDur = 5000;//32 * 1000
         const audioEl = document.getElementsByClassName('audio-element')[0];
         audioEl.play()
-        $('body').fadeOut(audioDur + 1000);
-        setTimeout(function() {
-            if (!facilitator) window.location = 'https://beyondthebreakdown.world/goodbye';
-        }, audioDur);
+        if (!facilitator) {
+            setTimeout(function() {
+                window.location = 'https://beyondthebreakdown.world/goodbye';
+            }, audioDur);
+        } else {
+            $('#session-controls').hide();
+            $('#world-form').show();
+        }
     }
 
     _submitWorld = () => {
@@ -598,13 +604,16 @@ class Conference extends AbstractConference<Props, *> {
         // check complete
         for (let i in w) {
             if (!w[i] || !w[i].length) {
-                alert('please complete the form');
+                alert('Please complete the form');
                 return false;
             }
         }
         db.collection('sessions').doc(sessionId).set(w, {
             merge: true
         });
+
+        $('#world-form').hide();
+        $('#world-thanks').show();
     }
   
     _convertTsvIntoObjects = (tsvText) => {
