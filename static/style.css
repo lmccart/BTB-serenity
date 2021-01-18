@@ -12,6 +12,7 @@ body {
   padding: 2.5em;
   font-size: 1.6em;
   overflow: hidden;
+  font-family: 'freight-sans-pro', sans-serif !important;
 }
 
 main {
@@ -91,6 +92,7 @@ main {
   box-sizing: border-box;
   position: absolute;
   bottom: 0;
+  font-family: 'freight-sans-pro', sans-serif !important;
 }
 
 #close-chat {
@@ -99,10 +101,11 @@ main {
   right: 0.5em;
   z-index: 1;
   cursor: pointer;
+  width: 1em;
 }
 
 #close-chat:hover {
-  color: #984F3A;
+  filter: invert(1);
 }
 
 #group-chat {
@@ -113,7 +116,7 @@ main {
   z-index: 18;
 }
 
-#chat-text, #prompt-text {
+.panel-input {
   border: none;
   border-top: 0.15em solid #232323;
   font-size: 0.75em;
@@ -289,6 +292,26 @@ a {
 a:hover {
   color: #984F3A;
   cursor: pointer;
+}
+
+#world-form {
+  margin: 0.75em;
+  text-align: left;
+}
+
+#world-form label {
+  font-size: 0.75em;
+  font-family: 'freight-sans-pro', sans-serif !important;
+  color: white;
+}
+
+#world-form input {
+  border: none;
+  margin-bottom: 1em;
+}
+
+#world-submit {
+  margin-bottom: 0;
 }
 
 

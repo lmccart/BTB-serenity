@@ -26,7 +26,7 @@ h1 {
   line-height: 1.15;
   font-family: freight-big-pro, serif;
   text-align: left;
-  margin: 1.5vw 0 1.3vw 0;
+  margin: 0;
 }
 
 ul {
@@ -76,8 +76,8 @@ p {
 
 .button.back, button.back {
   position: absolute;
-  left: 6.6vw;
-  bottom: calc(2.1em + 2.8vw);
+  left: 3.75em;
+  bottom: 3.25em;
 }
 
 .light {
@@ -119,7 +119,7 @@ select {
 
 #sessions-options {
   text-align: left;
-  height: 20vh;
+  height: 11em;
   overflow-y: scroll;
 }
 
@@ -218,18 +218,6 @@ a:hover, #confirm-url:hover {
   padding: 4em;
 }
 
-#serenity-welcome {
-  width: 10.5em;
-  padding: 0.25em;
-  background-image: -o-radial-gradient(circle, #F39330, #F3933000 5em);
-  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 5em);
-  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 5em);
-  position: absolute;
-  top: 2.5em;
-  left: calc((100vw - 10.5em)/2);
-  z-index: 10;
-}
-
 #welcome-name {
   display: inline-block;
 }
@@ -306,11 +294,24 @@ iframe {
 }
 
 #serenity {
-  width: 10.5em;
+  width: 8em;
   padding: 0.25em;
-  background-image: -o-radial-gradient(circle, #F39330, #F3933000 5em);
-  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 5em);
-  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 5em);
+  background-image: -o-radial-gradient(circle, #F39330, #F3933000 4em);
+  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 4em);
+  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 4em);
+}
+
+
+#serenity-welcome {
+  width: 6.9em;
+  padding: 0.25em;
+  background-image: -o-radial-gradient(circle, #F39330, #F3933000 4em);
+  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 4em);
+  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 4em);
+  position: absolute;
+  top: 2.55em;
+  left: calc((100vw - 6.9em)/2);
+  z-index: 10;
 }
 
 #plant {
