@@ -83,7 +83,7 @@ function searchSessions() {
 
   for (let o in options) {
     let opt = options[o];
-    if (!opt.participants || (opt.participants.length + num <= 6 && !opt.hold)) {
+    if (opt.id && (!opt.participants || (opt.participants.length + num <= 6 && !opt.hold))) {
       if ((!caption && !asl) || opt.accessible) {
         let date = moment(opt.datetime).format('dddd MMM DD h:mm a');
         console.log(date)
