@@ -371,7 +371,7 @@ class Conference extends AbstractConference<Props, *> {
     _loadFirebase = (config) => { 
         return new Promise( (resolve, reject) => {
             document.body.appendChild(Object.assign(document.createElement('script'), {
-                src: `https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js`,
+                src: `https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js`,
                 onload: () => resolve(firebase.initializeApp(config)),
                 onerror: reject
             }));
@@ -379,7 +379,7 @@ class Conference extends AbstractConference<Props, *> {
     _loadAuth = () => { 
         return new Promise( (resolve, reject) => {
             document.body.appendChild(Object.assign(document.createElement('script'), {
-                src: `https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js`,
+                src: `https://www.gstatic.com/firebasejs/8.2.4/firebase-auth.js`,
                 onload: () => resolve(firebase),
                 onerror: reject
             }));
@@ -387,7 +387,7 @@ class Conference extends AbstractConference<Props, *> {
     _loadFirestore = () => { 
         return new Promise( (resolve, reject) => {
             document.body.appendChild(Object.assign(document.createElement('script'), {
-                src: `https://www.gstatic.com/firebasejs/7.18.0/firebase-firestore.js`,
+                src: `https://www.gstatic.com/firebasejs/8.2.4/firebase-firestore.js`,
                 onload: () => resolve(firebase),
                 onerror: reject
             }));
@@ -582,12 +582,12 @@ class Conference extends AbstractConference<Props, *> {
   
     _endSession = () => {
         console.log('end session')
-        let audioDur = 5000;//32 * 1000
+        let audioDur = 32 * 1000;
         const audioEl = document.getElementsByClassName('audio-element')[0];
         audioEl.play()
         if (!facilitator) {
             setTimeout(function() {
-                window.location = 'https://beyondthebreakdown.world/goodbye';
+                window.location = 'https://beyondthebreakdown.world/credits';
             }, audioDur);
         } else {
             $('#session-controls').hide();

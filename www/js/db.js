@@ -4,6 +4,8 @@ firebase.auth().onAuthStateChanged(function(user) { });
 const db = firebase.firestore(app);
 
 let times = [
+  'Thu Jan 28 2021 13:00:00 GMT-0800 (Pacific Standard Time)',
+
   'Fri Jan 29 2021 10:00:00 GMT-0800 (Pacific Standard Time)',
   'Fri Jan 29 2021 11:30:00 GMT-0800 (Pacific Standard Time)',
   'Fri Jan 29 2021 16:30:00 GMT-0800 (Pacific Standard Time)',

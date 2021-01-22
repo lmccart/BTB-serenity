@@ -16,6 +16,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 let num = 3;
 let caption = false;
 let asl = false;
+let press = window.location.href.includes('press');
 
 let options = {};
 let selected_option = -1;
@@ -85,11 +86,13 @@ function searchSessions() {
     let opt = options[o];
     if (opt.id && (!opt.participants || (opt.participants.length + num <= 6 && !opt.hold))) {
       if ((!caption && !asl) || opt.accessible) {
-        let date = moment(opt.datetime).format('dddd MMM DD h:mm a');
-        console.log(date)
-        let elt = $('<li class="option button light">'+date+'</li>');
-        elt.attr('id', opt.id);
-        $('#sessions-options').append(elt);
+        if ((press && opt.press) || !press) {
+          let date = moment(opt.datetime).format('dddd MMM DD h:mm a');
+          console.log(date)
+          let elt = $('<li class="option button light">'+date+'</li>');
+          elt.attr('id', opt.id);
+          $('#sessions-options').append(elt);
+        }
       }
     }
   }

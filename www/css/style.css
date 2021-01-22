@@ -85,6 +85,10 @@ p {
   background: none;
 }
 
+b {
+  font-weight: 500;
+}
+
 select {
   font-size: 0.75em;
   font-family: 'freight-sans-pro', sans-serif;
@@ -314,7 +318,7 @@ iframe {
 }
 
 #plant {
-  width: 32em;
+  width: 28em;
   position: absolute;
   bottom: 0;
   left: calc(50vw - 16em);
@@ -327,6 +331,21 @@ body {
   -webkit-animation: GradientAnim 30s linear infinite;
   -moz-animation: GradientAnim 30s linear infinite;
   animation: GradientAnim 30s linear infinite;
+}
+
+table {
+  margin-top: 1em;
+}
+td {
+
+  vertical-align: top;
+}
+
+td:nth-child(odd) {
+  width: 10em;
+}
+td:nth-child(even) {
+  /* max-width: 20em; */
 }
 
 @-webkit-keyframes GradientAnim {
