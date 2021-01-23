@@ -3,7 +3,7 @@ firebase.auth().signInAnonymously().catch(function(error) { console.log(error); 
 firebase.auth().onAuthStateChanged(function(user) { });
 const db = firebase.firestore(app);
 let participantName = '';
-
+let pass = window.location.href.includes('pass');
 
 init();
 
@@ -44,6 +44,10 @@ function showVideo() {
   if (participantName) {
     $('#welcome-name').hide();
     $('#welcome-video').show();
+
+    if (pass) {
+      $('#session-enter').show();
+    }
     setTimeout(() => {
       $('#session-enter').show();
     }, 110 * 1000);

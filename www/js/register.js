@@ -15,8 +15,8 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 let num = 3;
 let caption = false;
-let asl = false;
 let press = window.location.href.includes('press');
+let code = window.location.href.split('?id=')[1];
 
 let options = {};
 let selected_option = -1;
@@ -33,7 +33,6 @@ $('#submit-register').on('click', register);
 $('#back-sessions').on('click', showSessionOptions);
 
 $('#caption-display').on('click', () => { $('#caption').prop('checked', !$('#caption').prop('checked'))});
-$('#asl-display').on('click', () => { $('#asl').prop('checked', !$('#asl').prop('checked'))});
 
 
 function showSessionOptions() {
@@ -78,20 +77,16 @@ function showConfirm(pid) {
 function searchSessions() {
   releaseSession();
   num = Number($('#num').val());
-
-  caption = $('#caption').prop('checked');
-  asl = $('#asl').prop('checked');
+  caption = Number($('#caption').val());
 
   for (let o in options) {
     let opt = options[o];
     if (opt.id && (!opt.participants || (opt.participants.length + num <= 6 && !opt.hold))) {
-      if ((!caption && !asl) || opt.accessible) {
-        if ((press && opt.press) || !press) {
-          let date = moment(opt.datetime).format('dddd MMM DD h:mm a');
-          console.log(date)
-          let elt = $('<li class="option button light">'+date+'</li>');
-          elt.attr('id', opt.id);
-          $('#sessions-options').append(elt);
+      if (code && !press) {
+        if (opt.id === code) displayOpt(opt);
+      } else {
+        if (!caption || opt.accessible) {
+          if ((press && opt.press) || !press) displayOpt(opt);
         }
       }
     }
@@ -107,6 +102,13 @@ function searchSessions() {
   }
 }
 
+function displayOpt(opt) {
+  let date = moment(opt.datetime).format('dddd MMM DD h:mm a');
+  console.log(date)
+  let elt = $('<li class="option button light">'+date+'</li>');
+  elt.attr('id', opt.id);
+  $('#sessions-options').append(elt);
+}
 
 function selectSession() {
   $('#sessions').hide();
@@ -163,12 +165,11 @@ function register(e) {
         url_cancel: url_cancel
       });
     };
-    if (num >= 4) {
+    if (num >= 6) {
       s.closed = true;
     }
 
     if (caption) s.accessiblity_caption = true;
-    if (asl) s.accessiblity_asl = true;
 
     db.collection('sessions').doc(selected_option).set(s);
     showConfirm(group_ids);

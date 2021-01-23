@@ -25,7 +25,7 @@
       <!-- sessionOptions SECTION -->
       <section id='sessionOptions'>
         <h1>Make a Reservation</h1>
-        <p>Please select the number of people in your group. If you are less than 3, you will be paired with other participants to make a group.</p>
+        <p>Please select the number of people in your group. If you are less than 6, you may be paired with other participants to make a group.</p>
         
         <label for='num' class='sr-only'>Number participants:</label>
         <select name='num' id='num'>
@@ -39,18 +39,10 @@
 
         <div>
           <select name='caption' id='caption'>
-            <option value='1'>Yes</option>
             <option value='0'>No</option>
+            <option value='1'>Yes</option>
           </select>
           <label for='caption'>Closed captioning is needed for this session</label>
-        </div>
-
-        <div>
-          <select name='asl' id='asl'>
-            <option value='1'>Yes</option>
-            <option value='0'>No</option>
-          </select>
-          <label for='asl'>ASL interpretation is needed for this session</label>
         </div>
 
         <div class='buttons'>
