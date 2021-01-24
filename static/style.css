@@ -63,6 +63,9 @@ main {
 }
 
 #group-pause-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   top: 0;
   left: 0;
@@ -70,6 +73,15 @@ main {
   height: 100%;
   z-index: 20;
   overflow: hidden;
+}
+
+#group-pause-timer {
+  z-index: 25;
+  color: white;
+  text-shadow: 0.02em 0.02em 0.05em #46413d;
+  font-size: 4em;
+  width: 1.6em;
+  text-align: left;
 }
 
 .video-react {

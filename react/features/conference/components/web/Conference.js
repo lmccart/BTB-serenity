@@ -33,10 +33,13 @@ import { Player, ControlBar } from 'video-react';
 declare var APP: Object;
 declare var interfaceConfig: Object;
 
+let userName = 'Participant';
+if (window.location.href.includes('?id=')) {
+    userName = window.location.href.substring(window.location.href.indexOf('?id=')+4);
+}
+let sessionId = window.location.pathname;
 let app;
 let db;
-let userName = 'Fellow Builder';
-let sessionId;
 let pauseTimer = 0;
 let pauseInterval = false;
 
@@ -403,6 +406,8 @@ class Conference extends AbstractConference<Props, *> {
                 console.log(extraPrompts);
             });
 
+
+        $('.prejoin-input-area input').val(userName);
         $('#participant-controls').show();
         $('#chat-text').on('keypress', (e) => { if (e.which === 13) this._sendChat();});
         $('#prompt-text').on('keypress', (e) => { if (e.which === 13) this._triggerTextPrompt();});
@@ -455,7 +460,7 @@ class Conference extends AbstractConference<Props, *> {
     }
     _triggerGroupPause = () => {
         if (facilitator) this._pausePrompt();
-        this._sendMessage('group-pause', 5000); // 10 second pause
+        this._sendMessage('group-pause', 10 * 1000); // 10 second pause
     }
 
     _toggleChat = () => {
@@ -470,15 +475,16 @@ class Conference extends AbstractConference<Props, *> {
         this.player.play();
         APP.UI.mute(true);
         let player = this.player;
-        setTimeout(function() {
-            APP.UI.mute(false);
-            player.pause();
-            if (currentPrompt > -1) this._resumePrompt();
-        }, ms);
         pauseInterval = setInterval(function() {
             const remaining = pauseTimer - performance.now();
             $('#group-pause-timer').text(_msToHms(remaining));
         });
+        setTimeout(function() {
+            APP.UI.mute(false);
+            player.pause();
+            clearInterval(pauseInterval);
+            if (currentPrompt > -1) this._resumePrompt();
+        }, ms);
     }
   
     _playPrompt = (msg, doSpeak) => {
@@ -662,9 +668,6 @@ class Conference extends AbstractConference<Props, *> {
         dispatch(connect());
         maybeShowSuboptimalExperienceNotification(dispatch, t);
 
-        const params = window.location.pathname.substring(1).split('-');
-        sessionId = params[0];
-        userName = params[1];
         if (userName === 'facilitator') {
             userName = 'Serenity';
             facilitator = true;

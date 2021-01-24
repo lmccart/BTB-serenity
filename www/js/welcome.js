@@ -58,5 +58,5 @@ function showVideo() {
 }
 
 function enterSession() {
-  window.location = 'https://build.beyondthebreakdown.world/'+sessionId + '-' + participantName;
+  window.location = 'https://build.beyondthebreakdown.world/'+sessionId + '?id=' + participantName;
 }
