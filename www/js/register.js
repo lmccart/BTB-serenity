@@ -65,7 +65,7 @@ function showConfirm(pid) {
   $('section').hide();
   console.log(options[selected_option]);
   let dt = options[selected_option].datetime;
-  let formatted = moment(dt).format('dddd MMM DD h:mm a');
+  let formatted = moment(dt).format('dddd MMM DD h:mm a z') + ' (' + $('#tz').text() + ')';
   $('#confirm-datetime').text(formatted);
   $('#confirm-url').text(options[selected_option].url_session);
   $('#confirm-url').attr('href', options[selected_option].url_session);
@@ -103,6 +103,8 @@ function searchSessions() {
 }
 
 function displayOpt(opt) {
+  let tz = opt.datetime.substring(opt.datetime.indexOf('(')+1, opt.datetime.length - 1);
+  $('#tz').text(tz);
   let date = moment(opt.datetime).format('dddd MMM DD h:mm a');
   console.log(date)
   let elt = $('<li class="option button light">'+date+'</li>');

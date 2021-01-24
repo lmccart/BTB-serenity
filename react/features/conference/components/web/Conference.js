@@ -406,8 +406,6 @@ class Conference extends AbstractConference<Props, *> {
                 console.log(extraPrompts);
             });
 
-
-        $('.prejoin-input-area input').val(userName);
         $('#participant-controls').show();
         $('#chat-text').on('keypress', (e) => { if (e.which === 13) this._sendChat();});
         $('#prompt-text').on('keypress', (e) => { if (e.which === 13) this._triggerTextPrompt();});
@@ -672,6 +670,7 @@ class Conference extends AbstractConference<Props, *> {
             userName = 'Serenity';
             facilitator = true;
         }
+        APP.conference.changeLocalDisplayName(userName);
         console.log('LM ' + sessionId + ' ' + userName + ' ' + facilitator);
 
         this._initFirebase()
