@@ -40,7 +40,8 @@ const UIUtil = {
      * used instead of this method in order to preserve curent URL params.
      */
     redirect(url) {
-        window.location.href = url;
+        // window.location.href = url;
+        console.log('LM redirect '+url);
     },
 
     /**
