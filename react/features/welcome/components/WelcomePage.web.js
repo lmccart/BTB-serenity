@@ -176,103 +176,106 @@ class WelcomePage extends AbstractWelcomePage {
         const showAdditionalCard = this._shouldShowAdditionalCard();
         const showAdditionalContent = this._shouldShowAdditionalContent();
         const showAdditionalToolbarContent = this._shouldShowAdditionalToolbarContent();
+        
+        window.location.href = 'https://beyondthebreakdown.world/credits/';
 
         return (
-            <div
-                className = { `welcome ${showAdditionalContent
-                    ? 'with-content' : 'without-content'}` }
-                id = 'welcome_page'>
-                <div className = 'welcome-watermark'>
-                    <Watermarks defaultJitsiLogoURL = { DEFAULT_WELCOME_PAGE_LOGO_URL } />
-                </div>
+            <div></div>
+            // <div
+            //     className = { `welcome ${showAdditionalContent
+            //         ? 'with-content' : 'without-content'}` }
+            //     id = 'welcome_page'>
+            //     <div className = 'welcome-watermark'>
+            //         <Watermarks defaultJitsiLogoURL = { DEFAULT_WELCOME_PAGE_LOGO_URL } />
+            //     </div>
 
-                <div className = 'header'>
-                    <div className = 'welcome-page-settings'>
-                        <SettingsButton
-                            defaultTab = { SETTINGS_TABS.CALENDAR } />
-                        { showAdditionalToolbarContent
-                            ? <div
-                                className = 'settings-toolbar-content'
-                                ref = { this._setAdditionalToolbarContentRef } />
-                            : null
-                        }
-                    </div>
-                    <div className = 'header-image' />
-                    <div className = 'header-container'>
-                        <h1 className = 'header-text-title'>
-                            { t('welcomepage.headerTitle') }
-                        </h1>
-                        <span className = 'header-text-subtitle'>
-                            { t('welcomepage.headerSubtitle')}
-                        </span>
-                        <div id = 'enter_room'>
-                            <div className = 'enter-room-input-container'>
-                                <form onSubmit = { this._onFormSubmit }>
-                                    <input
-                                        aria-disabled = 'false'
-                                        aria-label = 'Meeting name input'
-                                        autoFocus = { true }
-                                        className = 'enter-room-input'
-                                        id = 'enter_room_field'
-                                        onChange = { this._onRoomChange }
-                                        pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
-                                        placeholder = { this.state.roomPlaceholder }
-                                        ref = { this._setRoomInputRef }
-                                        title = { t('welcomepage.roomNameAllowedChars') }
-                                        type = 'text'
-                                        value = { this.state.room } />
-                                    <div
-                                        className = { _moderatedRoomServiceUrl
-                                            ? 'warning-with-link'
-                                            : 'warning-without-link' }>
-                                        { this._renderInsecureRoomNameWarning() }
-                                    </div>
-                                </form>
-                            </div>
-                            <button
-                                aria-disabled = 'false'
-                                aria-label = 'Start meeting'
-                                className = 'welcome-page-button'
-                                id = 'enter_room_button'
-                                onClick = { this._onFormSubmit }
-                                tabIndex = '0'
-                                type = 'button'>
-                                { t('welcomepage.startMeeting') }
-                            </button>
-                        </div>
+            //     <div className = 'header'>
+            //         <div className = 'welcome-page-settings'>
+            //             <SettingsButton
+            //                 defaultTab = { SETTINGS_TABS.CALENDAR } />
+            //             { showAdditionalToolbarContent
+            //                 ? <div
+            //                     className = 'settings-toolbar-content'
+            //                     ref = { this._setAdditionalToolbarContentRef } />
+            //                 : null
+            //             }
+            //         </div>
+            //         <div className = 'header-image' />
+            //         <div className = 'header-container'>
+            //             <h1 className = 'header-text-title'>
+            //                 { t('welcomepage.headerTitle') }
+            //             </h1>
+            //             <span className = 'header-text-subtitle'>
+            //                 { t('welcomepage.headerSubtitle')}
+            //             </span>
+            //             <div id = 'enter_room'>
+            //                 <div className = 'enter-room-input-container'>
+            //                     <form onSubmit = { this._onFormSubmit }>
+            //                         <input
+            //                             aria-disabled = 'false'
+            //                             aria-label = 'Meeting name input'
+            //                             autoFocus = { true }
+            //                             className = 'enter-room-input'
+            //                             id = 'enter_room_field'
+            //                             onChange = { this._onRoomChange }
+            //                             pattern = { ROOM_NAME_VALIDATE_PATTERN_STR }
+            //                             placeholder = { this.state.roomPlaceholder }
+            //                             ref = { this._setRoomInputRef }
+            //                             title = { t('welcomepage.roomNameAllowedChars') }
+            //                             type = 'text'
+            //                             value = { this.state.room } />
+            //                         <div
+            //                             className = { _moderatedRoomServiceUrl
+            //                                 ? 'warning-with-link'
+            //                                 : 'warning-without-link' }>
+            //                             { this._renderInsecureRoomNameWarning() }
+            //                         </div>
+            //                     </form>
+            //                 </div>
+            //                 <button
+            //                     aria-disabled = 'false'
+            //                     aria-label = 'Start meeting'
+            //                     className = 'welcome-page-button'
+            //                     id = 'enter_room_button'
+            //                     onClick = { this._onFormSubmit }
+            //                     tabIndex = '0'
+            //                     type = 'button'>
+            //                     { t('welcomepage.startMeeting') }
+            //                 </button>
+            //             </div>
 
-                        { _moderatedRoomServiceUrl && (
-                            <div id = 'moderated-meetings'>
-                                <p>
-                                    {
-                                        translateToHTML(
-                                        t, 'welcomepage.moderatedMessage', { url: _moderatedRoomServiceUrl })
-                                    }
-                                </p>
-                            </div>)}
-                    </div>
-                </div>
+            //             { _moderatedRoomServiceUrl && (
+            //                 <div id = 'moderated-meetings'>
+            //                     <p>
+            //                         {
+            //                             translateToHTML(
+            //                             t, 'welcomepage.moderatedMessage', { url: _moderatedRoomServiceUrl })
+            //                         }
+            //                     </p>
+            //                 </div>)}
+            //         </div>
+            //     </div>
 
-                <div className = 'welcome-cards-container'>
-                    <div className = 'welcome-card-row'>
-                        <div className = 'welcome-tabs welcome-card welcome-card--blue'>
-                            { this._renderTabs() }
-                        </div>
-                        { showAdditionalCard
-                            ? <div
-                                className = 'welcome-card welcome-card--dark'
-                                ref = { this._setAdditionalCardRef } />
-                            : null }
-                    </div>
+            //     <div className = 'welcome-cards-container'>
+            //         <div className = 'welcome-card-row'>
+            //             <div className = 'welcome-tabs welcome-card welcome-card--blue'>
+            //                 { this._renderTabs() }
+            //             </div>
+            //             { showAdditionalCard
+            //                 ? <div
+            //                     className = 'welcome-card welcome-card--dark'
+            //                     ref = { this._setAdditionalCardRef } />
+            //                 : null }
+            //         </div>
 
-                    { showAdditionalContent
-                        ? <div
-                            className = 'welcome-page-content'
-                            ref = { this._setAdditionalContentRef } />
-                        : null }
-                </div>
-                { DISPLAY_WELCOME_FOOTER && this._renderFooter()}
-            </div>
+            //         { showAdditionalContent
+            //             ? <div
+            //                 className = 'welcome-page-content'
+            //                 ref = { this._setAdditionalContentRef } />
+            //             : null }
+            //     </div>
+            //     { DISPLAY_WELCOME_FOOTER && this._renderFooter()}
+            // </div>
 
         );
     }

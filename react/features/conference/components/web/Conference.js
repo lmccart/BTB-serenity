@@ -463,6 +463,7 @@ class Conference extends AbstractConference<Props, *> {
 
     _toggleChat = () => {
         $('#group-chat').toggle();
+        $('#chat-messages').scrollTop($('#chat-messages').height());
     }
   
     _groupPause = (ms) => {
@@ -650,7 +651,6 @@ class Conference extends AbstractConference<Props, *> {
         }
         console.log(prompts);
     }
-
 
     /**
      * Until we don't rewrite UI using react components
