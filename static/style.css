@@ -183,8 +183,7 @@ main {
 }
 
 #end-session {
-  margin-top: 0.5em;
-  margin-bottom: 0;
+  margin: 0.5em 0;
 }
 
 #resume-prompt, #pause-prompt {
@@ -199,6 +198,7 @@ main {
 
 #next {
   margin: 0.75em;
+  margin-top: 0;
   padding: 0.75em;
   background: #232323;
   color: white;

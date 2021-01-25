@@ -83,7 +83,9 @@ exports.sendWrapup = functions.firestore
           name: 'session-wrapup',
           data: {
             names: names.join(', '),
-            world_name: session.world_name
+            world_name: session.world_name,
+            world_values: session.world_values,
+            world_actions: session.world_actions
           }
         }
       });

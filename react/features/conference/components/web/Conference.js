@@ -278,8 +278,8 @@ class Conference extends AbstractConference<Props, *> {
                             <input id='world-name' type='text' className='panel-input'/>
                             <label htmlFor='world-values'>World values</label>
                             <input id='world-values' type='text' className='panel-input'/>
-                            <label htmlFor='world-description'>World description</label>
-                            <input id='world-description' type='text' className='panel-input'/>
+                            <label htmlFor='world-actions'>World actions</label>
+                            <input id='world-actions' type='text' className='panel-input'/>
                             <button id='world-submit' onClick={this._submitWorld}>Submit</button>
                         </div>
                         <div id='world-thanks' className='chat-message serenity-message' style={{display:'none'}}>Thanks! The session is complete, you can close the window now.</div>
@@ -527,6 +527,7 @@ class Conference extends AbstractConference<Props, *> {
         if (!facilitator) return;
         if (promptInterval) clearInterval(promptInterval);
         currentPrompt++;
+        console.log(currentPrompt, prompts.length);
         if (currentPrompt < prompts.length) {
             promptInterval = setInterval(this._checkPrompt, 100);
             promptTimer = prompts[currentPrompt].lastOffset + performance.now();
@@ -534,7 +535,9 @@ class Conference extends AbstractConference<Props, *> {
             currentOption = Math.floor(Math.random() * options.length);
             $('#next-prompt').text(options[currentOption]);
         } else {
-            $('#form').show();
+            $('#next').hide();
+            $('#pause-prompt').hide();
+            $('#skip-prompt').hide();
         }
     }
   
@@ -588,8 +591,10 @@ class Conference extends AbstractConference<Props, *> {
         console.log('end session')
         let audioDur = 32 * 1000;
         const audioEl = document.getElementsByClassName('audio-element')[0];
-        audioEl.play()
+        audioEl.play();
+        APP.UI.mute(true);
         if (!facilitator) {
+            $('#react').delay(0).fadeOut(audioDur - 2000);
             setTimeout(function() {
                 window.location = 'https://beyondthebreakdown.world/credits';
             }, audioDur);
@@ -603,7 +608,7 @@ class Conference extends AbstractConference<Props, *> {
         let w = {
             world_name: $('#world-name').val(),
             world_values: $('#world-values').val(),
-            world_description: $('#world-description').val()
+            world_actions: $('#world-actions').val()
         }
         // check complete
         for (let i in w) {
