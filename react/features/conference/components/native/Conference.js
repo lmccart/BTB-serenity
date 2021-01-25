@@ -252,11 +252,12 @@ class Conference extends AbstractConference<Props, *> {
                 {/*
                   * The LargeVideo is the lowermost stacking layer.
                   */
-                    _shouldDisplayTileView
-                        ? <TileView onClick = { this._onClick } />
-                        : <LargeVideo onClick = { this._onClick } />
+                    // _shouldDisplayTileView
+                    //     ? <TileView onClick = { this._onClick } />
+                    //     : <LargeVideo onClick = { this._onClick } />
                 }
-
+                <TileView onClick = { this._onClick } />
+                
                 {/*
                   * If there is a ringing call, show the callee's info.
                   */
