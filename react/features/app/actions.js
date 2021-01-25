@@ -286,59 +286,59 @@ export function reloadWithStoredParams() {
 export function maybeRedirectToWelcomePage(options: Object = {}) {
     return (dispatch: Dispatch<any>, getState: Function) => {
 
-        const {
-            enableClosePage
-        } = getState()['features/base/config'];
+        // const {
+        //     enableClosePage
+        // } = getState()['features/base/config'];
 
-        // if close page is enabled redirect to it, without further action
-        if (enableClosePage) {
-            if (isVpaasMeeting(getState())) {
-                redirectToStaticPage('/');
+        // // if close page is enabled redirect to it, without further action
+        // if (enableClosePage) {
+        //     if (isVpaasMeeting(getState())) {
+        //         redirectToStaticPage('/');
 
-                return;
-            }
+        //         return;
+        //     }
 
-            const { jwt } = getState()['features/base/jwt'];
+        //     const { jwt } = getState()['features/base/jwt'];
 
-            let hashParam;
+        //     let hashParam;
 
-            // save whether current user is guest or not, and pass auth token,
-            // before navigating to close page
-            window.sessionStorage.setItem('guest', !jwt);
-            window.sessionStorage.setItem('jwt', jwt);
+        //     // save whether current user is guest or not, and pass auth token,
+        //     // before navigating to close page
+        //     window.sessionStorage.setItem('guest', !jwt);
+        //     window.sessionStorage.setItem('jwt', jwt);
 
-            let path = 'close.html';
+        //     let path = 'close.html';
 
-            if (interfaceConfig.SHOW_PROMOTIONAL_CLOSE_PAGE) {
-                if (Number(API_ID) === API_ID) {
-                    hashParam = `#jitsi_meet_external_api_id=${API_ID}`;
-                }
-                path = 'close3.html';
-            } else if (!options.feedbackSubmitted) {
-                path = 'close2.html';
-            }
+        //     if (interfaceConfig.SHOW_PROMOTIONAL_CLOSE_PAGE) {
+        //         if (Number(API_ID) === API_ID) {
+        //             hashParam = `#jitsi_meet_external_api_id=${API_ID}`;
+        //         }
+        //         path = 'close3.html';
+        //     } else if (!options.feedbackSubmitted) {
+        //         path = 'close2.html';
+        //     }
 
-            dispatch(redirectToStaticPage(`static/${path}`, hashParam));
+        //     dispatch(redirectToStaticPage(`static/${path}`, hashParam));
 
-            return;
-        }
+        //     return;
+        // }
 
-        // else: show thankYou dialog only if there is no feedback
-        if (options.showThankYou) {
-            dispatch(showNotification({
-                titleArguments: { appName: getName() },
-                titleKey: 'dialog.thankYou'
-            }));
-        }
+        // // else: show thankYou dialog only if there is no feedback
+        // if (options.showThankYou) {
+        //     dispatch(showNotification({
+        //         titleArguments: { appName: getName() },
+        //         titleKey: 'dialog.thankYou'
+        //     }));
+        // }
 
-        // if Welcome page is enabled redirect to welcome page after 3 sec, if
-        // there is a thank you message to be shown, 0.5s otherwise.
-        if (getState()['features/base/config'].enableWelcomePage) {
-            setTimeout(
-                () => {
-                    dispatch(redirectWithStoredParams('/'));
-                },
-                options.showThankYou ? 3000 : 500);
-        }
+        // // if Welcome page is enabled redirect to welcome page after 3 sec, if
+        // // there is a thank you message to be shown, 0.5s otherwise.
+        // if (getState()['features/base/config'].enableWelcomePage) {
+        //     setTimeout(
+        //         () => {
+        //             dispatch(redirectWithStoredParams('/'));
+        //         },
+        //         options.showThankYou ? 3000 : 500);
+        // }
     };
 }

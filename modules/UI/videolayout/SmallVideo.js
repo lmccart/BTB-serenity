@@ -454,8 +454,10 @@ export default class SmallVideo {
             isScreenSharing = typeof track !== 'undefined' && track.videoType === 'desktop';
             connectionStatus = participant.connectionStatus;
         }
+        let isSerenity = (participant && participant.name === 'Serenity') ? true : false;
+
         return {
-            serenity: participant.name === 'Serenity',
+            serenity: isSerenity,
             isCurrentlyOnLargeVideo: this.isCurrentlyOnLargeVideo(),
             isHovered: this._isHovered(),
             isAudioOnly: APP.conference.isAudioOnly(),

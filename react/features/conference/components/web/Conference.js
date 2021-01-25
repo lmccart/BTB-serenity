@@ -213,7 +213,7 @@ class Conference extends AbstractConference<Props, *> {
                 id = 'videoconference_page'
                 onMouseMove = { this._onShowToolbar }>
 
-
+                <div id='gradient'></div>
                 <main id='session-page'>
                     <section id='session-top'>
 

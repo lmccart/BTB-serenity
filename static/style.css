@@ -343,17 +343,25 @@ a:hover {
 
 #serenity-session {
   width: 6.9em;
-  background-image: -o-radial-gradient(circle, #F39330, #F3933000 5em);
-  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 5em);
-  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 5em);
+  background-image: -o-radial-gradient(circle, #F39330, #F3933000 3.5em);
+  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 3.5em);
+  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 3.5em);
   position: absolute;
   top: 2.55em;
   left: calc((100vw - 6.9em)/2);
   z-index: 10;
 }
 
-body, #error {
-  background: linear-gradient(135deg, #e6abba,  #ec8c4c, #f2cc53, #984f3a) !important;
+#gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#gradient, #error {
+  background: linear-gradient(135deg, #e6abba,  #ec8c4c, #f2cc53, #984f3a);
   background-size: 800% 800%;
   -webkit-animation: GradientAnim 20s ease infinite;
   -moz-animation: GradientAnim 20s ease infinite;
@@ -362,17 +370,17 @@ body, #error {
 
 @-webkit-keyframes GradientAnim {
   0%{background-position:0% 50%}
-  50%{background-position:100% 51%}
+  50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
 @-moz-keyframes GradientAnim {
   0%{background-position:0% 50%}
-  50%{background-position:100% 51%}
+  50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
 @keyframes GradientAnim {
   0%{background-position:0% 50%}
-  50%{background-position:100% 51%}
+  50%{background-position:100% 50%}
   100%{background-position:0% 50%}
 }
 

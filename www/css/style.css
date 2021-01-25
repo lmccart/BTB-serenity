@@ -312,9 +312,9 @@ iframe {
 #serenity {
   width: 8em;
   padding: 0.25em;
-  background-image: -o-radial-gradient(circle, #F39330, #F3933000 4em);
-  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 4em);
-  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 4em);
+  background-image: -o-radial-gradient(circle, #F39330, #F3933000 4.2em);
+  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 4.2em);
+  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 4.2em);
 }
 
 
