@@ -669,7 +669,7 @@ class Conference extends AbstractConference<Props, *> {
 
         sessionId = window.location.pathname.substring(1);
         
-        userName = _getCookie('BTB_userName') || 'Participant';
+        userName = _getCookie('userNameBTB') || 'Participant';
         if (userName === 'Serenity') {
             facilitator = true;
         }
