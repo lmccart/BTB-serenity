@@ -15,7 +15,8 @@
 ## Useful commands
 * `sudo nano /usr/local/etc/nginx/nginx.conf`
 * `sudo nano /etc/nginx/sites-available/friendcrawl.net.conf`
-* `sudo nano /etc/jitsi/meet/build.beyondthebreakdown.net-config.js`
+* `sudo nano /etc/jitsi/meet/build.beyondthebreakdown.world-config.js`
+* `sudo nano /etc/prosody/conf.avail/build.beyondthebreakdown.world.cfg.lua`
 * `history | grep certbot`
 * `sudo nano /var/log/nginx/error.log`
 

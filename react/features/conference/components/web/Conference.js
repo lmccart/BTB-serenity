@@ -33,12 +33,8 @@ import { Player, ControlBar } from 'video-react';
 declare var APP: Object;
 declare var interfaceConfig: Object;
 
-let userName = 'Participant';
-if (window.location.href.includes('?id=')) {
-    userName = window.location.href.substring(window.location.href.indexOf('?id=')+4);
-}
-let sessionId = window.location.pathname;
-let app;
+let sessionId;
+let userName;
 let db;
 let pauseTimer = 0;
 let pauseInterval = false;
@@ -671,8 +667,9 @@ class Conference extends AbstractConference<Props, *> {
         dispatch(connect());
         maybeShowSuboptimalExperienceNotification(dispatch, t);
 
-        if (userName === 'facilitator') {
-            userName = 'Serenity';
+        sessionId = window.location.pathname;
+        userName = window.localStorage.getItem('userName') | 'Participant';
+        if (userName === 'Serenity') {
             facilitator = true;
         }
         APP.conference.changeLocalDisplayName(userName);

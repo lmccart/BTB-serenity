@@ -42,6 +42,14 @@ function checkSession(sessionId) {
 function showVideo() {
   participantName = $('#participant-name').val();
   if (participantName) {
+    if (participantName.toLowerCase() === 'facilitator') {
+      participantName = 'Serenity';
+      pass = true;
+    } else if (participantName.toLowerCase() === 'captioner') {
+      participantName = 'Captioner';
+      pass = true;
+    }
+    window.localStorage.setItem('userName', participantName);
     $('#welcome-name').hide();
     $('#welcome-video').show();
 
@@ -58,5 +66,5 @@ function showVideo() {
 }
 
 function enterSession() {
-  window.location = 'https://build.beyondthebreakdown.world/'+sessionId + '?id=' + participantName;
+  window.location = 'https://build.beyondthebreakdown.world/'+sessionId;
 }
