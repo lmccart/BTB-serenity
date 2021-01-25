@@ -667,8 +667,9 @@ class Conference extends AbstractConference<Props, *> {
         dispatch(connect());
         maybeShowSuboptimalExperienceNotification(dispatch, t);
 
-        sessionId = window.location.pathname;
-        userName = window.localStorage.getItem('userName') | 'Participant';
+        sessionId = window.location.pathname.substring(1);
+        
+        userName = _getCookie('BTB_userName') || 'Participant';
         if (userName === 'Serenity') {
             facilitator = true;
         }
@@ -679,6 +680,22 @@ class Conference extends AbstractConference<Props, *> {
         .then(this._initSession);
     }
     
+}
+
+function _getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
 }
 
 /**
@@ -699,7 +716,6 @@ function _mapStateToProps(state) {
         _showPrejoin: isPrejoinPageVisible(state)
     };
 }
-
 
     // Helper for formatting text in hh:mm format.
 function _msToHms(d) {

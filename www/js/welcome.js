@@ -49,7 +49,7 @@ function showVideo() {
       participantName = 'Captioner';
       pass = true;
     }
-    window.localStorage.setItem('userName', participantName);
+    setCookie('BTB_userName', participantName, 1);
     $('#welcome-name').hide();
     $('#welcome-video').show();
 
@@ -67,4 +67,12 @@ function showVideo() {
 
 function enterSession() {
   window.location = 'https://build.beyondthebreakdown.world/'+sessionId;
+}
+
+
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
