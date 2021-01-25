@@ -208,12 +208,13 @@ class Conference extends AbstractConference<Props, *> {
         const hideLabels = _iAmRecorder;
 
         return (
+        <>
+            <div id='gradient'></div>
             <div
                 className = { _layoutClassName }
                 id = 'videoconference_page'
                 onMouseMove = { this._onShowToolbar }>
 
-                <div id='gradient'></div>
                 <main id='session-page'>
                     <section id='session-top'>
 
@@ -309,6 +310,7 @@ class Conference extends AbstractConference<Props, *> {
                 
                 <img src='./images/serenity.gif' id='serenity-session' alt=''/>
             </div>
+        </>
         );
     }
 
@@ -591,7 +593,7 @@ class Conference extends AbstractConference<Props, *> {
         audioEl.play();
         APP.UI.mute(true);
         if (!facilitator) {
-            $('#react').delay(0).fadeOut(audioDur - 2000);
+            $('#videoconference_page').delay(0).fadeOut(audioDur - 2000);
             setTimeout(function() {
                 window.location = 'https://beyondthebreakdown.world/credits';
             }, audioDur);

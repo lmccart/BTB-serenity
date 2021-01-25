@@ -6,6 +6,8 @@ html {
 }
 
 body {
+  background: linear-gradient(135deg, #e6abba,  #ec8c4c, #f2cc53, #984f3a) !important;
+  background-size: 800% 800% !important;
   width: calc(100vw - 5em);
   height: calc(100vh - 5em);
   margin: 0;
