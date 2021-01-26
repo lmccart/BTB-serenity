@@ -293,11 +293,9 @@ UI.updateUserStatus = (user, status) => {
  */
 UI.toggleFilmstrip = function() {
     const { visible } = APP.store.getState()['features/filmstrip'];
-    APP.store.dispatch(setFilmstripVisible(true));
-    APP.store.dispatch(setTileView(true));
+
+    APP.store.dispatch(setFilmstripVisible(!visible));
 };
-
-
 
 /**
  * Toggles the visibility of the chat panel.

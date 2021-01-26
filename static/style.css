@@ -346,9 +346,9 @@ a:hover {
 
 #serenity-session {
   width: 6.9em;
-  background-image: -o-radial-gradient(circle, #F39330, #F3933000 3.5em);
-  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 3.5em);
-  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 3.5em);
+  background-image: -o-radial-gradient(circle, #F39330, #F3933000 3.6em);
+  background-image: -moz-radial-gradient(circle, #F39330, #F3933000 3.6em);
+  background-image: -webkit-radial-gradient(circle, #F39330, #F3933000 3.6em);
   position: absolute;
   top: 2.55em;
   left: calc((100vw - 6.9em)/2);
