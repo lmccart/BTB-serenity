@@ -674,6 +674,11 @@ class Conference extends AbstractConference<Props, *> {
         userName = _getCookie('userNameBTB') || 'Participant';
         if (userName === 'Serenity') {
             facilitator = true;
+            APP.UI.muteVideo(true);
+            APP.UI.mute(true);
+        } else {
+            APP.UI.muteVideo(false);
+            APP.UI.mute(false);
         }
         APP.conference.changeLocalDisplayName(userName);
         console.log('LM ' + sessionId + ' ' + userName + ' ' + facilitator);
