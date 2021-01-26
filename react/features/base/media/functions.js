@@ -75,7 +75,8 @@ function _isVideoMutedByAuthority(
  * @returns {boolean} - The computed startWithAudioMuted value that will be used.
  */
 export function getStartWithAudioMuted(stateful: Object | Function) {
-    return Boolean(getPropertyValue(stateful, 'startWithAudioMuted', START_WITH_AUDIO_VIDEO_MUTED_SOURCES));
+    return true;
+   //return Boolean(getPropertyValue(stateful, 'startWithAudioMuted', START_WITH_AUDIO_VIDEO_MUTED_SOURCES));
 }
 
 /**
@@ -85,7 +86,8 @@ export function getStartWithAudioMuted(stateful: Object | Function) {
  * @returns {boolean} - The computed startWithAudioMuted value that will be used.
  */
 export function getStartWithVideoMuted(stateful: Object | Function) {
-    return Boolean(getPropertyValue(stateful, 'startWithVideoMuted', START_WITH_AUDIO_VIDEO_MUTED_SOURCES));
+    return true;
+    //return Boolean(getPropertyValue(stateful, 'startWithVideoMuted', START_WITH_AUDIO_VIDEO_MUTED_SOURCES));
 }
 
 /**
