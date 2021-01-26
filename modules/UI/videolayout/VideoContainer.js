@@ -155,7 +155,9 @@ function getCameraVideoPosition( // eslint-disable-line max-params
     // Need to think it further at some point and implement it properly.
     if (UIUtil.isFullScreen()) {
         // eslint-disable-next-line no-param-reassign
-        videoSpaceHeight = window.innerHeight;
+        // videoSpaceHeight = window.innerHeight;
+        videoSpaceHeight = $('#largeVideoContainer').height();
+        console.log("LM DIMS ", videoSpaceHeight)
     }
 
     const horizontalIndent = (videoSpaceWidth - videoWidth) / 2;

@@ -1364,7 +1364,7 @@ class Toolbox extends Component<Props, State> {
                             tooltip = { t('toolbar.invite') } /> }
                     { buttonsRight.indexOf('security') !== -1
                         && <SecurityDialogButton customClass = 'security-toolbar-button' /> } */}
-                    { buttonsRight.indexOf('overflowmenu') !== -1
+                    {/* { buttonsRight.indexOf('overflowmenu') !== -1
                         && <OverflowMenuButton
                             isOpen = { _overflowMenuVisible }
                             onVisibilityChange = { this._onSetOverflowVisible }>
@@ -1373,7 +1373,7 @@ class Toolbox extends Component<Props, State> {
                                 className = 'overflow-menu'>
                                 { overflowMenuContent }
                             </ul>
-                        </OverflowMenuButton> }
+                        </OverflowMenuButton> } */}
                 </div>
             </div>);
     }

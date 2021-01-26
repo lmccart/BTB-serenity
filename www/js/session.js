@@ -1,8 +1,4 @@
 const app = firebase.app();
-firebase.auth().signInAnonymously().catch(function(error) { console.log(error); });
-firebase.auth().onAuthStateChanged(function(user) { });
-const db = firebase.firestore(app);
-
 let db, api;
 let userId;
 let pauseTimer = 0;
@@ -17,19 +13,23 @@ let promptInterval = false;
 let promptTimer = 0;
 
 
-// Parse URL params, show HTML elements depending on view
-const params = new URLSearchParams(window.location.search);
-let sessionId = params.get('sessionId');
-if (!sessionId) {
-  $('#error').show(); // TODO show error page
-}
-let guide = params.get('guide') ? true : false;
-if (guide) initGuide();
-
-initSession();
+firebase.auth().signInAnonymously()
+.then(initSession)
+.catch(function(error) { console.log(error); });
 
 
 function initSession() {
+  db = firebase.firestore(app);
+  // Parse URL params, show HTML elements depending on view
+  const params = new URLSearchParams(window.location.search);
+  let sessionId = params.get('sessionId');
+  if (!sessionId) {
+    $('#error').show(); // TODO show error page
+  }
+  let guide = params.get('guide') ? true : false;
+  if (guide) initGuide();
+
+
   // Create jitsi session
   const domain = 'meet.jit.si';
   const options = {

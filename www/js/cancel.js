@@ -1,10 +1,12 @@
 const app = firebase.app();
-firebase.auth().signInAnonymously().catch(function(error) { console.log(error); });
-firebase.auth().onAuthStateChanged(function(user) { });
-const db = firebase.firestore(app);
-
+let db;
 let sessionId, pid;
 let session;
+
+firebase.auth().signInAnonymously()
+then(init)
+.catch(function(error) { console.log(error); });
+
 
 $('#submit-cancel-individual').on('click', cancelIndividual);
 $('#submit-cancel-group').on('click', cancelGroup);
@@ -15,9 +17,7 @@ $('.cancel-option').on('click', function() {
   $('#submit-cancel-option').show();
 });
 
-parseParams();
-
-function parseParams() {
+function init() {
   const params = new URLSearchParams(window.location.search);
   sessionId = params.get('sessionId');
   pid = params.get('pid');

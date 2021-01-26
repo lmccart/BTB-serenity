@@ -44,15 +44,17 @@ MiddlewareRegistry.register(store => next => action => {
  */
 function _appWillMount(store) {
     handler = () => {
-        const {
-            innerHeight,
-            innerWidth
-        } = window;
+        // const {
+        //     innerHeight,
+        //     innerWidth
+        // } = window;
 
-        store.dispatch(clientResized(innerWidth, innerHeight));
+        let w = $('#largeVideoContainer').width();
+        let h = $('#largeVideoContainer').height();
+        store.dispatch(clientResized(w, h));
     };
-
     window.addEventListener('resize', handler);
+    window.addEventListener('forceResize', handler);
 }
 
 /**

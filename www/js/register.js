@@ -1,18 +1,6 @@
 const app = firebase.app();
 let db;
 let initialized = false;
-firebase.auth().signInAnonymously().catch(function(error) { console.log(error); });
-firebase.auth().onAuthStateChanged(function(user) { 
-  db = firebase.firestore(app);
-
-  db.collection('sessions').onSnapshot({}, function(snapshot) {
-    snapshot.docChanges().forEach(function(change) {
-      options[change.doc.id] = change.doc.data();
-      if (!initialized) showSessionOptions();
-    });
-  });
-});
-
 let num = 3;
 let caption = false;
 let press = window.location.href.includes('press');
@@ -23,17 +11,26 @@ let selected_option = -1;
 let timer_interval;
 let end_timer;
 
+firebase.auth().signInAnonymously()
+.then(init)
+.catch(function(error) { console.log(error); });
 
-$('#submit-search').on('click', showSessions);
+function init() {
+  db = firebase.firestore(app);
+  db.collection('sessions').onSnapshot({}, function(snapshot) {
+    snapshot.docChanges().forEach(function(change) {
+      options[change.doc.id] = change.doc.data();
+      if (!initialized) showSessionOptions();
+    });
+  });
 
-$('#submit-session').on('click', selectSession);
-$('#back-sessionOptions').on('click', showSessionOptions);
-
-$('#submit-register').on('click', register);
-$('#back-sessions').on('click', showSessionOptions);
-
-$('#caption-display').on('click', () => { $('#caption').prop('checked', !$('#caption').prop('checked'))});
-
+  $('#submit-search').on('click', showSessions);
+  $('#submit-session').on('click', selectSession);
+  $('#back-sessionOptions').on('click', showSessionOptions);
+  $('#submit-register').on('click', register);
+  $('#back-sessions').on('click', showSessionOptions);
+  $('#caption-display').on('click', () => { $('#caption').prop('checked', !$('#caption').prop('checked'))});
+}
 
 function showSessionOptions() {
   initialized = true;

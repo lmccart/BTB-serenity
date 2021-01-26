@@ -115,15 +115,15 @@ const KeyboardShortcut = {
             shortcutAttr,
             exec,
             helpDescription) {
-        _shortcuts.set(shortcutChar, {
-            character: shortcutChar,
-            function: exec,
-            shortcutAttr
-        });
+        // _shortcuts.set(shortcutChar, {
+        //     character: shortcutChar,
+        //     function: exec,
+        //     shortcutAttr
+        // });
 
-        if (helpDescription) {
-            this._addShortcutToHelp(shortcutChar, helpDescription);
-        }
+        // if (helpDescription) {
+        //     this._addShortcutToHelp(shortcutChar, helpDescription);
+        // }
     },
 
     /**
@@ -189,33 +189,33 @@ const KeyboardShortcut = {
      * triggered _only_ with a shortcut.
      */
     _initGlobalShortcuts() {
-        this.registerShortcut('?', null, () => {
-            sendAnalytics(createShortcutEvent('help'));
-            this.openDialog();
-        }, 'keyboardShortcuts.toggleShortcuts');
+        // this.registerShortcut('?', null, () => {
+        //     sendAnalytics(createShortcutEvent('help'));
+        //     this.openDialog();
+        // }, 'keyboardShortcuts.toggleShortcuts');
 
         // register SPACE shortcut in two steps to insure visibility of help
         // message
-        this.registerShortcut(' ', null, () => {
-            sendAnalytics(createShortcutEvent('push.to.talk', RELEASED));
-            logger.log('Talk shortcut released');
-            APP.conference.muteAudio(true);
-        });
-        this._addShortcutToHelp('SPACE', 'keyboardShortcuts.pushToTalk');
+        // this.registerShortcut(' ', null, () => {
+        //     sendAnalytics(createShortcutEvent('push.to.talk', RELEASED));
+        //     logger.log('Talk shortcut released');
+        //     APP.conference.muteAudio(true);
+        // });
+        // this._addShortcutToHelp('SPACE', 'keyboardShortcuts.pushToTalk');
 
-        this.registerShortcut('T', null, () => {
-            sendAnalytics(createShortcutEvent('speaker.stats'));
-            APP.store.dispatch(toggleDialog(SpeakerStats, {
-                conference: APP.conference
-            }));
-        }, 'keyboardShortcuts.showSpeakerStats');
+        // this.registerShortcut('T', null, () => {
+        //     sendAnalytics(createShortcutEvent('speaker.stats'));
+        //     APP.store.dispatch(toggleDialog(SpeakerStats, {
+        //         conference: APP.conference
+        //     }));
+        // }, 'keyboardShortcuts.showSpeakerStats');
 
         /**
          * FIXME: Currently focus keys are directly implemented below in
          * onkeyup. They should be moved to the SmallVideo instead.
          */
-        this._addShortcutToHelp('0', 'keyboardShortcuts.focusLocal');
-        this._addShortcutToHelp('1-9', 'keyboardShortcuts.focusRemote');
+        // this._addShortcutToHelp('0', 'keyboardShortcuts.focusLocal');
+        // this._addShortcutToHelp('1-9', 'keyboardShortcuts.focusRemote');
     }
 };
 

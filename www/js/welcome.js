@@ -1,13 +1,15 @@
 const app = firebase.app();
-firebase.auth().signInAnonymously().catch(function(error) { console.log(error); });
-firebase.auth().onAuthStateChanged(function(user) { });
-const db = firebase.firestore(app);
+let db;
 let participantName = '';
 let pass = window.location.href.includes('pass');
+firebase.auth().signInAnonymously()
+.then(init)
+.catch(function(error) { console.log(error); });
 
-init();
+
 
 function init() {
+  db = firebase.firestore(app);
   const params = new URLSearchParams(window.location.search);
   sessionId = params.get('sessionId');
   if (!sessionId) {

@@ -38,6 +38,8 @@ let userName;
 let db;
 let pauseTimer = 0;
 let pauseInterval = false;
+let serenityVoice;
+let serenityVoiceIndex = 99999;
 
 /* FACILITATOR VARS */
 let facilitator;
@@ -234,7 +236,6 @@ class Conference extends AbstractConference<Props, *> {
                         <Player
                             src='./images/pause.mp4'
                             loop
-                            muted={true}
                             id='group-pause-player' 
                             ref={(player) => { this.player = player }}>
                             <ControlBar disableCompletely={true} />
@@ -248,7 +249,9 @@ class Conference extends AbstractConference<Props, *> {
                     <section id='group-chat' style={{display:'none'}} className='panel'>
                         <img id='close-chat' onClick={this._toggleChat} src='./images/x.png' />
                         <h3 className='sr-only'>Chat</h3>
-                        <div id='chat-messages'></div>
+                        <div id='chat-messages'>
+                            <div id='chat-messages-holder'></div>
+                        </div>
                         <label htmlFor='chat-text' className='sr-only'>Input Message</label>
                         <input type='text' id='chat-text' placeholder='Type a message' className='panel-input'/>
                         <button id='chat-send' onClick={this._sendChat} className='sr-only'>Send</button>
@@ -287,7 +290,10 @@ class Conference extends AbstractConference<Props, *> {
                 {/* <div id='error' style={{display:'none'}}><span>Sorry! I'm unable to locate your session. Please try clicking the link in your email again.</span></div> */}
 
                 
-                <audio className='audio-element' style={{display:'none'}}>
+                <audio id='audio-intro' style={{display:'none'}} loop>
+                    <source src='./images/introddd.mp3'></source>
+                </audio>
+                <audio id='audio-outro' style={{display:'none'}}>
                     <source src='./images/outro.mp3'></source>
                 </audio>
                     
@@ -407,6 +413,12 @@ class Conference extends AbstractConference<Props, *> {
         $('#participant-controls').show();
         $('#chat-text').on('keypress', (e) => { if (e.which === 13) this._sendChat();});
         $('#prompt-text').on('keypress', (e) => { if (e.which === 13) this._triggerTextPrompt();});
+        window.dispatchEvent(new Event('resize'));
+
+        let introEl = document.querySelector('#audio-intro');
+        introEl.volume = 0.25;
+        introEl.play();
+
         let now = new Date().getTime();
         db.collection('messages').where('timestamp', '>', now).onSnapshot({}, (snapshot) => {
             let that = this;
@@ -415,6 +427,7 @@ class Conference extends AbstractConference<Props, *> {
                 console.log(msg)
                 if (change.type !== 'added') return;
                 else if (msg.sessionId !== sessionId) return;
+                else if (msg.type === 'stop-intro') that._stopIntroMusic();
                 else if (msg.type === 'group-pause') that._groupPause(msg.val);
                 else if (msg.type === 'group-chat') that._groupChatMessage(msg.val);
                 else if (msg.type === 'serenity') that._playPrompt(msg.val, true);
@@ -422,6 +435,7 @@ class Conference extends AbstractConference<Props, *> {
                 else console.log('LM badType:', msg.type)
             });
         });
+
     }
 
     _sendMessage = (type, val) => {
@@ -433,6 +447,11 @@ class Conference extends AbstractConference<Props, *> {
         };
         db.collection('messages').add(m);
     };
+
+    _stopIntroMusic = () => {
+        let introEl = document.querySelector('#audio-intro');
+        introEl.pause();
+    }
 
     _sendChat = () => {
         const data = {
@@ -446,8 +465,8 @@ class Conference extends AbstractConference<Props, *> {
     _groupChatMessage = (data) => {
         let elt = $('<div class="chat-message"><span class="chat-user">'+data.userName+'</span><span class="chat-text">'+data.msg+'</span></div>');
         if (data.userName === 'Serenity') elt.addClass('serenity-message');
-        $('#chat-messages').append(elt);
-        $('#chat-messages').scrollTop($('#chat-messages').height());
+        $('#chat-messages-holder').append(elt);
+        $('#chat-messages').scrollTop($('#chat-messages-holder').height());
     }
   
     _triggerHelp = () => {
@@ -456,12 +475,12 @@ class Conference extends AbstractConference<Props, *> {
     }
     _triggerGroupPause = () => {
         if (facilitator) this._pausePrompt();
-        this._sendMessage('group-pause', 10 * 1000); // 10 second pause
+        this._sendMessage('group-pause', 20 * 1000); // 20 second pause
     }
 
     _toggleChat = () => {
         $('#group-chat').toggle();
-        $('#chat-messages').scrollTop($('#chat-messages').height());
+        $('#chat-messages').scrollTop($('#chat-messages-holder').height());
     }
   
     _groupPause = (ms) => {
@@ -477,7 +496,7 @@ class Conference extends AbstractConference<Props, *> {
             $('#group-pause-timer').text(_msToHms(remaining));
         });
         setTimeout(function() {
-            APP.UI.mute(false);
+            if (!facilitator) APP.UI.mute(false);
             player.pause();
             clearInterval(pauseInterval);
             if (currentPrompt > -1) this._resumePrompt();
@@ -496,6 +515,7 @@ class Conference extends AbstractConference<Props, *> {
     _speak = (msg) => {
         const utter = new SpeechSynthesisUtterance(msg);
         utter.rate = 0.9;
+        if (serenityVoice) utter.voice = serenityVoice;
         window.speechSynthesis.speak(utter);
     }
   
@@ -514,6 +534,7 @@ class Conference extends AbstractConference<Props, *> {
   
     _startPrompt = () => {
         if (!facilitator) return;
+        this._sendMessage('stop-intro', {});
         $('#start-prompt').hide();
         $('#next').show();
         $('#pause-prompt').show();
@@ -589,11 +610,11 @@ class Conference extends AbstractConference<Props, *> {
     _endSession = () => {
         console.log('end session')
         let audioDur = 32 * 1000;
-        const audioEl = document.getElementsByClassName('audio-element')[0];
-        audioEl.play();
+        let outroEl = document.querySelector('#audio-outro');
+        outroEl.play();
         APP.UI.mute(true);
         if (!facilitator) {
-            $('#videoconference_page').delay(0).fadeOut(audioDur - 2000);
+            $('#videoconference_page').delay(0).fadeOut(audioDur);
             setTimeout(function() {
                 window.location = 'https://beyondthebreakdown.world/credits';
             }, audioDur);
@@ -682,6 +703,20 @@ class Conference extends AbstractConference<Props, *> {
         }
         APP.conference.changeLocalDisplayName(userName);
         console.log('LM ' + sessionId + ' ' + userName + ' ' + facilitator);
+
+        window.speechSynthesis.onvoiceschanged = function() {
+            let voiceOptions = ['Ava', 'Allison', 'Samantha', 'Susan', 'Vicki', 'Kathy', 'Victoria'];
+            let voices = window.speechSynthesis.getVoices();
+            for (let v in voices) {
+                console.log(voices[v]);
+                let ind = voiceOptions.indexOf(voices[v].voiceURI);
+                if (ind !== -1 && ind < serenityVoiceIndex) {
+                    serenityVoice = voices[v];
+                    serenityVoiceIndex = ind;
+                    console.log('found! '+voices[v]);
+                }
+            }
+        };
 
         this._initFirebase()
         .then(this._initSession);

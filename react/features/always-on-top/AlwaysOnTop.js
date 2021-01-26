@@ -188,10 +188,11 @@ export default class AlwaysOnTop extends Component<*, State> {
             <div id = 'videoNotAvailableScreen'>
                 <div id = 'avatarContainer'>
                     <StatelessAvatar
-                        color = { getAvatarColor(userID) }
+                        color = { getAvatarColor(userID, displayName) }
                         id = 'avatar'
                         initials = { getInitials(displayName) }
-                        url = { avatarURL } />)
+                        url = { avatarURL } 
+                    />)
                 </div>
                 <div
                     className = 'displayname'

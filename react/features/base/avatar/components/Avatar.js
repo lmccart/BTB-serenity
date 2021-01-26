@@ -172,7 +172,7 @@ class Avatar<P: Props> extends PureComponent<P, State> {
 
         if (initials) {
             if (dynamicColor) {
-                avatarProps.color = getAvatarColor(colorBase || _initialsBase);
+                avatarProps.color = getAvatarColor(colorBase || _initialsBase, _initialsBase);
             }
 
             avatarProps.initials = initials;
