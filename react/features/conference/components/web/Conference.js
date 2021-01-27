@@ -609,7 +609,7 @@ class Conference extends AbstractConference<Props, *> {
   
     _endSession = () => {
         console.log('end session')
-        let audioDur = 32 * 1000;
+        let audioDur = 33 * 1000;
         let outroEl = document.querySelector('#audio-outro');
         outroEl.play();
         APP.UI.mute(true);
@@ -705,7 +705,7 @@ class Conference extends AbstractConference<Props, *> {
         console.log('LM ' + sessionId + ' ' + userName + ' ' + facilitator);
 
         window.speechSynthesis.onvoiceschanged = function() {
-            let voiceOptions = ['Ava', 'Allison', 'Samantha', 'Susan', 'Vicki', 'Kathy', 'Victoria'];
+            let voiceOptions = ['Ava', 'Allison', 'Susan', 'Samantha', 'Vicki', 'Kathy', 'Victoria', 'Vicki'];
             let voices = window.speechSynthesis.getVoices();
             for (let v in voices) {
                 console.log(voices[v]);

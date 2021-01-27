@@ -116,7 +116,7 @@ main {
   padding: 0.1em;
   z-index: 1;
   cursor: pointer;
-  width: 1em;
+  width: 2vw;
 }
 
 #close-chat:hover {
