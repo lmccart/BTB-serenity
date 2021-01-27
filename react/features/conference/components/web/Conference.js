@@ -626,7 +626,6 @@ class Conference extends AbstractConference<Props, *> {
 
     _submitWorld = () => {
         let w = {
-            world_name: $('#world-name').val(),
             world_values: $('#world-values').val(),
             world_actions: $('#world-actions').val()
         }
