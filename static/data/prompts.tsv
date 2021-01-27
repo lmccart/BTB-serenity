@@ -1,27 +1,27 @@
 Offset	Automated?	Possible Prompt 0	Possible Prompt 1	Possible Prompt 2
 0:10	Y	Hello.	 	
-0:12	Y	I am Serenity.	 	 
-0:20	Y	Your facilitator for today’s world-building session.	 	
-0:35	Y	We’d like to ask you to introduce yourselves. Who are you and why are you here?	 	
-2:35	Y	Welcome to the year 2050.		
-2:40	Y	What are the values of this world?
-2:50	Y	Please discuss. 	
-6:40	Y	What new kinds of jobs are required in 2050?		
-10:40	Y	Where do people find home in this world?		
-14:40	Y	What does care look like in this world?		
+0:12	Y	I am Serenity, your facilitator	 	 
+0:35	Y	Please introduce yourselves. Who are you and what brought you here today?	 	
+2:00	Y	It's nice to meet you. 		
+2:10	Y	Feel free to use any of our three buttons at your lesiure. The Chat will help us keep track of our ideas. Press Pause if you need more time for a question or a moment of reflection. Press Help if you need it. 		
+3:20	Y	Shall we begin building a world?		
+3:35	Y	Welcome to the year 2050.		
+3:45	Y	What are the values of this world in 2050?  What values do you aspire to? 	 	
+6:45	Y	Please type those values into the chat.		
+7:45	Y	What  kinds of new jobs help support these values in 2050?		
+10:45	Y	Where do people find home in 2050?  		
+13:45	Y	What does care look like in this world?		
 18:40	Y	What's your offering to this world of 2050?		
-23:40	Y	Do you like this 2050 world you’re standing in now?		
-26:40	Y	How does it feel?		
-28:40	Y	If you could give this 2050 world a name, what would it be?		
+25:40	Y	How does it feel to be standing in this 2050 world? 		
+27:40	Y	If you could give this 2050 world a name, what would it be?		
 28:50	Y	Discuss a name together and type it into the chat.		
 30:00	Y	Thank you.		
 30:05	Y	Processing...		
-30:07	Y	Processing...		
-30:09	Y	We are now returning to 2021.		
-30:20	Y	We have just come through the Breakdown.		
-30:28	Y	Can we pause to take in all we have shared with one another?		
-30:50	Y	Thank you.		
-31:00	Y	Can each of you share an action you can take to make your 2050 world a reality today in 2020? 		
+30:15	Y	Processing...		
+30:25	Y	We are now returning to 2021.		
+30:30	Y	Can we pause to take in all we have shared with one another?		
+31:30	Y	Thank you.		
+31:40	Y	Can each of you share an action you can take to make your 2050 world a reality today in 2021? 		
 33:00	Y	Please type the actions into the chat.		
-33:30	Y	Are you ready to make this world real together?		
-33:40	Y	I will leave you now.
+35:00	Y	Are you ready to make this world real together?		
+35:30	Y	Thank you. I will leave you now.		
