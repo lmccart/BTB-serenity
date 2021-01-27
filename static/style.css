@@ -144,11 +144,12 @@ main {
   left: 0;
 }
 
+
 #chat-messages {
   position: absolute;
   left: 0;
   bottom: 1.75em;
-  height: calc(100% - 1.75em);
+  height: calc(100% - 6.25em);
   width: 100%;
   overflow-y: scroll;
 }
@@ -174,6 +175,16 @@ main {
 .chat-text {
   display: block;
 }
+
+.chat-text a {
+  color: #984F3A;
+  text-decoration: none;
+}
+
+.chat-text a:hover {
+  color: white;
+}
+
 
 #facilitator-controls {
   left: 0;

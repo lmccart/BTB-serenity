@@ -249,6 +249,10 @@ class Conference extends AbstractConference<Props, *> {
                     <section id='group-chat' style={{display:'none'}} className='panel'>
                         <img id='close-chat' onClick={this._toggleChat} src='./images/x.png' />
                         <h3 className='sr-only'>Chat</h3>
+                        <div id='serenity-latest' className='chat-message serenity-message'>
+                            <span className='chat-user'>Serenity</span>
+                            <span className='chat-text'>What are you values?</span>
+                        </div>
                         <div id='chat-messages'>
                             <div id='chat-messages-holder'></div>
                         </div>
@@ -270,6 +274,7 @@ class Conference extends AbstractConference<Props, *> {
                             <button id='pause-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._pausePrompt}>Pause</button>
                             <button id='resume-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._resumePrompt}>Resume</button>
                             <button id='skip-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._nextPrompt}>Skip</button>
+                            <button id='play-prompt' className='facilitator-button light' style={{display:'none'}} onClick={this._nowPrompt}>Play Now</button>
                             <input id='prompt-text' type='text' placeholder='Type a message'  className='panel-input'/>
                         </div>
 
@@ -291,7 +296,7 @@ class Conference extends AbstractConference<Props, *> {
 
                 
                 <audio id='audio-intro' style={{display:'none'}} loop>
-                    <source src='./images/introddd.mp3'></source>
+                    <source src='./images/intro.mp3'></source>
                 </audio>
                 <audio id='audio-outro' style={{display:'none'}}>
                     <source src='./images/outro.mp3'></source>
@@ -463,10 +468,19 @@ class Conference extends AbstractConference<Props, *> {
     }
 
     _groupChatMessage = (data) => {
-        let elt = $('<div class="chat-message"><span class="chat-user">'+data.userName+'</span><span class="chat-text">'+data.msg+'</span></div>');
-        if (data.userName === 'Serenity') elt.addClass('serenity-message');
-        $('#chat-messages-holder').append(elt);
-        $('#chat-messages').scrollTop($('#chat-messages-holder').height());
+        let msg = data.msg;
+        if (msg.includes('http')) {
+            msg = '<a href="'+msg+'" target="_blank">'+msg+'</a>';
+        } else if (msg.includes('.com') || msg.includes('.org') || msg.includes('.net')) {
+            msg = '<a href="http://'+msg+'" target="_blank">'+msg+'</a>';
+        }
+        if (data.userName !== 'Serenity') {
+            let elt = $('<div class="chat-message"><span class="chat-user">'+data.userName+'</span><span class="chat-text">'+msg+'</span></div>');
+            $('#chat-messages-holder').append(elt);
+            $('#chat-messages').scrollTop($('#chat-messages-holder').height());
+        } else {
+            $('#serenity-latest .chat-text').html(msg);
+        }
     }
   
     _triggerHelp = () => {
@@ -538,6 +552,7 @@ class Conference extends AbstractConference<Props, *> {
         $('#start-prompt').hide();
         $('#next').show();
         $('#pause-prompt').show();
+        $('#play-prompt').show();
         $('#skip-prompt').show();
         $('#end-session').show();
         this._nextPrompt();
@@ -549,6 +564,8 @@ class Conference extends AbstractConference<Props, *> {
         currentPrompt++;
         console.log(currentPrompt, prompts.length);
         if (currentPrompt < prompts.length) {
+            $('#resume-prompt').hide();
+            $('#pause-prompt').show();
             promptInterval = setInterval(this._checkPrompt, 100);
             promptTimer = prompts[currentPrompt].lastOffset + performance.now();
             let options = prompts[currentPrompt].options;
@@ -557,8 +574,18 @@ class Conference extends AbstractConference<Props, *> {
         } else {
             $('#next').hide();
             $('#pause-prompt').hide();
+            $('#resume-prompt').hide();
+            $('#play-prompt').hide();
             $('#skip-prompt').hide();
         }
+    }
+
+    _nowPrompt = () => {
+        if (!facilitator) return;
+        $('#resume-prompt').hide();
+        $('#pause-prompt').show();
+        this._triggerPrompt();
+        this._nextPrompt();
     }
   
     _resumePrompt = () => {
