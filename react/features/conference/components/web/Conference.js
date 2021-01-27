@@ -520,7 +520,8 @@ class Conference extends AbstractConference<Props, *> {
     _playPrompt = (msg, doSpeak) => {
         $('#notif').text(msg);
         this._groupChatMessage({msg: msg, userName: 'Serenity'});
-        $('#notif-holder').stop().fadeIn(300).delay(msg.length*75).fadeOut(300);
+        let msgDur = Math.max(msg.length*75, 1000);
+        $('#notif-holder').stop().fadeIn(300).delay(msgDur).fadeOut(300);
         if (doSpeak) this._speak(msg);
         console.log('LM _playPrompt: ' + msg);
     }
