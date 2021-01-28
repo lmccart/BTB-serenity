@@ -69,7 +69,7 @@ exports.sendWrapup = functions.firestore
   .document('sessions/{sessionId}')
   .onUpdate((change, context) => {
     let session = change.after.data();
-    if (session.world_name && !session.sent_wrapup) {
+    if (session.world_values && !session.sent_wrapup) {
       functions.logger.log('sending wrapup to ' + session.id);
       let emails = [];
       let names = [];
@@ -77,13 +77,14 @@ exports.sendWrapup = functions.firestore
         emails.push(session.participants[i].email);
         names.push(session.participants[i].name);
       }
+      let wn = session.world_name || '';
       db.collection('mail').add({
         to: emails,
         template: {
           name: 'session-wrapup',
           data: {
             names: names.join(', '),
-            world_name: session.world_name,
+            world_name: wn,
             world_values: session.world_values,
             world_actions: session.world_actions
           }

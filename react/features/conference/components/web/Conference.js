@@ -251,7 +251,7 @@ class Conference extends AbstractConference<Props, *> {
                         <h3 className='sr-only'>Chat</h3>
                         <div id='serenity-latest' className='chat-message serenity-message'>
                             <span className='chat-user'>Serenity</span>
-                            <span className='chat-text'>What are you values?</span>
+                            <span className='chat-text'>Welcome</span>
                         </div>
                         <div id='chat-messages'>
                             <div id='chat-messages-holder'></div>
