@@ -42,6 +42,7 @@ function checkSession(sessionId) {
 }
 
 function showVideo() {
+  // e.preventDefault();
   participantName = $('#participant-name').val();
   if (participantName) {
     if (participantName.toLowerCase() === 'facilitator') {
@@ -54,13 +55,13 @@ function showVideo() {
     setCookie('userNameBTB', participantName, 1);
     $('#welcome-name').hide();
     $('#welcome-video').show();
+    $('#session-enter').show();
 
-    if (pass) {
-      $('#session-enter').show();
-    }
-    setTimeout(() => {
-      $('#session-enter').show();
-    }, 110 * 1000);
+    // if (pass) {
+    //   $('#session-enter').show();
+    // }
+    // setTimeout(() => {
+    // }, 30 * 1000);
     
   } else {
     alert('Please enter your display name');

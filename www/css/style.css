@@ -450,10 +450,10 @@ td:nth-child(even) {
     width: 80%;
   }
   #plant {
-    width: 25em;
+    width: 15em;
     position: absolute;
     bottom: 0;
-    left: calc(100vw - 25em)
+    left: calc(50vw - 7.5em);
   }
   #serenity {
     width: 10em;

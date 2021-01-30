@@ -78,7 +78,7 @@ function searchSessions() {
 
   for (let o in options) {
     let opt = options[o];
-    if (opt.id && (!opt.participants || (opt.participants.length + num <= 6 && !opt.hold))) {
+    if (opt.id && !opt.closed  && !opt.blocked && (!opt.participants || (opt.participants.length + num <= 6 && !opt.hold))) {
       if (code && !press) {
         if (opt.id === code) displayOpt(opt);
       } else {
@@ -100,7 +100,9 @@ function searchSessions() {
 }
 
 function displayOpt(opt) {
-  let tz = opt.datetime.substring(opt.datetime.indexOf('(')+1, opt.datetime.length - 1);
+  let localTime = new Date(opt.datetime).toString();
+  let tz = localTime.substring(localTime.indexOf('(')+1, localTime.length - 1);
+  console.log(opt.datetime);
   $('#tz').text(tz);
   let date = moment(opt.datetime).format('dddd MMM DD h:mm a');
   console.log(date)

@@ -165,3 +165,23 @@ exports.checkOneYear = functions.https.onRequest((req, res) => {
     res.json({success: true});
   });
 });
+
+
+exports.getChat = functions.https.onRequest((req, res) => {
+  let sessionId = req.query.sessionId;
+
+  let messages = [];
+  db.collection('messages').get()
+  .then(snapshot => {
+    snapshot.forEach(doc => {
+      if (doc.data().sessionId === sessionId && doc.data().type === 'group-chat') {
+        messages.push(doc.data());
+      }
+    });
+    messages.sort((a, b) => {
+      return a.timestamp < b.timestamp;
+    });
+    let results = messages.map(a => a.val.userName + ': ' + a.val.msg + '\n');
+    res.send(results);
+  });
+});

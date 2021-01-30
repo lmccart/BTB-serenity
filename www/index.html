@@ -23,9 +23,9 @@
           cultivating a collaborative space for self-reflection and renewal. Created by Tony Patrick, Lauren Lee McCarthy, and Grace Lee.<br>
           <a href='./credits/'>Project Credits</a>
         </p>
-        <p id='reg-soon'>Registration coming soon.</p>
+        <!-- <p id='reg-soon'>Registration coming soon.</p> -->
         <div class='buttons'>
-          <a href='./register' id='register' class='button' style='display:none'>Register for a Sesssion</a>
+          <a href='./register' id='register' class='button'>Register for a Sesssion</a>
         </div>
       </section>
 
@@ -34,13 +34,13 @@
     </main>
 
     <script>
-      let press = window.location.href.includes('press');
-      let code = window.location.href.split('?id=')[1];
-      if (press || code) {
-        $('#register').attr('href', './register?id='+code);
-        $('#reg-soon').hide();
-        $('#register').show();
-      }
+      // let press = window.location.href.includes('press');
+      // let code = window.location.href.split('?id=')[1];
+      // if (press || code) {
+      //   $('#register').attr('href', './register?id='+code);
+      //   $('#reg-soon').hide();
+      //   $('#register').show();
+      // }
     </script>
   </body>
 </html>

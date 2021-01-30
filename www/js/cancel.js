@@ -4,7 +4,7 @@ let sessionId, pid;
 let session;
 
 firebase.auth().signInAnonymously()
-then(init)
+.then(init)
 .catch(function(error) { console.log(error); });
 
 
@@ -18,6 +18,7 @@ $('.cancel-option').on('click', function() {
 });
 
 function init() {
+  db = firebase.firestore(app);
   const params = new URLSearchParams(window.location.search);
   sessionId = params.get('sessionId');
   pid = params.get('pid');

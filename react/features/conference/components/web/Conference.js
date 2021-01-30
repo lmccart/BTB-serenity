@@ -280,11 +280,11 @@ class Conference extends AbstractConference<Props, *> {
 
                         <div id='world-form' style={{display:'none'}}>
                             <label htmlFor='world-name'>World name</label>
-                            <input id='world-name' type='text' className='panel-input'/>
+                            <textarea id='world-name' type='text' className='panel-input'></textarea>
                             <label htmlFor='world-values'>World values</label>
-                            <input id='world-values' type='text' className='panel-input'/>
+                            <textarea id='world-values' type='text' className='panel-input'></textarea>
                             <label htmlFor='world-actions'>World actions</label>
-                            <input id='world-actions' type='text' className='panel-input'/>
+                            <textarea id='world-actions' type='text' className='panel-input'></textarea>
                             <button id='world-submit' onClick={this._submitWorld}>Submit</button>
                         </div>
                         <div id='world-thanks' className='chat-message serenity-message' style={{display:'none'}}>Thanks! The session is complete, you can close the window now.</div>
@@ -421,7 +421,7 @@ class Conference extends AbstractConference<Props, *> {
         window.dispatchEvent(new Event('resize'));
 
         let introEl = document.querySelector('#audio-intro');
-        introEl.volume = 0.25;
+        introEl.volume = 0.03;
         introEl.play();
 
         let now = new Date().getTime();
@@ -518,6 +518,7 @@ class Conference extends AbstractConference<Props, *> {
     }
   
     _playPrompt = (msg, doSpeak) => {
+        this._stopIntroMusic();
         $('#notif').text(msg);
         this._groupChatMessage({msg: msg, userName: 'Serenity'});
         let msgDur = Math.max(msg.length*75, 1000);
@@ -649,6 +650,7 @@ class Conference extends AbstractConference<Props, *> {
         } else {
             $('#session-controls').hide();
             $('#world-form').show();
+            $('#facilitator-controls').width('50vw');
         }
     }
 

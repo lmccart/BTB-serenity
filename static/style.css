@@ -336,6 +336,13 @@ a:hover {
   margin-bottom: 1em;
 }
 
+#world-form textarea {
+  border: none;
+  margin-bottom: 1em;
+  font-family: 'freight-sans-pro', sans-serif !important;
+  font-size: 0.75em;
+}
+
 #world-submit {
   margin-bottom: 0;
 }
