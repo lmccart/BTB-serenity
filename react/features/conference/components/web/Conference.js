@@ -666,6 +666,8 @@ class Conference extends AbstractConference<Props, *> {
                 return false;
             }
         }
+        let wn = $('#world-name').val();
+        if (wn) w.world_name = wn;
         db.collection('sessions').doc(sessionId).set(w, {
             merge: true
         });

@@ -78,7 +78,7 @@ function searchSessions() {
 
   for (let o in options) {
     let opt = options[o];
-    if (opt.id && !opt.closed  && !opt.blocked && (!opt.participants || (opt.participants.length + num <= 6 && !opt.hold))) {
+    if (opt.id && !opt.closed  && !opt.blocked && (!opt.participants || (opt.participants.length + num <= 8 && !opt.hold))) {
       if (code && !press) {
         if (opt.id === code) displayOpt(opt);
       } else {
@@ -166,7 +166,7 @@ function register(e) {
         url_cancel: url_cancel
       });
     };
-    if (num >= 6) {
+    if (num >= 8) {
       s.closed = true;
     }
 
