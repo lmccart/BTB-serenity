@@ -71,25 +71,27 @@ exports.sendWrapup = functions.firestore
     let session = change.after.data();
     if (session.world_values && !session.sent_wrapup) {
       functions.logger.log('sending wrapup to ' + session.id);
-      let emails = [];
-      let names = [];
-      for (let i=0; i<session.participants.length; i++) {
-        emails.push(session.participants[i].email);
-        names.push(session.participants[i].name);
-      }
+      // let emails = [];
+      // let names = [];
+      // for (let i=0; i<session.participants.length; i++) {
+      //   emails.push(session.participants[i].email);
+      //   names.push(session.participants[i].name);
+      // }
       let wn = session.world_name || '';
-      db.collection('mail').add({
-        to: emails,
-        template: {
-          name: 'session-wrapup',
-          data: {
-            names: names.join(', '),
-            world_name: wn,
-            world_values: session.world_values,
-            world_actions: session.world_actions
+      for (let i=0; i<session.participants.length; i++) {
+        db.collection('mail').add({
+          to: session.participants[i].email,
+          template: {
+            name: 'session-wrapup',
+            data: {
+              names: session.participants[i].name,
+              world_name: wn,
+              world_values: session.world_values,
+              world_actions: session.world_actions
+            }
           }
-        }
-      });
+        });
+      }
       db.collection('sessions').doc(session.id).set({sent_wrapup: true}, {merge: true});
     }
 });
@@ -105,7 +107,7 @@ exports.checkReminder = functions.https.onRequest((req, res) => {
       let when = new Date(session.datetime);
       let today = new Date();
       let diff = when.getTime() == today.getTime();
-      if(diff < 6 * 60 * 60 * 1000 && !session.sent_reminder) { // 6 hours
+      if (diff < 6 * 60 * 60 * 1000 && !session.sent_reminder) { // 6 hours
         for (let i=0; i<session.participants.length; i++) {
           db.collection('mail').add({
             to: session.participants[i].email,
@@ -130,40 +132,41 @@ exports.checkReminder = functions.https.onRequest((req, res) => {
 });
 
 exports.checkOneYear = functions.https.onRequest((req, res) => {
-  let code = req.query.code;
-  if (code !== 'check') return res.json(false);
+  res.json({success: true});
+  // let code = req.query.code;
+  // if (code !== 'check') return res.json(false);
 
-  const snapshot = db.collection('sessions').get()
-  .then(snapshot => {
-    snapshot.forEach(doc => {
-      let session = doc.data();
-      let when = new Date(session.datetime);
-      let today = new Date();
-      today.setFullYear(today.getFullYear() - 1);
-      let diff = when.getTime() == today.getTime();
-      if(diff < 12 * 60 * 60 * 1000 && !session.oneyear_sent) { // 12 hours, 1 year
-        functions.logger.log('sending wrapup to ' + session.id);
-        let emails = [];
-        let names = [];
-        for (let i=0; i<session.participants.length; i++) {
-          emails.push(session.participants[i].email);
-          names.push(session.participants[i].name);
-        }
-        db.collection('mail').add({
-          to: emails,
-          template: {
-            name: 'session-reflection',
-            data: {
-              names: names.join(', '),
-              world_name: session.world_name
-            }
-          }
-        });
-        db.collection('sessions').doc(session.id).set({oneyear_sent: true}, {merge: true});
-      }
-    });
-    res.json({success: true});
-  });
+  // const snapshot = db.collection('sessions').get()
+  // .then(snapshot => {
+  //   snapshot.forEach(doc => {
+  //     let session = doc.data();
+  //     let when = new Date(session.datetime);
+  //     let today = new Date();
+  //     today.setFullYear(today.getFullYear() - 1);
+  //     let diff = when.getTime() == today.getTime();
+  //     if(diff < 12 * 60 * 60 * 1000 && !session.oneyear_sent) { // 12 hours, 1 year
+  //       functions.logger.log('sending wrapup to ' + session.id);
+  //       let emails = [];
+  //       let names = [];
+  //       for (let i=0; i<session.participants.length; i++) {
+  //         emails.push(session.participants[i].email);
+  //         names.push(session.participants[i].name);
+  //       }
+  //       db.collection('mail').add({
+  //         to: emails,
+  //         template: {
+  //           name: 'session-reflection',
+  //           data: {
+  //             names: names.join(', '),
+  //             world_name: session.world_name
+  //           }
+  //         }
+  //       });
+  //       db.collection('sessions').doc(session.id).set({oneyear_sent: true}, {merge: true});
+  //     }
+  //   });
+  //   res.json({success: true});
+  // });
 });
 
 
