@@ -724,14 +724,14 @@ class Conference extends AbstractConference<Props, *> {
         sessionId = window.location.pathname.substring(1);
         
         userName = _getCookie('userNameBTB') || 'Participant';
-        // if (userName === 'Serenity') {
-        //     facilitator = true;
-        //     APP.UI.muteVideo(true);
-        //     APP.UI.mute(true);
-        // } else {
-            APP.UI.muteVideo(false);
-            APP.UI.mute(false);
-        // }
+        if (userName === 'Serenity') {
+            facilitator = true;
+            APP.UI.muteVideo(true);
+            APP.UI.mute(true);
+        } else {
+            APP.UI.muteVideo(true);
+            APP.UI.mute(true);
+        }
         APP.conference.changeLocalDisplayName(userName);
         console.log('LM ' + sessionId + ' ' + userName + ' ' + facilitator);
 
